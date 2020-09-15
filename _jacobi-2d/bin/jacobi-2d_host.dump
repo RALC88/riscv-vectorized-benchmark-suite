@@ -1,0 +1,769 @@
+
+bin/jacobi-2d_host.exe:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000001118 <_init>:
+    1118:	48 83 ec 08          	sub    $0x8,%rsp
+    111c:	48 8b 05 c5 1e 20 00 	mov    0x201ec5(%rip),%rax        # 202fe8 <__gmon_start__>
+    1123:	48 85 c0             	test   %rax,%rax
+    1126:	74 02                	je     112a <_init+0x12>
+    1128:	ff d0                	callq  *%rax
+    112a:	48 83 c4 08          	add    $0x8,%rsp
+    112e:	c3                   	retq   
+
+Disassembly of section .plt:
+
+0000000000001130 <.plt>:
+    1130:	ff 35 aa 1d 20 00    	pushq  0x201daa(%rip)        # 202ee0 <_GLOBAL_OFFSET_TABLE_+0x8>
+    1136:	ff 25 ac 1d 20 00    	jmpq   *0x201dac(%rip)        # 202ee8 <_GLOBAL_OFFSET_TABLE_+0x10>
+    113c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000001140 <__printf_chk@plt>:
+    1140:	ff 25 aa 1d 20 00    	jmpq   *0x201daa(%rip)        # 202ef0 <__printf_chk@GLIBC_2.3.4>
+    1146:	68 00 00 00 00       	pushq  $0x0
+    114b:	e9 e0 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001150 <std::basic_filebuf<char, std::char_traits<char> >::close()@plt>:
+    1150:	ff 25 a2 1d 20 00    	jmpq   *0x201da2(%rip)        # 202ef8 <std::basic_filebuf<char, std::char_traits<char> >::close()@GLIBCXX_3.4>
+    1156:	68 01 00 00 00       	pushq  $0x1
+    115b:	e9 d0 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001160 <std::__basic_file<char>::is_open() const@plt>:
+    1160:	ff 25 9a 1d 20 00    	jmpq   *0x201d9a(%rip)        # 202f00 <std::__basic_file<char>::is_open() const@GLIBCXX_3.4>
+    1166:	68 02 00 00 00       	pushq  $0x2
+    116b:	e9 c0 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001170 <std::ios_base::ios_base()@plt>:
+    1170:	ff 25 92 1d 20 00    	jmpq   *0x201d92(%rip)        # 202f08 <std::ios_base::ios_base()@GLIBCXX_3.4>
+    1176:	68 03 00 00 00       	pushq  $0x3
+    117b:	e9 b0 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001180 <std::ios_base::~ios_base()@plt>:
+    1180:	ff 25 8a 1d 20 00    	jmpq   *0x201d8a(%rip)        # 202f10 <std::ios_base::~ios_base()@GLIBCXX_3.4>
+    1186:	68 04 00 00 00       	pushq  $0x4
+    118b:	e9 a0 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001190 <__assert_fail@plt>:
+    1190:	ff 25 82 1d 20 00    	jmpq   *0x201d82(%rip)        # 202f18 <__assert_fail@GLIBC_2.2.5>
+    1196:	68 05 00 00 00       	pushq  $0x5
+    119b:	e9 90 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011a0 <__cxa_atexit@plt>:
+    11a0:	ff 25 7a 1d 20 00    	jmpq   *0x201d7a(%rip)        # 202f20 <__cxa_atexit@GLIBC_2.2.5>
+    11a6:	68 06 00 00 00       	pushq  $0x6
+    11ab:	e9 80 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011b0 <std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)@plt>:
+    11b0:	ff 25 72 1d 20 00    	jmpq   *0x201d72(%rip)        # 202f28 <std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)@GLIBCXX_3.4>
+    11b6:	68 07 00 00 00       	pushq  $0x7
+    11bb:	e9 70 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011c0 <std::basic_filebuf<char, std::char_traits<char> >::basic_filebuf()@plt>:
+    11c0:	ff 25 6a 1d 20 00    	jmpq   *0x201d6a(%rip)        # 202f30 <std::basic_filebuf<char, std::char_traits<char> >::basic_filebuf()@GLIBCXX_3.4>
+    11c6:	68 08 00 00 00       	pushq  $0x8
+    11cb:	e9 60 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011d0 <__stack_chk_fail@plt>:
+    11d0:	ff 25 62 1d 20 00    	jmpq   *0x201d62(%rip)        # 202f38 <__stack_chk_fail@GLIBC_2.4>
+    11d6:	68 09 00 00 00       	pushq  $0x9
+    11db:	e9 50 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011e0 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>:
+    11e0:	ff 25 5a 1d 20 00    	jmpq   *0x201d5a(%rip)        # 202f40 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@GLIBCXX_3.4.9>
+    11e6:	68 0a 00 00 00       	pushq  $0xa
+    11eb:	e9 40 ff ff ff       	jmpq   1130 <.plt>
+
+00000000000011f0 <free@plt>:
+    11f0:	ff 25 52 1d 20 00    	jmpq   *0x201d52(%rip)        # 202f48 <free@GLIBC_2.2.5>
+    11f6:	68 0b 00 00 00       	pushq  $0xb
+    11fb:	e9 30 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001200 <exit@plt>:
+    1200:	ff 25 4a 1d 20 00    	jmpq   *0x201d4a(%rip)        # 202f50 <exit@GLIBC_2.2.5>
+    1206:	68 0c 00 00 00       	pushq  $0xc
+    120b:	e9 20 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001210 <malloc@plt>:
+    1210:	ff 25 42 1d 20 00    	jmpq   *0x201d42(%rip)        # 202f58 <malloc@GLIBC_2.2.5>
+    1216:	68 0d 00 00 00       	pushq  $0xd
+    121b:	e9 10 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001220 <std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@plt>:
+    1220:	ff 25 3a 1d 20 00    	jmpq   *0x201d3a(%rip)        # 202f60 <std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@GLIBCXX_3.4>
+    1226:	68 0e 00 00 00       	pushq  $0xe
+    122b:	e9 00 ff ff ff       	jmpq   1130 <.plt>
+
+0000000000001230 <strtol@plt>:
+    1230:	ff 25 32 1d 20 00    	jmpq   *0x201d32(%rip)        # 202f68 <strtol@GLIBC_2.2.5>
+    1236:	68 0f 00 00 00       	pushq  $0xf
+    123b:	e9 f0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001240 <std::locale::~locale()@plt>:
+    1240:	ff 25 2a 1d 20 00    	jmpq   *0x201d2a(%rip)        # 202f70 <std::locale::~locale()@GLIBCXX_3.4>
+    1246:	68 10 00 00 00       	pushq  $0x10
+    124b:	e9 e0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001250 <std::basic_ofstream<char, std::char_traits<char> >::~basic_ofstream()@plt>:
+    1250:	ff 25 22 1d 20 00    	jmpq   *0x201d22(%rip)        # 202f78 <std::basic_ofstream<char, std::char_traits<char> >::~basic_ofstream()@GLIBCXX_3.4>
+    1256:	68 11 00 00 00       	pushq  $0x11
+    125b:	e9 d0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001260 <std::ios_base::Init::Init()@plt>:
+    1260:	ff 25 1a 1d 20 00    	jmpq   *0x201d1a(%rip)        # 202f80 <std::ios_base::Init::Init()@GLIBCXX_3.4>
+    1266:	68 12 00 00 00       	pushq  $0x12
+    126b:	e9 c0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001270 <puts@plt>:
+    1270:	ff 25 12 1d 20 00    	jmpq   *0x201d12(%rip)        # 202f88 <puts@GLIBC_2.2.5>
+    1276:	68 13 00 00 00       	pushq  $0x13
+    127b:	e9 b0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001280 <std::basic_filebuf<char, std::char_traits<char> >::~basic_filebuf()@plt>:
+    1280:	ff 25 0a 1d 20 00    	jmpq   *0x201d0a(%rip)        # 202f90 <std::basic_filebuf<char, std::char_traits<char> >::~basic_filebuf()@GLIBCXX_3.4>
+    1286:	68 14 00 00 00       	pushq  $0x14
+    128b:	e9 a0 fe ff ff       	jmpq   1130 <.plt>
+
+0000000000001290 <std::ostream& std::ostream::_M_insert<double>(double)@plt>:
+    1290:	ff 25 02 1d 20 00    	jmpq   *0x201d02(%rip)        # 202f98 <std::ostream& std::ostream::_M_insert<double>(double)@GLIBCXX_3.4.9>
+    1296:	68 15 00 00 00       	pushq  $0x15
+    129b:	e9 90 fe ff ff       	jmpq   1130 <.plt>
+
+00000000000012a0 <gettimeofday@plt>:
+    12a0:	ff 25 fa 1c 20 00    	jmpq   *0x201cfa(%rip)        # 202fa0 <gettimeofday@GLIBC_2.2.5>
+    12a6:	68 16 00 00 00       	pushq  $0x16
+    12ab:	e9 80 fe ff ff       	jmpq   1130 <.plt>
+
+00000000000012b0 <std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@plt>:
+    12b0:	ff 25 f2 1c 20 00    	jmpq   *0x201cf2(%rip)        # 202fa8 <std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@GLIBCXX_3.4>
+    12b6:	68 17 00 00 00       	pushq  $0x17
+    12bb:	e9 70 fe ff ff       	jmpq   1130 <.plt>
+
+00000000000012c0 <_Unwind_Resume@plt>:
+    12c0:	ff 25 ea 1c 20 00    	jmpq   *0x201cea(%rip)        # 202fb0 <_Unwind_Resume@GCC_3.0>
+    12c6:	68 18 00 00 00       	pushq  $0x18
+    12cb:	e9 60 fe ff ff       	jmpq   1130 <.plt>
+
+00000000000012d0 <std::__basic_file<char>::~__basic_file()@plt>:
+    12d0:	ff 25 e2 1c 20 00    	jmpq   *0x201ce2(%rip)        # 202fb8 <std::__basic_file<char>::~__basic_file()@GLIBCXX_3.4>
+    12d6:	68 19 00 00 00       	pushq  $0x19
+    12db:	e9 50 fe ff ff       	jmpq   1130 <.plt>
+
+00000000000012e0 <std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*)@plt>:
+    12e0:	ff 25 da 1c 20 00    	jmpq   *0x201cda(%rip)        # 202fc0 <std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*)@GLIBCXX_3.4.21>
+    12e6:	68 1a 00 00 00       	pushq  $0x1a
+    12eb:	e9 40 fe ff ff       	jmpq   1130 <.plt>
+
+Disassembly of section .plt.got:
+
+00000000000012f0 <__cxa_finalize@plt>:
+    12f0:	ff 25 d2 1c 20 00    	jmpq   *0x201cd2(%rip)        # 202fc8 <__cxa_finalize@GLIBC_2.2.5>
+    12f6:	66 90                	xchg   %ax,%ax
+
+Disassembly of section .text:
+
+0000000000001300 <main>:
+    1300:	41 57                	push   %r15
+    1302:	41 56                	push   %r14
+    1304:	41 55                	push   %r13
+    1306:	41 54                	push   %r12
+    1308:	55                   	push   %rbp
+    1309:	53                   	push   %rbx
+    130a:	48 83 ec 48          	sub    $0x48,%rsp
+    130e:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    1315:	00 00 
+    1317:	48 89 44 24 38       	mov    %rax,0x38(%rsp)
+    131c:	31 c0                	xor    %eax,%eax
+    131e:	83 ff 04             	cmp    $0x4,%edi
+    1321:	74 13                	je     1336 <main+0x36>
+    1323:	48 8d 3d 2e 09 00 00 	lea    0x92e(%rip),%rdi        # 1c58 <_IO_stdin_used+0x38>
+    132a:	e8 41 ff ff ff       	callq  1270 <puts@plt>
+    132f:	31 ff                	xor    %edi,%edi
+    1331:	e8 ca fe ff ff       	callq  1200 <exit@plt>
+    1336:	48 8b 7e 08          	mov    0x8(%rsi),%rdi
+    133a:	49 89 f5             	mov    %rsi,%r13
+    133d:	ba 0a 00 00 00       	mov    $0xa,%edx
+    1342:	31 f6                	xor    %esi,%esi
+    1344:	e8 e7 fe ff ff       	callq  1230 <strtol@plt>
+    1349:	49 8b 7d 10          	mov    0x10(%r13),%rdi
+    134d:	ba 0a 00 00 00       	mov    $0xa,%edx
+    1352:	31 f6                	xor    %esi,%esi
+    1354:	48 89 c3             	mov    %rax,%rbx
+    1357:	89 44 24 14          	mov    %eax,0x14(%rsp)
+    135b:	e8 d0 fe ff ff       	callq  1230 <strtol@plt>
+    1360:	49 8b 75 18          	mov    0x18(%r13),%rsi
+    1364:	48 8d 3d d5 1c 20 00 	lea    0x201cd5(%rip),%rdi        # 203040 <outfilename[abi:cxx11]>
+    136b:	4c 63 eb             	movslq %ebx,%r13
+    136e:	49 c1 e5 03          	shl    $0x3,%r13
+    1372:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+    1377:	89 44 24 10          	mov    %eax,0x10(%rsp)
+    137b:	e8 60 ff ff ff       	callq  12e0 <std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*)@plt>
+    1380:	4c 89 ef             	mov    %r13,%rdi
+    1383:	e8 88 fe ff ff       	callq  1210 <malloc@plt>
+    1388:	4c 89 ef             	mov    %r13,%rdi
+    138b:	49 89 c4             	mov    %rax,%r12
+    138e:	e8 7d fe ff ff       	callq  1210 <malloc@plt>
+    1393:	85 db                	test   %ebx,%ebx
+    1395:	48 89 c5             	mov    %rax,%rbp
+    1398:	0f 8e cc 00 00 00    	jle    146a <main+0x16a>
+    139e:	8d 73 ff             	lea    -0x1(%rbx),%esi
+    13a1:	45 31 f6             	xor    %r14d,%r14d
+    13a4:	48 89 5c 24 18       	mov    %rbx,0x18(%rsp)
+    13a9:	4c 89 f3             	mov    %r14,%rbx
+    13ac:	4c 8d 7e 01          	lea    0x1(%rsi),%r15
+    13b0:	4a 8d 04 fd 00 00 00 	lea    0x0(,%r15,8),%rax
+    13b7:	00 
+    13b8:	49 89 c6             	mov    %rax,%r14
+    13bb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+    13c0:	4c 89 ef             	mov    %r13,%rdi
+    13c3:	e8 48 fe ff ff       	callq  1210 <malloc@plt>
+    13c8:	4c 89 ef             	mov    %r13,%rdi
+    13cb:	49 89 04 1c          	mov    %rax,(%r12,%rbx,1)
+    13cf:	e8 3c fe ff ff       	callq  1210 <malloc@plt>
+    13d4:	48 89 44 1d 00       	mov    %rax,0x0(%rbp,%rbx,1)
+    13d9:	48 83 c3 08          	add    $0x8,%rbx
+    13dd:	49 39 de             	cmp    %rbx,%r14
+    13e0:	75 de                	jne    13c0 <main+0xc0>
+    13e2:	48 8b 5c 24 18       	mov    0x18(%rsp),%rbx
+    13e7:	66 0f ef d2          	pxor   %xmm2,%xmm2
+    13eb:	f2 0f 10 25 f5 08 00 	movsd  0x8f5(%rip),%xmm4        # 1ce8 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__+0x48>
+    13f2:	00 
+    13f3:	45 31 d2             	xor    %r10d,%r10d
+    13f6:	f2 0f 10 1d f2 08 00 	movsd  0x8f2(%rip),%xmm3        # 1cf0 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__+0x50>
+    13fd:	00 
+    13fe:	f2 0f 2a d3          	cvtsi2sd %ebx,%xmm2
+    1402:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    1408:	66 0f ef c9          	pxor   %xmm1,%xmm1
+    140c:	4b 8b 34 d4          	mov    (%r12,%r10,8),%rsi
+    1410:	4a 8b 4c d5 00       	mov    0x0(%rbp,%r10,8),%rcx
+    1415:	31 c0                	xor    %eax,%eax
+    1417:	f2 41 0f 2a ca       	cvtsi2sd %r10d,%xmm1
+    141c:	0f 1f 40 00          	nopl   0x0(%rax)
+    1420:	66 0f ef c0          	pxor   %xmm0,%xmm0
+    1424:	8d 50 02             	lea    0x2(%rax),%edx
+    1427:	f2 0f 2a c2          	cvtsi2sd %edx,%xmm0
+    142b:	8d 50 03             	lea    0x3(%rax),%edx
+    142e:	f2 0f 59 c1          	mulsd  %xmm1,%xmm0
+    1432:	f2 0f 58 c4          	addsd  %xmm4,%xmm0
+    1436:	f2 0f 5e c2          	divsd  %xmm2,%xmm0
+    143a:	f2 0f 11 04 c6       	movsd  %xmm0,(%rsi,%rax,8)
+    143f:	66 0f ef c0          	pxor   %xmm0,%xmm0
+    1443:	f2 0f 2a c2          	cvtsi2sd %edx,%xmm0
+    1447:	f2 0f 59 c1          	mulsd  %xmm1,%xmm0
+    144b:	f2 0f 58 c3          	addsd  %xmm3,%xmm0
+    144f:	f2 0f 5e c2          	divsd  %xmm2,%xmm0
+    1453:	f2 0f 11 04 c1       	movsd  %xmm0,(%rcx,%rax,8)
+    1458:	48 83 c0 01          	add    $0x1,%rax
+    145c:	49 39 c7             	cmp    %rax,%r15
+    145f:	75 bf                	jne    1420 <main+0x120>
+    1461:	49 83 c2 01          	add    $0x1,%r10
+    1465:	4d 39 fa             	cmp    %r15,%r10
+    1468:	75 9e                	jne    1408 <main+0x108>
+    146a:	4c 8d 6c 24 20       	lea    0x20(%rsp),%r13
+    146f:	31 f6                	xor    %esi,%esi
+    1471:	4c 89 ef             	mov    %r13,%rdi
+    1474:	e8 27 fe ff ff       	callq  12a0 <gettimeofday@plt>
+    1479:	48 69 44 24 20 40 42 	imul   $0xf4240,0x20(%rsp),%rax
+    1480:	0f 00 
+    1482:	48 03 44 24 28       	add    0x28(%rsp),%rax
+    1487:	83 7c 24 08 00       	cmpl   $0x0,0x8(%rsp)
+    148c:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+    1491:	0f 8e 0c 01 00 00    	jle    15a3 <main+0x2a3>
+    1497:	8d 43 fd             	lea    -0x3(%rbx),%eax
+    149a:	8b 7c 24 10          	mov    0x10(%rsp),%edi
+    149e:	44 8b 44 24 14       	mov    0x14(%rsp),%r8d
+    14a3:	f2 0f 10 15 4d 08 00 	movsd  0x84d(%rip),%xmm2        # 1cf8 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__+0x58>
+    14aa:	00 
+    14ab:	45 31 d2             	xor    %r10d,%r10d
+    14ae:	4c 8d 0c c5 08 00 00 	lea    0x8(,%rax,8),%r9
+    14b5:	00 
+    14b6:	48 8d 34 c5 10 00 00 	lea    0x10(,%rax,8),%rsi
+    14bd:	00 
+    14be:	66 90                	xchg   %ax,%ax
+    14c0:	41 83 f8 02          	cmp    $0x2,%r8d
+    14c4:	0f 8e cc 00 00 00    	jle    1596 <main+0x296>
+    14ca:	49 8b 54 24 08       	mov    0x8(%r12),%rdx
+    14cf:	45 31 ff             	xor    %r15d,%r15d
+    14d2:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    14d8:	4b 8b 4c 3c 10       	mov    0x10(%r12,%r15,1),%rcx
+    14dd:	4f 8b 34 3c          	mov    (%r12,%r15,1),%r14
+    14e1:	b8 08 00 00 00       	mov    $0x8,%eax
+    14e6:	4e 8b 5c 3d 08       	mov    0x8(%rbp,%r15,1),%r11
+    14eb:	f2 0f 10 4a 08       	movsd  0x8(%rdx),%xmm1
+    14f0:	f2 0f 58 4c 02 f8    	addsd  -0x8(%rdx,%rax,1),%xmm1
+    14f6:	66 0f 28 c1          	movapd %xmm1,%xmm0
+    14fa:	f2 0f 10 4c 02 08    	movsd  0x8(%rdx,%rax,1),%xmm1
+    1500:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+    1504:	f2 0f 58 04 01       	addsd  (%rcx,%rax,1),%xmm0
+    1509:	f2 41 0f 58 04 06    	addsd  (%r14,%rax,1),%xmm0
+    150f:	f2 0f 59 c2          	mulsd  %xmm2,%xmm0
+    1513:	f2 41 0f 11 04 03    	movsd  %xmm0,(%r11,%rax,1)
+    1519:	48 83 c0 08          	add    $0x8,%rax
+    151d:	48 39 c6             	cmp    %rax,%rsi
+    1520:	75 ce                	jne    14f0 <main+0x1f0>
+    1522:	49 83 c7 08          	add    $0x8,%r15
+    1526:	48 89 ca             	mov    %rcx,%rdx
+    1529:	4d 39 f9             	cmp    %r15,%r9
+    152c:	75 aa                	jne    14d8 <main+0x1d8>
+    152e:	48 8b 55 08          	mov    0x8(%rbp),%rdx
+    1532:	45 31 ff             	xor    %r15d,%r15d
+    1535:	0f 1f 00             	nopl   (%rax)
+    1538:	4a 8b 4c 3d 10       	mov    0x10(%rbp,%r15,1),%rcx
+    153d:	4e 8b 74 3d 00       	mov    0x0(%rbp,%r15,1),%r14
+    1542:	b8 08 00 00 00       	mov    $0x8,%eax
+    1547:	4f 8b 5c 3c 08       	mov    0x8(%r12,%r15,1),%r11
+    154c:	f2 0f 10 4a 08       	movsd  0x8(%rdx),%xmm1
+    1551:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    1558:	f2 0f 58 4c 02 f8    	addsd  -0x8(%rdx,%rax,1),%xmm1
+    155e:	66 0f 28 c1          	movapd %xmm1,%xmm0
+    1562:	f2 0f 10 4c 02 08    	movsd  0x8(%rdx,%rax,1),%xmm1
+    1568:	f2 0f 58 c1          	addsd  %xmm1,%xmm0
+    156c:	f2 0f 58 04 01       	addsd  (%rcx,%rax,1),%xmm0
+    1571:	f2 41 0f 58 04 06    	addsd  (%r14,%rax,1),%xmm0
+    1577:	f2 0f 59 c2          	mulsd  %xmm2,%xmm0
+    157b:	f2 41 0f 11 04 03    	movsd  %xmm0,(%r11,%rax,1)
+    1581:	48 83 c0 08          	add    $0x8,%rax
+    1585:	48 39 f0             	cmp    %rsi,%rax
+    1588:	75 ce                	jne    1558 <main+0x258>
+    158a:	49 83 c7 08          	add    $0x8,%r15
+    158e:	48 89 ca             	mov    %rcx,%rdx
+    1591:	4d 39 f9             	cmp    %r15,%r9
+    1594:	75 a2                	jne    1538 <main+0x238>
+    1596:	41 83 c2 01          	add    $0x1,%r10d
+    159a:	44 39 d7             	cmp    %r10d,%edi
+    159d:	0f 85 1d ff ff ff    	jne    14c0 <main+0x1c0>
+    15a3:	31 f6                	xor    %esi,%esi
+    15a5:	4c 89 ef             	mov    %r13,%rdi
+    15a8:	e8 f3 fc ff ff       	callq  12a0 <gettimeofday@plt>
+    15ad:	48 69 44 24 20 40 42 	imul   $0xf4240,0x20(%rsp),%rax
+    15b4:	0f 00 
+    15b6:	66 0f ef c0          	pxor   %xmm0,%xmm0
+    15ba:	48 8d 35 88 06 00 00 	lea    0x688(%rip),%rsi        # 1c49 <_IO_stdin_used+0x29>
+    15c1:	bf 01 00 00 00       	mov    $0x1,%edi
+    15c6:	48 03 44 24 28       	add    0x28(%rsp),%rax
+    15cb:	48 2b 44 24 18       	sub    0x18(%rsp),%rax
+    15d0:	f2 48 0f 2a c0       	cvtsi2sd %rax,%xmm0
+    15d5:	b8 01 00 00 00       	mov    $0x1,%eax
+    15da:	f2 0f 5e 05 fe 06 00 	divsd  0x6fe(%rip),%xmm0        # 1ce0 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__+0x40>
+    15e1:	00 
+    15e2:	e8 59 fb ff ff       	callq  1140 <__printf_chk@plt>
+    15e7:	48 8d 15 52 1a 20 00 	lea    0x201a52(%rip),%rdx        # 203040 <outfilename[abi:cxx11]>
+    15ee:	4c 89 e6             	mov    %r12,%rsi
+    15f1:	89 df                	mov    %ebx,%edi
+    15f3:	e8 38 02 00 00       	callq  1830 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)>
+    15f8:	49 8b 3c 24          	mov    (%r12),%rdi
+    15fc:	e8 ef fb ff ff       	callq  11f0 <free@plt>
+    1601:	4c 89 e7             	mov    %r12,%rdi
+    1604:	e8 e7 fb ff ff       	callq  11f0 <free@plt>
+    1609:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+    160d:	e8 de fb ff ff       	callq  11f0 <free@plt>
+    1612:	48 89 ef             	mov    %rbp,%rdi
+    1615:	e8 d6 fb ff ff       	callq  11f0 <free@plt>
+    161a:	31 c0                	xor    %eax,%eax
+    161c:	48 8b 5c 24 38       	mov    0x38(%rsp),%rbx
+    1621:	64 48 33 1c 25 28 00 	xor    %fs:0x28,%rbx
+    1628:	00 00 
+    162a:	75 0f                	jne    163b <main+0x33b>
+    162c:	48 83 c4 48          	add    $0x48,%rsp
+    1630:	5b                   	pop    %rbx
+    1631:	5d                   	pop    %rbp
+    1632:	41 5c                	pop    %r12
+    1634:	41 5d                	pop    %r13
+    1636:	41 5e                	pop    %r14
+    1638:	41 5f                	pop    %r15
+    163a:	c3                   	retq   
+    163b:	e8 90 fb ff ff       	callq  11d0 <__stack_chk_fail@plt>
+
+0000000000001640 <_GLOBAL__sub_I__Z11outfilenameB5cxx11>:
+    1640:	48 8d 3d 19 1a 20 00 	lea    0x201a19(%rip),%rdi        # 203060 <std::__ioinit>
+    1647:	48 83 ec 08          	sub    $0x8,%rsp
+    164b:	e8 10 fc ff ff       	callq  1260 <std::ios_base::Init::Init()@plt>
+    1650:	48 8b 3d a1 19 20 00 	mov    0x2019a1(%rip),%rdi        # 202ff8 <std::ios_base::Init::~Init()@GLIBCXX_3.4>
+    1657:	48 8d 15 aa 19 20 00 	lea    0x2019aa(%rip),%rdx        # 203008 <__dso_handle>
+    165e:	48 8d 35 fb 19 20 00 	lea    0x2019fb(%rip),%rsi        # 203060 <std::__ioinit>
+    1665:	e8 36 fb ff ff       	callq  11a0 <__cxa_atexit@plt>
+    166a:	48 8d 05 df 19 20 00 	lea    0x2019df(%rip),%rax        # 203050 <outfilename[abi:cxx11]+0x10>
+    1671:	48 8b 3d 58 19 20 00 	mov    0x201958(%rip),%rdi        # 202fd0 <std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string()@GLIBCXX_3.4.21>
+    1678:	48 8d 15 89 19 20 00 	lea    0x201989(%rip),%rdx        # 203008 <__dso_handle>
+    167f:	48 c7 05 be 19 20 00 	movq   $0x0,0x2019be(%rip)        # 203048 <outfilename[abi:cxx11]+0x8>
+    1686:	00 00 00 00 
+    168a:	c6 05 bf 19 20 00 00 	movb   $0x0,0x2019bf(%rip)        # 203050 <outfilename[abi:cxx11]+0x10>
+    1691:	48 8d 70 f0          	lea    -0x10(%rax),%rsi
+    1695:	48 89 05 a4 19 20 00 	mov    %rax,0x2019a4(%rip)        # 203040 <outfilename[abi:cxx11]>
+    169c:	48 83 c4 08          	add    $0x8,%rsp
+    16a0:	e9 fb fa ff ff       	jmpq   11a0 <__cxa_atexit@plt>
+    16a5:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    16ac:	00 00 00 
+    16af:	90                   	nop
+
+00000000000016b0 <_start>:
+    16b0:	31 ed                	xor    %ebp,%ebp
+    16b2:	49 89 d1             	mov    %rdx,%r9
+    16b5:	5e                   	pop    %rsi
+    16b6:	48 89 e2             	mov    %rsp,%rdx
+    16b9:	48 83 e4 f0          	and    $0xfffffffffffffff0,%rsp
+    16bd:	50                   	push   %rax
+    16be:	54                   	push   %rsp
+    16bf:	4c 8d 05 4a 05 00 00 	lea    0x54a(%rip),%r8        # 1c10 <__libc_csu_fini>
+    16c6:	48 8d 0d d3 04 00 00 	lea    0x4d3(%rip),%rcx        # 1ba0 <__libc_csu_init>
+    16cd:	48 8d 3d 2c fc ff ff 	lea    -0x3d4(%rip),%rdi        # 1300 <main>
+    16d4:	ff 15 06 19 20 00    	callq  *0x201906(%rip)        # 202fe0 <__libc_start_main@GLIBC_2.2.5>
+    16da:	f4                   	hlt    
+    16db:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+00000000000016e0 <deregister_tm_clones>:
+    16e0:	48 8d 3d 31 19 20 00 	lea    0x201931(%rip),%rdi        # 203018 <__TMC_END__>
+    16e7:	55                   	push   %rbp
+    16e8:	48 8d 05 29 19 20 00 	lea    0x201929(%rip),%rax        # 203018 <__TMC_END__>
+    16ef:	48 39 f8             	cmp    %rdi,%rax
+    16f2:	48 89 e5             	mov    %rsp,%rbp
+    16f5:	74 19                	je     1710 <deregister_tm_clones+0x30>
+    16f7:	48 8b 05 da 18 20 00 	mov    0x2018da(%rip),%rax        # 202fd8 <_ITM_deregisterTMCloneTable>
+    16fe:	48 85 c0             	test   %rax,%rax
+    1701:	74 0d                	je     1710 <deregister_tm_clones+0x30>
+    1703:	5d                   	pop    %rbp
+    1704:	ff e0                	jmpq   *%rax
+    1706:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    170d:	00 00 00 
+    1710:	5d                   	pop    %rbp
+    1711:	c3                   	retq   
+    1712:	0f 1f 40 00          	nopl   0x0(%rax)
+    1716:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    171d:	00 00 00 
+
+0000000000001720 <register_tm_clones>:
+    1720:	48 8d 3d f1 18 20 00 	lea    0x2018f1(%rip),%rdi        # 203018 <__TMC_END__>
+    1727:	48 8d 35 ea 18 20 00 	lea    0x2018ea(%rip),%rsi        # 203018 <__TMC_END__>
+    172e:	55                   	push   %rbp
+    172f:	48 29 fe             	sub    %rdi,%rsi
+    1732:	48 89 e5             	mov    %rsp,%rbp
+    1735:	48 c1 fe 03          	sar    $0x3,%rsi
+    1739:	48 89 f0             	mov    %rsi,%rax
+    173c:	48 c1 e8 3f          	shr    $0x3f,%rax
+    1740:	48 01 c6             	add    %rax,%rsi
+    1743:	48 d1 fe             	sar    %rsi
+    1746:	74 18                	je     1760 <register_tm_clones+0x40>
+    1748:	48 8b 05 a1 18 20 00 	mov    0x2018a1(%rip),%rax        # 202ff0 <_ITM_registerTMCloneTable>
+    174f:	48 85 c0             	test   %rax,%rax
+    1752:	74 0c                	je     1760 <register_tm_clones+0x40>
+    1754:	5d                   	pop    %rbp
+    1755:	ff e0                	jmpq   *%rax
+    1757:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+    175e:	00 00 
+    1760:	5d                   	pop    %rbp
+    1761:	c3                   	retq   
+    1762:	0f 1f 40 00          	nopl   0x0(%rax)
+    1766:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    176d:	00 00 00 
+
+0000000000001770 <__do_global_dtors_aux>:
+    1770:	80 3d a9 18 20 00 00 	cmpb   $0x0,0x2018a9(%rip)        # 203020 <completed.7698>
+    1777:	75 2f                	jne    17a8 <__do_global_dtors_aux+0x38>
+    1779:	48 83 3d 47 18 20 00 	cmpq   $0x0,0x201847(%rip)        # 202fc8 <__cxa_finalize@GLIBC_2.2.5>
+    1780:	00 
+    1781:	55                   	push   %rbp
+    1782:	48 89 e5             	mov    %rsp,%rbp
+    1785:	74 0c                	je     1793 <__do_global_dtors_aux+0x23>
+    1787:	48 8b 3d 7a 18 20 00 	mov    0x20187a(%rip),%rdi        # 203008 <__dso_handle>
+    178e:	e8 5d fb ff ff       	callq  12f0 <__cxa_finalize@plt>
+    1793:	e8 48 ff ff ff       	callq  16e0 <deregister_tm_clones>
+    1798:	c6 05 81 18 20 00 01 	movb   $0x1,0x201881(%rip)        # 203020 <completed.7698>
+    179f:	5d                   	pop    %rbp
+    17a0:	c3                   	retq   
+    17a1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+    17a8:	f3 c3                	repz retq 
+    17aa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+00000000000017b0 <frame_dummy>:
+    17b0:	55                   	push   %rbp
+    17b1:	48 89 e5             	mov    %rsp,%rbp
+    17b4:	5d                   	pop    %rbp
+    17b5:	e9 66 ff ff ff       	jmpq   1720 <register_tm_clones>
+    17ba:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+00000000000017c0 <get_time()>:
+    17c0:	48 83 ec 28          	sub    $0x28,%rsp
+    17c4:	31 f6                	xor    %esi,%esi
+    17c6:	48 89 e7             	mov    %rsp,%rdi
+    17c9:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    17d0:	00 00 
+    17d2:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+    17d7:	31 c0                	xor    %eax,%eax
+    17d9:	e8 c2 fa ff ff       	callq  12a0 <gettimeofday@plt>
+    17de:	48 69 04 24 40 42 0f 	imul   $0xf4240,(%rsp),%rax
+    17e5:	00 
+    17e6:	48 03 44 24 08       	add    0x8(%rsp),%rax
+    17eb:	48 8b 54 24 18       	mov    0x18(%rsp),%rdx
+    17f0:	64 48 33 14 25 28 00 	xor    %fs:0x28,%rdx
+    17f7:	00 00 
+    17f9:	75 05                	jne    1800 <get_time()+0x40>
+    17fb:	48 83 c4 28          	add    $0x28,%rsp
+    17ff:	c3                   	retq   
+    1800:	e8 cb f9 ff ff       	callq  11d0 <__stack_chk_fail@plt>
+    1805:	90                   	nop
+    1806:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    180d:	00 00 00 
+
+0000000000001810 <elapsed_time(long long, long long)>:
+    1810:	66 0f ef c0          	pxor   %xmm0,%xmm0
+    1814:	48 29 fe             	sub    %rdi,%rsi
+    1817:	f2 48 0f 2a c6       	cvtsi2sd %rsi,%xmm0
+    181c:	f2 0f 5e 05 bc 04 00 	divsd  0x4bc(%rip),%xmm0        # 1ce0 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__+0x40>
+    1823:	00 
+    1824:	c3                   	retq   
+    1825:	90                   	nop
+    1826:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    182d:	00 00 00 
+
+0000000000001830 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)>:
+    1830:	41 57                	push   %r15
+    1832:	41 56                	push   %r14
+    1834:	41 55                	push   %r13
+    1836:	41 54                	push   %r12
+    1838:	41 89 fd             	mov    %edi,%r13d
+    183b:	55                   	push   %rbp
+    183c:	53                   	push   %rbx
+    183d:	49 89 f4             	mov    %rsi,%r12
+    1840:	48 89 d3             	mov    %rdx,%rbx
+    1843:	48 81 ec 28 02 00 00 	sub    $0x228,%rsp
+    184a:	48 8d 6c 24 10       	lea    0x10(%rsp),%rbp
+    184f:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+    1856:	00 00 
+    1858:	48 89 84 24 18 02 00 	mov    %rax,0x218(%rsp)
+    185f:	00 
+    1860:	31 c0                	xor    %eax,%eax
+    1862:	48 8d bd f8 00 00 00 	lea    0xf8(%rbp),%rdi
+    1869:	e8 02 f9 ff ff       	callq  1170 <std::ios_base::ios_base()@plt>
+    186e:	48 8d 05 d3 12 20 00 	lea    0x2012d3(%rip),%rax        # 202b48 <vtable for std::basic_ios<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1875:	c6 84 24 e8 01 00 00 	movb   $0x0,0x1e8(%rsp)
+    187c:	00 
+    187d:	48 c7 84 24 e0 01 00 	movq   $0x0,0x1e0(%rsp)
+    1884:	00 00 00 00 00 
+    1889:	c6 84 24 e9 01 00 00 	movb   $0x0,0x1e9(%rsp)
+    1890:	00 
+    1891:	48 c7 84 24 f0 01 00 	movq   $0x0,0x1f0(%rsp)
+    1898:	00 00 00 00 00 
+    189d:	31 f6                	xor    %esi,%esi
+    189f:	48 89 84 24 08 01 00 	mov    %rax,0x108(%rsp)
+    18a6:	00 
+    18a7:	48 8b 05 32 13 20 00 	mov    0x201332(%rip),%rax        # 202be0 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x8>
+    18ae:	48 c7 84 24 f8 01 00 	movq   $0x0,0x1f8(%rsp)
+    18b5:	00 00 00 00 00 
+    18ba:	48 c7 84 24 00 02 00 	movq   $0x0,0x200(%rsp)
+    18c1:	00 00 00 00 00 
+    18c6:	48 c7 84 24 08 02 00 	movq   $0x0,0x208(%rsp)
+    18cd:	00 00 00 00 00 
+    18d2:	48 8b 78 e8          	mov    -0x18(%rax),%rdi
+    18d6:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+    18db:	48 8b 05 06 13 20 00 	mov    0x201306(%rip),%rax        # 202be8 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    18e2:	48 01 ef             	add    %rbp,%rdi
+    18e5:	48 89 07             	mov    %rax,(%rdi)
+    18e8:	e8 33 f9 ff ff       	callq  1220 <std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@plt>
+    18ed:	48 8d 05 9c 13 20 00 	lea    0x20139c(%rip),%rax        # 202c90 <vtable for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x18>
+    18f4:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+    18f8:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+    18fd:	48 83 c0 28          	add    $0x28,%rax
+    1901:	48 89 84 24 08 01 00 	mov    %rax,0x108(%rsp)
+    1908:	00 
+    1909:	e8 b2 f8 ff ff       	callq  11c0 <std::basic_filebuf<char, std::char_traits<char> >::basic_filebuf()@plt>
+    190e:	48 8d 75 08          	lea    0x8(%rbp),%rsi
+    1912:	48 8d bd f8 00 00 00 	lea    0xf8(%rbp),%rdi
+    1919:	e8 02 f9 ff ff       	callq  1220 <std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)@plt>
+    191e:	48 8b 33             	mov    (%rbx),%rsi
+    1921:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+    1925:	ba 30 00 00 00       	mov    $0x30,%edx
+    192a:	e8 81 f8 ff ff       	callq  11b0 <std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)@plt>
+    192f:	48 8b 54 24 10       	mov    0x10(%rsp),%rdx
+    1934:	48 8b 7a e8          	mov    -0x18(%rdx),%rdi
+    1938:	48 01 ef             	add    %rbp,%rdi
+    193b:	48 85 c0             	test   %rax,%rax
+    193e:	0f 84 72 01 00 00    	je     1ab6 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x286>
+    1944:	31 f6                	xor    %esi,%esi
+    1946:	e8 65 f9 ff ff       	callq  12b0 <std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@plt>
+    194b:	48 8d 7d 70          	lea    0x70(%rbp),%rdi
+    194f:	e8 0c f8 ff ff       	callq  1160 <std::__basic_file<char>::is_open() const@plt>
+    1954:	84 c0                	test   %al,%al
+    1956:	0f 84 dc 01 00 00    	je     1b38 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x308>
+    195c:	45 85 ed             	test   %r13d,%r13d
+    195f:	0f 8e 94 00 00 00    	jle    19f9 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x1c9>
+    1965:	41 8d 45 ff          	lea    -0x1(%r13),%eax
+    1969:	4c 8d 35 d7 02 00 00 	lea    0x2d7(%rip),%r14        # 1c47 <_IO_stdin_used+0x27>
+    1970:	49 8d 4c c4 08       	lea    0x8(%r12,%rax,8),%rcx
+    1975:	49 89 c5             	mov    %rax,%r13
+    1978:	48 83 c0 01          	add    $0x1,%rax
+    197c:	48 89 04 24          	mov    %rax,(%rsp)
+    1980:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+    1985:	0f 1f 00             	nopl   (%rax)
+    1988:	31 db                	xor    %ebx,%ebx
+    198a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+    1990:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+    1995:	48 89 ef             	mov    %rbp,%rdi
+    1998:	4c 8d 3c dd 00 00 00 	lea    0x0(,%rbx,8),%r15
+    199f:	00 
+    19a0:	48 8b 50 e8          	mov    -0x18(%rax),%rdx
+    19a4:	48 01 ea             	add    %rbp,%rdx
+    19a7:	8b 42 18             	mov    0x18(%rdx),%eax
+    19aa:	48 c7 42 08 04 00 00 	movq   $0x4,0x8(%rdx)
+    19b1:	00 
+    19b2:	25 fb fe ff ff       	and    $0xfffffefb,%eax
+    19b7:	83 c8 04             	or     $0x4,%eax
+    19ba:	89 42 18             	mov    %eax,0x18(%rdx)
+    19bd:	49 8b 04 24          	mov    (%r12),%rax
+    19c1:	f2 0f 10 04 d8       	movsd  (%rax,%rbx,8),%xmm0
+    19c6:	e8 c5 f8 ff ff       	callq  1290 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+    19cb:	ba 01 00 00 00       	mov    $0x1,%edx
+    19d0:	4c 89 f6             	mov    %r14,%rsi
+    19d3:	48 89 c7             	mov    %rax,%rdi
+    19d6:	e8 05 f8 ff ff       	callq  11e0 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>
+    19db:	41 39 dd             	cmp    %ebx,%r13d
+    19de:	0f 84 fe 00 00 00    	je     1ae2 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x2b2>
+    19e4:	48 83 c3 01          	add    $0x1,%rbx
+    19e8:	48 3b 1c 24          	cmp    (%rsp),%rbx
+    19ec:	75 a2                	jne    1990 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x160>
+    19ee:	49 83 c4 08          	add    $0x8,%r12
+    19f2:	4c 39 64 24 08       	cmp    %r12,0x8(%rsp)
+    19f7:	75 8f                	jne    1988 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x158>
+    19f9:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+    19fd:	e8 4e f7 ff ff       	callq  1150 <std::basic_filebuf<char, std::char_traits<char> >::close()@plt>
+    1a02:	48 85 c0             	test   %rax,%rax
+    1a05:	0f 84 bb 00 00 00    	je     1ac6 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x296>
+    1a0b:	48 8d 05 7e 12 20 00 	lea    0x20127e(%rip),%rax        # 202c90 <vtable for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x18>
+    1a12:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+    1a16:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+    1a1b:	48 83 c0 28          	add    $0x28,%rax
+    1a1f:	48 89 84 24 08 01 00 	mov    %rax,0x108(%rsp)
+    1a26:	00 
+    1a27:	48 8d 05 da 11 20 00 	lea    0x2011da(%rip),%rax        # 202c08 <vtable for std::basic_filebuf<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1a2e:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+    1a33:	e8 18 f7 ff ff       	callq  1150 <std::basic_filebuf<char, std::char_traits<char> >::close()@plt>
+    1a38:	48 8d 7d 70          	lea    0x70(%rbp),%rdi
+    1a3c:	e8 8f f8 ff ff       	callq  12d0 <std::__basic_file<char>::~__basic_file()@plt>
+    1a41:	48 8d 05 20 11 20 00 	lea    0x201120(%rip),%rax        # 202b68 <vtable for std::basic_streambuf<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1a48:	48 8d 7d 40          	lea    0x40(%rbp),%rdi
+    1a4c:	48 89 44 24 18       	mov    %rax,0x18(%rsp)
+    1a51:	e8 ea f7 ff ff       	callq  1240 <std::locale::~locale()@plt>
+    1a56:	48 8b 05 83 11 20 00 	mov    0x201183(%rip),%rax        # 202be0 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x8>
+    1a5d:	48 8b 0d 84 11 20 00 	mov    0x201184(%rip),%rcx        # 202be8 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1a64:	48 8d bd f8 00 00 00 	lea    0xf8(%rbp),%rdi
+    1a6b:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+    1a70:	48 8b 40 e8          	mov    -0x18(%rax),%rax
+    1a74:	48 89 4c 04 10       	mov    %rcx,0x10(%rsp,%rax,1)
+    1a79:	48 8d 05 c8 10 20 00 	lea    0x2010c8(%rip),%rax        # 202b48 <vtable for std::basic_ios<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1a80:	48 89 84 24 08 01 00 	mov    %rax,0x108(%rsp)
+    1a87:	00 
+    1a88:	e8 f3 f6 ff ff       	callq  1180 <std::ios_base::~ios_base()@plt>
+    1a8d:	48 8b 84 24 18 02 00 	mov    0x218(%rsp),%rax
+    1a94:	00 
+    1a95:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+    1a9c:	00 00 
+    1a9e:	0f 85 8f 00 00 00    	jne    1b33 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x303>
+    1aa4:	48 81 c4 28 02 00 00 	add    $0x228,%rsp
+    1aab:	5b                   	pop    %rbx
+    1aac:	5d                   	pop    %rbp
+    1aad:	41 5c                	pop    %r12
+    1aaf:	41 5d                	pop    %r13
+    1ab1:	41 5e                	pop    %r14
+    1ab3:	41 5f                	pop    %r15
+    1ab5:	c3                   	retq   
+    1ab6:	8b 77 20             	mov    0x20(%rdi),%esi
+    1ab9:	83 ce 04             	or     $0x4,%esi
+    1abc:	e8 ef f7 ff ff       	callq  12b0 <std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@plt>
+    1ac1:	e9 85 fe ff ff       	jmpq   194b <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x11b>
+    1ac6:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+    1acb:	48 8b 78 e8          	mov    -0x18(%rax),%rdi
+    1acf:	48 01 ef             	add    %rbp,%rdi
+    1ad2:	8b 77 20             	mov    0x20(%rdi),%esi
+    1ad5:	83 ce 04             	or     $0x4,%esi
+    1ad8:	e8 d3 f7 ff ff       	callq  12b0 <std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)@plt>
+    1add:	e9 29 ff ff ff       	jmpq   1a0b <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x1db>
+    1ae2:	49 8b 04 24          	mov    (%r12),%rax
+    1ae6:	48 89 ef             	mov    %rbp,%rdi
+    1ae9:	f2 42 0f 10 04 38    	movsd  (%rax,%r15,1),%xmm0
+    1aef:	e8 9c f7 ff ff       	callq  1290 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+    1af4:	48 8d 35 57 01 00 00 	lea    0x157(%rip),%rsi        # 1c52 <_IO_stdin_used+0x32>
+    1afb:	ba 01 00 00 00       	mov    $0x1,%edx
+    1b00:	48 89 c7             	mov    %rax,%rdi
+    1b03:	e8 d8 f6 ff ff       	callq  11e0 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>
+    1b08:	e9 d7 fe ff ff       	jmpq   19e4 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x1b4>
+    1b0d:	48 89 c3             	mov    %rax,%rbx
+    1b10:	48 8d 05 31 10 20 00 	lea    0x201031(%rip),%rax        # 202b48 <vtable for std::basic_ios<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1b17:	48 8d bd f8 00 00 00 	lea    0xf8(%rbp),%rdi
+    1b1e:	48 89 84 24 08 01 00 	mov    %rax,0x108(%rsp)
+    1b25:	00 
+    1b26:	e8 55 f6 ff ff       	callq  1180 <std::ios_base::~ios_base()@plt>
+    1b2b:	48 89 df             	mov    %rbx,%rdi
+    1b2e:	e8 8d f7 ff ff       	callq  12c0 <_Unwind_Resume@plt>
+    1b33:	e8 98 f6 ff ff       	callq  11d0 <__stack_chk_fail@plt>
+    1b38:	48 8d 0d 61 01 00 00 	lea    0x161(%rip),%rcx        # 1ca0 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)::__PRETTY_FUNCTION__>
+    1b3f:	48 8d 35 de 00 00 00 	lea    0xde(%rip),%rsi        # 1c24 <_IO_stdin_used+0x4>
+    1b46:	48 8d 3d e9 00 00 00 	lea    0xe9(%rip),%rdi        # 1c36 <_IO_stdin_used+0x16>
+    1b4d:	ba 8b 00 00 00       	mov    $0x8b,%edx
+    1b52:	e8 39 f6 ff ff       	callq  1190 <__assert_fail@plt>
+    1b57:	48 89 c3             	mov    %rax,%rbx
+    1b5a:	48 89 ef             	mov    %rbp,%rdi
+    1b5d:	e8 ee f6 ff ff       	callq  1250 <std::basic_ofstream<char, std::char_traits<char> >::~basic_ofstream()@plt>
+    1b62:	48 89 df             	mov    %rbx,%rdi
+    1b65:	e8 56 f7 ff ff       	callq  12c0 <_Unwind_Resume@plt>
+    1b6a:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+    1b6e:	48 89 c3             	mov    %rax,%rbx
+    1b71:	e8 0a f7 ff ff       	callq  1280 <std::basic_filebuf<char, std::char_traits<char> >::~basic_filebuf()@plt>
+    1b76:	48 8b 05 63 10 20 00 	mov    0x201063(%rip),%rax        # 202be0 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x8>
+    1b7d:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+    1b82:	48 8b 50 e8          	mov    -0x18(%rax),%rdx
+    1b86:	48 8b 05 5b 10 20 00 	mov    0x20105b(%rip),%rax        # 202be8 <VTT for std::basic_ofstream<char, std::char_traits<char> >@@GLIBCXX_3.4+0x10>
+    1b8d:	48 89 44 14 10       	mov    %rax,0x10(%rsp,%rdx,1)
+    1b92:	e9 79 ff ff ff       	jmpq   1b10 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x2e0>
+    1b97:	48 89 c3             	mov    %rax,%rbx
+    1b9a:	eb da                	jmp    1b76 <output_printfile(int, double**, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)+0x346>
+    1b9c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000001ba0 <__libc_csu_init>:
+    1ba0:	41 57                	push   %r15
+    1ba2:	41 56                	push   %r14
+    1ba4:	49 89 d7             	mov    %rdx,%r15
+    1ba7:	41 55                	push   %r13
+    1ba9:	41 54                	push   %r12
+    1bab:	4c 8d 25 6e 0f 20 00 	lea    0x200f6e(%rip),%r12        # 202b20 <__frame_dummy_init_array_entry>
+    1bb2:	55                   	push   %rbp
+    1bb3:	48 8d 2d 76 0f 20 00 	lea    0x200f76(%rip),%rbp        # 202b30 <__init_array_end>
+    1bba:	53                   	push   %rbx
+    1bbb:	41 89 fd             	mov    %edi,%r13d
+    1bbe:	49 89 f6             	mov    %rsi,%r14
+    1bc1:	4c 29 e5             	sub    %r12,%rbp
+    1bc4:	48 83 ec 08          	sub    $0x8,%rsp
+    1bc8:	48 c1 fd 03          	sar    $0x3,%rbp
+    1bcc:	e8 47 f5 ff ff       	callq  1118 <_init>
+    1bd1:	48 85 ed             	test   %rbp,%rbp
+    1bd4:	74 20                	je     1bf6 <__libc_csu_init+0x56>
+    1bd6:	31 db                	xor    %ebx,%ebx
+    1bd8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    1bdf:	00 
+    1be0:	4c 89 fa             	mov    %r15,%rdx
+    1be3:	4c 89 f6             	mov    %r14,%rsi
+    1be6:	44 89 ef             	mov    %r13d,%edi
+    1be9:	41 ff 14 dc          	callq  *(%r12,%rbx,8)
+    1bed:	48 83 c3 01          	add    $0x1,%rbx
+    1bf1:	48 39 dd             	cmp    %rbx,%rbp
+    1bf4:	75 ea                	jne    1be0 <__libc_csu_init+0x40>
+    1bf6:	48 83 c4 08          	add    $0x8,%rsp
+    1bfa:	5b                   	pop    %rbx
+    1bfb:	5d                   	pop    %rbp
+    1bfc:	41 5c                	pop    %r12
+    1bfe:	41 5d                	pop    %r13
+    1c00:	41 5e                	pop    %r14
+    1c02:	41 5f                	pop    %r15
+    1c04:	c3                   	retq   
+    1c05:	90                   	nop
+    1c06:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+    1c0d:	00 00 00 
+
+0000000000001c10 <__libc_csu_fini>:
+    1c10:	f3 c3                	repz retq 
+
+Disassembly of section .fini:
+
+0000000000001c14 <_fini>:
+    1c14:	48 83 ec 08          	sub    $0x8,%rsp
+    1c18:	48 83 c4 08          	add    $0x8,%rsp
+    1c1c:	c3                   	retq   
