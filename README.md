@@ -11,8 +11,7 @@ https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1
 
 
 If you use this software or a modified version of it for your research, please cite the paper:
-Cristóbal Ramírez, César Hernández, Oscar Palomar, Osman Unsal, Marco Ramírez and Adrián Cristal, "A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures", ACM Transactions on Architecture and Code Optimization (TACO), 2020.
-Note: This paper will be available in the next ACM TACO issue (Volume 17, Issue 4).
+Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
 
 ## Pakage Structure
 
