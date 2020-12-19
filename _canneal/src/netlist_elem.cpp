@@ -98,7 +98,9 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
     int a_size;
 	a_size = fan_size*2;
 
-    unsigned long int gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
+    //unsigned long int gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
+    unsigned long int gvl = vsetvl_e32m1(a_size) //PLCT
+
     xresult_no_swap = _MM_SET_f32(0.0f,gvl);
     xresult_yes_swap = _MM_SET_f32(0.0f,gvl);
     xNo_Swap = _MM_SET_f32(0.0f,gvl);
@@ -109,7 +111,8 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
         FENCE();
         // fan_locs  is a vector which holds the pointers to every input and ouput of the current node,
         // Then by loading this first vector, it is possible to access to the pointers of the current location of each input and output.
-        gvl     = __builtin_epi_vsetvl((a_size-i)/2, __epi_e64, __epi_m1);
+        // gvl     = __builtin_epi_vsetvl((a_size-i)/2, __epi_e64, __epi_m1);
+        gvl = vsetvl_e64m1((a_size-i)/2) //PLCT
 
         _MMR_i64   xLoc;
         xLoc = _MM_LOAD_i64((const long *)&(fan_locs[i/2]),gvl);
@@ -117,7 +120,8 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
         xLoc = _MM_LOAD_INDEX_i64(0,xLoc,gvl);
 
         FENCE();
-        gvl     = __builtin_epi_vsetvl(a_size-i, __epi_e32, __epi_m1);
+        // gvl     = __builtin_epi_vsetvl(a_size-i, __epi_e32, __epi_m1);
+        gvl = vsetvl_e32m1(a_size-i) //PLCT
 
         xLoc2           =   (_MMR_i32)xLoc;
 
@@ -129,16 +133,17 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
         xYes_Swap_aux   = _MM_VFCVT_F_X_f32(xYes_Swap_i,gvl); 
         xYes_Swap_aux   = _MM_VFSGNJX_f32(xYes_Swap_aux,xYes_Swap_aux,gvl);
 
-        gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
+        // gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
+        gvl = vsetvl_e32m1(a_size) //PLCT
         xNo_Swap        = _MM_ADD_f32(xNo_Swap,xNo_Swap_aux,gvl);
         xYes_Swap       = _MM_ADD_f32(xYes_Swap,xYes_Swap_aux,gvl);
 
-        gvl     = __builtin_epi_vsetvl(a_size-i, __epi_e32, __epi_m1);
-
+        // gvl     = __builtin_epi_vsetvl(a_size-i, __epi_e32, __epi_m1);
+         gvl = vsetvl_e32m1(a_size-i) //PLCT
     }
 
-    gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
-
+    // gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
+    gvl = vsetvl_e32m1(a_size) //PLCT
     xresult_no_swap = _MM_REDSUM_f32(xNo_Swap,xresult_no_swap,gvl);
     no_swap = _MM_VGETFIRST_f32(xresult_no_swap,gvl);
 

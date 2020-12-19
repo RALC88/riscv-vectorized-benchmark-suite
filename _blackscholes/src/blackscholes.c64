@@ -394,7 +394,8 @@ struct mainWork {
       /* Calling main function to calculate option value based on
        * Black & Scholes's equation.
        */
-      unsigned long int gvl = __builtin_epi_vsetvl(VECTOR_LENGTH, __epi_e64, __epi_m1);
+      //  unsigned long int gvl = __builtin_epi_vsetvl(VECTOR_LENGTH, __epi_e64, __epi_m1);
+      unsigned long int gvl = vsetvl_e64m1(VECTOR_LENGTH) //PLCT
       BlkSchlsEqEuroNoDiv_SIMD( price, VECTOR_LENGTH, &(sptprice[i]), &(strike[i]),
                            &(rate[i]), &(volatility[i]), &(otime[i]),
                            &(otype[i]),&(otype_d[i]), 0 , gvl);
@@ -491,7 +492,8 @@ int bs_thread(void *tid_ptr) {
 #endif //ENABLE_OPENMP
             // Calling main function to calculate option value based on Black & Scholes's
             // equation.
-            unsigned long int gvl = __builtin_epi_vsetvl(VECTOR_LENGTH, __epi_e64, __epi_m1);
+            //   unsigned long int gvl = __builtin_epi_vsetvl(VECTOR_LENGTH, __epi_e64, __epi_m1);
+            unsigned long int gvl = vsetvl_e64m1(VECTOR_LENGTH) //PLCT
             BlkSchlsEqEuroNoDiv_SIMD( price, VECTOR_LENGTH, &(sptprice[i]), &(strike[i]),
                                 &(rate[i]), &(volatility[i]), &(otime[i]), &(otype[i]),&(otype_d[i]), 0,gvl);
             for (k=0; k<VECTOR_LENGTH; k++) {

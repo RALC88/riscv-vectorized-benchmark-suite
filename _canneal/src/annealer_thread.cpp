@@ -68,7 +68,9 @@ void annealer_thread::Run()
     int temp_steps_completed=0;
 
     #ifdef USE_RISCV_VECTOR
-    unsigned long int gvl   = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
+    //unsigned long int gvl   = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
+    unsigned long int gvl   = vsetvlmax_e32m1() //PLCT
+    
     mask = (int*)malloc(gvl*sizeof(int));
     for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
     #endif // !USE_RISCV_VECTOR
@@ -148,7 +150,9 @@ routing_cost_t annealer_thread::calculate_delta_routing_cost_vector(netlist_elem
     if((a_fan_size > 0) | (b_fan_size > 0))
     {
         int max_vl = (a_fan_size > b_fan_size) ? a_fan_size*2 : b_fan_size*2;
-        unsigned long int gvl   = __builtin_epi_vsetvl(max_vl,__epi_e32, __epi_m1);
+        //unsigned long int gvl   = __builtin_epi_vsetvl(max_vl,__epi_e32, __epi_m1);
+        unsigned long int gvl = vsetvl_e32m1(max_vl) //PLCT
+
         // Get the MVL allowed by the hardware
         //unsigned long int gvl   = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
         //Create a mask with size of MVL

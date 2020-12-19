@@ -442,7 +442,8 @@ int bs_thread(void *tid_ptr) {
     int start = tid * (numOptions / nThreads);
     int end = start + (numOptions / nThreads);
 
-    unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
+    // unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
+    unsigned long int gvl = vsetvl_e32m1(end) //PLCT
     fptype* price;
     price = (fptype*)malloc(gvl*sizeof(fptype));
     //price = aligned_alloc(64, gvl*sizeof(fptype));
@@ -460,7 +461,8 @@ int bs_thread(void *tid_ptr) {
 #endif //ENABLE_OPENMP
             // Calling main function to calculate option value based on Black & Scholes's
             // equation.
-            gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
+            // gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
+            gvl = vsetvl_e32m1(end-i) //PLCT
             BlkSchlsEqEuroNoDiv_vector( price, gvl, &(sptprice[i]), &(strike[i]),
                                 &(rate[i]), &(volatility[i]), &(otime[i]), &(otype[i])/*,&(otype_d[i])*/, 0,gvl);
             for (k=0; k<gvl; k++) {
