@@ -24,8 +24,11 @@
 //#define _MM_LOAD_i32    	__builtin_epi_vload_2xi32
 #define _MM_LOAD_i32(op1, op2, op3)     vle32_v_i32m1(op1, op2)
 
-#define _MM_LOAD_INDEX_i64 __builtin_epi_vload_indexed_1xi64 //TODO
-#define _MM_LOAD_INDEX_i32 __builtin_epi_vload_indexed_2xi32 //TODO
+//#define _MM_LOAD_INDEX_i64 __builtin_epi_vload_indexed_1xi64
+#define _MM_LOAD_INDEX_i64(op1, op2, op3)  vlxei64_v_i64m1(op1, op2)
+
+//#define _MM_LOAD_INDEX_i32 __builtin_epi_vload_indexed_2xi32
+#define _MM_LOAD_INDEX_i32(op1, op2, op3) vlxei32_v_i32m1(op1, op2)
 
 //#define _MM_STORE_i64   	__builtin_epi_vstore_1xi64
 #define _MM_STORE_i64(op1, op2, op3)    vse64_v_i64m1(op1, op2)
@@ -55,9 +58,10 @@ __epi_1xi64 test_vadd_1xi64_mask(__epi_1xi64 arg_0, __epi_1xi64 arg_1, __epi_1xi
 0.9
 vint64m1_t vadd_vv_i64m1_m (vbool64_t mask, vint64m1_t maskedoff, vint64m1_t op1, vint64m1_t op2);
 */
-#define _MM_ADD_i64_MASK(op1, op2, op3, op4, op5) vadd_vv_i64m1_m() //TODO
+#define _MM_ADD_i64_MASK(op1, op2, op3, op4, op5) vadd_vv_i64m1_m(op4, op1, op2, op3)
 
-#define _MM_ADD_i32_MASK  __builtin_epi_vadd_2xi32_mask //TODO
+// #define _MM_ADD_i32_MASK  __builtin_epi_vadd_2xi32_mask 
+#define _MM_ADD_i32_MASK(op1, op2, op3, op4, op5) vadd_vv_i32m1_m(op4, op1, op2, op3)
 
 //#define _MM_MUL_i64       __builtin_epi_vmul_1xi64
 #define _MM_MUL_i64(op1, op2, op3) vmul_vv_i64m1(op1, op2)
@@ -77,8 +81,27 @@ vint64m1_t vadd_vv_i64m1_m (vbool64_t mask, vint64m1_t maskedoff, vint64m1_t op1
 //#define _MM_REM_i32       __builtin_epi_vrem_2xi32
 #define _MM_REM_i32(op1, op2, op3) vrem_vv_i32m1(op1, op2)
 
-#define _MM_SET_i64     	__builtin_epi_vbroadcast_1xi64 //TODO
-#define _MM_SET_i32     	__builtin_epi_vbroadcast_2xi32 //TODO
+/*
+log:
+ Remove 'vbroadcast' builtin & intrinsic in favour of 'vmv.v.x' and 'vfmv.v.f'
+    - Also replace RISCVISD::VBROADCAST node with RISCVISD::VMV_V_X and
+    RISCVISD::VFMV_V_F, so that they can be more precisely constrained.
+    - Update EPIFoldBroadcast phase accordingly.
+
+0.7.1:
+__epi_1xi64 test_vbroadcast_1xi64(signed long int arg_0, unsigned long int arg_1)
+{
+    return __builtin_epi_vbroadcast_1xi64(arg_0, arg_1);
+}
+
+0.9:
+vint64m1_t vmv_v_x_i64m1 (int64_t src);
+*/
+//#define _MM_SET_i64     	__builtin_epi_vbroadcast_1xi64
+#define _MM_SET_i64(op1, op2) vmv_v_x_i64m1(op1)
+
+//#define _MM_SET_i32     	__builtin_epi_vbroadcast_2xi32 
+#define _MM_SET_i32(op1, op2) vmv_v_x_i32m1(op1)
 
 //#define _MM_MIN_i64         __builtin_epi_vmin_1xi64
 #define _MM_MIN_i64(op1, op2, op3) vmin_vv_i64m1(op1, op2)
@@ -128,17 +151,35 @@ vint64m1_t vadd_vv_i64m1_m (vbool64_t mask, vint64m1_t maskedoff, vint64m1_t op1
 //#define _MM_NOT_i32(x)     	_MM_XOR_i32((x),(x), gvl) 
 #define _MM_NOT_i32(x) vnot_v_i32m1(x)
 
-#define _MM_REDSUM_i64   	__builtin_epi_vredsum_1xi64  //TODO
-#define _MM_REDSUM_i32   	__builtin_epi_vredsum_2xi32 //TODO
 /*
 0.7.1
 __epi_1xi64 test_vredsum_1xi64(__epi_1xi64 arg_0, __epi_1xi64 arg_1, unsigned long int arg_2)
 {
     return __builtin_epi_vredsum_1xi64(arg_0, arg_1, arg_2);
 }
+
+# *** IR Dump After Finalize ISel and expand pseudo-instructions ***:
+# Machine code for function test_vredsum_1xi64: IsSSA, TracksLiveness
+Function Live Ins: $v16 in %0, $v17 in %1, $x10 in %2
+
+bb.0.entry:
+  liveins: $v16, $v17, $x10
+  %2:gpr = COPY $x10
+  %1:vr = COPY $v17
+  %0:vr = COPY $v16
+  %4:vr = IMPLICIT_DEF
+  dead %5:gpr = PseudoVSETVLI %2:gpr, 12, implicit-def $vl, implicit-def $vtype
+  %3:vr = PseudoVREDSUM_VS_M1 %4:vr(tied-def 0), %0:vr, %1:vr, $noreg, $noreg, -1, implicit $vl, implicit $vtype
+  $v16 = COPY %3:vr
+  PseudoRET implicit $v16
 0.9
-//vuint64m1_t vredsum_vs_u64m1_u64m1 (vuint64m1_t dst, vuint64m1_t vector, vuint64m1_t scalar)
+vint64m1_t vredsum_vs_i64m1_i64m1 (vint64m1_t dst, vint64m1_t vector, vint64m1_t scalar);
 */
+//#define _MM_REDSUM_i64   	__builtin_epi_vredsum_1xi64 
+#define _MM_REDSUM_i64(op1, op2, op3) vredsum_vs_i64m1_i64m1(op2, op1, op2)
+
+//#define _MM_REDSUM_i32   	__builtin_epi_vredsum_2xi32 
+#define _MM_REDSUM_i32(op1, op2, op3) vredsum_vs_i32m1_i32m1(op2, op1, op2)
 
 /*
 0.7.1
@@ -166,8 +207,8 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_LOAD_f32    	__builtin_epi_vload_2xf32
 #define _MM_LOAD_f32(op1, op2) vle32_v_f32m1(op1)
 
-#define _MM_LOAD_INDEX_f64 __builtin_epi_vload_indexed_1xf64 //TODO
-#define _MM_LOAD_INDEX_f32 __builtin_epi_vload_indexed_2xf32 //TODO
+#define _MM_LOAD_INDEX_f64 __builtin_epi_vload_indexed_1xf64 //TODO, not being used
+#define _MM_LOAD_INDEX_f32 __builtin_epi_vload_indexed_2xf32 //TODO, not being used
 
 //#define _MM_STORE_f64   	__builtin_epi_vstore_1xf64
 #define _MM_STORE_f64(op1, op2, op3) vse64_v_f64m1(op1, op2)
@@ -193,11 +234,17 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_SUB_f32     	__builtin_epi_vfsub_2xf32
 #define _MM_SUB_f32(op1, op2, op3) vfsub_vv_f32m1(op1, op2)
 
-#define _MM_SUB_f64_MASK	__builtin_epi_vfsub_1xf64_mask //TODO
-#define _MM_SUB_f32_MASK	__builtin_epi_vfsub_2xf32_mask //TODO
+//#define _MM_SUB_f64_MASK	__builtin_epi_vfsub_1xf64_mask
+#define _MM_SUB_f64_MASK(op1, op2, op3, op4, op5) vfsub_vv_f64m1_m(op4, op1, op2, op3)
 
-#define _MM_ADD_f64_MASK  __builtin_epi_vfadd_1xf64_mask //TODO
-#define _MM_ADD_f32_MASK  __builtin_epi_vfadd_2xf32_mask //TODO
+//#define _MM_SUB_f32_MASK	__builtin_epi_vfsub_2xf32_mask 
+#define _MM_SUB_f32_MASK(op1, op2, op3, op4, op5) vfsub_vv_f32m1_m(op4, op1, op2, op3)
+
+//#define _MM_ADD_f64_MASK  __builtin_epi_vfadd_1xf64_mask 
+#define _MM_ADD_f64_MASK(op1, op2, op3, op4, op5) vfadd_vv_f64m1_m(op4, op1, op2, op3)
+
+//#define _MM_ADD_f32_MASK  __builtin_epi_vfadd_2xf32_mask
+#define _MM_ADD_f32_MASK(op1, op2, op3, op4, op5) vfadd_vv_f32m1_m(op4, op1, op2, op3)
 
 //#define _MM_DIV_f64     	__builtin_epi_vfdiv_1xf64
 #define _MM_DIV_f64(op1, op2, op3) vfsub_vv_f64m1(op1, op2)
@@ -217,8 +264,11 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_SQRT_f32    	__builtin_epi_vfsqrt_2xf32
 #define _MM_SQRT_f32(op1, op2) vfsqrt_v_f32m1(op1) 
 
-#define _MM_SET_f64     	__builtin_epi_vbroadcast_1xf64 //TODO
-#define _MM_SET_f32     	__builtin_epi_vbroadcast_2xf32 //TODO
+//#define _MM_SET_f64     	__builtin_epi_vbroadcast_1xf64 
+#define _MM_SET_f64(op1, op2) vfmv_v_f_f64m1(op1)
+
+//#define _MM_SET_f32     	__builtin_epi_vbroadcast_2xf32 
+#define _MM_SET_f32(op1, op2) vfmv_v_f_f32m1(op1)
 
 //#define _MM_MIN_f64         __builtin_epi_vfmin_1xf64
 #define _MM_MIN_f64(op1, op2, op3) vfmin_vv_f64m1(op1, op2) 
@@ -256,11 +306,14 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_MERGE_f32 		__builtin_epi_vfmerge_2xf32
 #define _MM_MERGE_f32(op1, op2, op3) vfmerge_vv_f32m1(op1, op2)
 
-#define _MM_REDSUM_f64  	__builtin_epi_vfredsum_1xf64 //TODO
-#define _MM_REDSUM_f32  	__builtin_epi_vfredsum_2xf32 //TODO
+//#define _MM_REDSUM_f64  	__builtin_epi_vfredsum_1xf64 
+#define _MM_REDSUM_f64(op1, op2, op3) vfredsum_vs_f64m1_f64m1(op2, op1, op2)
 
-#define _MM_REDSUM_f64_MASK __builtin_epi_vfredsum_1xf64_mask //TODO
-#define _MM_REDSUM_f32_MASK __builtin_epi_vfredsum_2xf32_mask  //TODO
+//#define _MM_REDSUM_f32  	__builtin_epi_vfredsum_2xf32
+#define _MM_REDSUM_f32(op1, op2, op3) vfredsum_vs_f32m1_f32m1(op2, op1, op2)
+
+#define _MM_REDSUM_f64_MASK __builtin_epi_vfredsum_1xf64_mask //TODO, not being used
+#define _MM_REDSUM_f32_MASK __builtin_epi_vfredsum_2xf32_mask  //TODO, not being used
 
 
 //#define _MM_MACC_f64  		__builtin_epi_vfmacc_1xf64
@@ -326,8 +379,8 @@ __epi_2xi32 test_vslideup_2xi32(__epi_2xi32 arg_0, unsigned long int arg_1, unsi
 0.9
 vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 */
-#define _MM_VSLIDEUP_i32    __builtin_epi_vslideup_2xi32 //TODO
-#define _MM_VSLIDEUP_i64    __builtin_epi_vslideup_1xi64 //TODO
+#define _MM_VSLIDEUP_i32    __builtin_epi_vslideup_2xi32 //TODO, not being used
+#define _MM_VSLIDEUP_i64    __builtin_epi_vslideup_1xi64 //TODO, not being used
 
 //#define _MM_VSLIDE1UP_i32    __builtin_epi_vslide1up_2xi32
 #define _MM_VSLIDE1UP_i32(op1, op2, op3) vslide1up_vx_i32m1(op1, op2)
@@ -335,8 +388,8 @@ vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 //#define _MM_VSLIDE1UP_i64    __builtin_epi_vslide1up_1xi64
 #define _MM_VSLIDE1UP_i64(op1, op2, op3) vslide1up_vx_i64m1(op1, op2)
 
-#define _MM_VSLIDEUP_i32_MASK    __builtin_epi_vslideup_2xi32_mask //TODO
-#define _MM_VSLIDEUP_i64_MASK    __builtin_epi_vslideup_1xi64_mask //TODO
+#define _MM_VSLIDEUP_i32_MASK    __builtin_epi_vslideup_2xi32_mask //TODO, not being used
+#define _MM_VSLIDEUP_i64_MASK    __builtin_epi_vslideup_1xi64_mask //TODO, not being used
 
 //#define _MM_VSLIDEDOWN_i32    __builtin_epi_vslidedown_2xi32 
 #define _MM_VSLIDEDOWN_i32(op1, op2, op3) vslide1down_vx_i32m1(op1, op2)
@@ -350,16 +403,20 @@ vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 //#define _MM_VSLIDE1DOWN_i64    __builtin_epi_vslide1down_1xi64
 #define _MM_VSLIDE1DOWN_i64(op1, op2, op3) vslide1down_vx_i64m1(op1, op2)
 
-#define _MM_VSLIDEDOWN_i32_MASK    __builtin_epi_vslidedown_2xi32_mask //TODO
-#define _MM_VSLIDEDOWN_i64_MASK    __builtin_epi_vslidedown_1xi64_mask //TODO
+#define _MM_VSLIDEDOWN_i32_MASK    __builtin_epi_vslidedown_2xi32_mask //TODO, not being used
+#define _MM_VSLIDEDOWN_i64_MASK    __builtin_epi_vslidedown_1xi64_mask //TODO, not being used
 
 // fp
+// log : Rename 'vsetfirst' and 'vgetfirst' builtins to 'vmv.s.x'/'vfmv.s.f' and 'vmv.x.s'/'vfmv.f.s'
+//0.9 float32_t vfmv_f_s_f32m1_f32 (vfloat32m1_t src); 
+//#define _MM_VGETFIRST_f32   __builtin_epi_vgetfirst_2xf32 
+#define _MM_VGETFIRST_f32(op1, op2) vfmv_f_s_f32m1_f32(op1)
 
-#define _MM_VGETFIRST_f32   __builtin_epi_vgetfirst_2xf32 //TODO
-#define _MM_VGETFIRST_f64   __builtin_epi_vgetfirst_1xf64 //TODO
+//#define _MM_VGETFIRST_f64   __builtin_epi_vgetfirst_1xf64
+#define _MM_VGETFIRST_f64(op1, op2) vfmv_f_s_f64m1_f64(op1)
 
-#define _MM_VSLIDEUP_f32    __builtin_epi_vslideup_2xf32 //TODO
-#define _MM_VSLIDEUP_f64    __builtin_epi_vslideup_1xf64 //TODO
+#define _MM_VSLIDEUP_f32    __builtin_epi_vslideup_2xf32 //TODO, not being used
+#define _MM_VSLIDEUP_f64    __builtin_epi_vslideup_1xf64 //TODO, not being used
 
 //#define _MM_VSLIDE1UP_f32    __builtin_epi_vslide1up_2xf32
 #define _MM_VSLIDE1UP_f32(op1, op2, op3) vfslide1up_vf_f32m1(op1, op2)
@@ -367,8 +424,8 @@ vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 //#define _MM_VSLIDE1UP_f64    __builtin_epi_vslide1up_1xf64
 #define _MM_VSLIDE1UP_f64(op1, op2, op3) vfslide1up_vf_f64m1(op1, op2)
 
-#define _MM_VSLIDEUP_f32_MASK    __builtin_epi_vslideup_2xf32_mask //TODO
-#define _MM_VSLIDEUP_f64_MASK    __builtin_epi_vslideup_1xf64_mask //TODO
+#define _MM_VSLIDEUP_f32_MASK    __builtin_epi_vslideup_2xf32_mask //TODO, not being used
+#define _MM_VSLIDEUP_f64_MASK    __builtin_epi_vslideup_1xf64_mask //TODO, not being used
 
 //#define _MM_VSLIDEDOWN_f32    __builtin_epi_vslidedown_2xf32
 #define _MM_VSLIDEDOWN_f32(op1, op2, op3) vfslide1down_vf_f32m1(op1, op2)
@@ -382,40 +439,61 @@ vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 //#define _MM_VSLIDE1DOWN_f64    __builtin_epi_vslide1down_1xf64
 #define _MM_VSLIDE1DOWN_f64(op1, op2, op3) vfslide1down_vf_f64m1(op1, op2)
 
-#define _MM_VSLIDEDOWN_f32_MASK    __builtin_epi_vslidedown_2xf32_mask //TODO
-#define _MM_VSLIDEDOWN_f64_MASK    __builtin_epi_vslidedown_1xf64_mask //TODO
+#define _MM_VSLIDEDOWN_f32_MASK    __builtin_epi_vslidedown_2xf32_mask //TODO, not being used
+#define _MM_VSLIDEDOWN_f64_MASK    __builtin_epi_vslidedown_1xf64_mask //TODO, not being used
 //---------------------------------------------------------------------------
 // MASK DEFINITIONS
 
 #define _MMR_MASK_i64   	vbool64_t //__epi_1xi1
 #define _MMR_MASK_i32   	vbool32_t //__epi_2xi1
+/*__epi_1xi1 test_cast_1xi1_1xi64(__epi_1xi64 arg_0)
+{
+    return __builtin_epi_cast_1xi1_1xi64(arg_0);
+}
+trunc <vscale x 1 x i64> [[ARG_0:%.*]] to <vscale x 1 x i1>
+*/
+#define _MM_CAST_i1_i64  	__builtin_epi_cast_1xi1_1xi64 //TODO, not support?
+#define _MM_CAST_i1_i32  	__builtin_epi_cast_2xi1_2xi32 //TODO, not support?
 
-#define _MM_CAST_i1_i64  	__builtin_epi_cast_1xi1_1xi64 //TODO
-#define _MM_CAST_i1_i32  	__builtin_epi_cast_2xi1_2xi32 //TODO
-
-#define _MM_CAST_i64_i1  	__builtin_epi_cast_1xi64_1xi1 //TODO
-#define _MM_CAST_i32_i1  	__builtin_epi_cast_2xi32_2xi1 //TODO
+#define _MM_CAST_i64_i1  	__builtin_epi_cast_1xi64_1xi1 //TODO, not support?
+#define _MM_CAST_i32_i1  	__builtin_epi_cast_2xi32_2xi1 //TODO, not support?
 
 // OPERATIONS WITH MASKS
-
-#define _MM_VMFIRST_i64 	__builtin_epi_vmfirst_1xi1 //TODO vfirst?
-#define _MM_VMFIRST_i32 	__builtin_epi_vmfirst_2xi1 //TODO
-
-#define _MM_VMPOPC_i64 		__builtin_epi_vmpopc_1xi1 //TODO
-#define _MM_VMPOPC_i32 		__builtin_epi_vmpopc_2xi1 //TODO
-
-#define _MM_VMAND_i64 		__builtin_epi_vmand_1xi1 //TODO
-#define _MM_VMAND_i32 		__builtin_epi_vmand_2xi1 //TODO
  
-#define _MM_VMNOR_i64 		__builtin_epi_vmnor_1xi1 //TODO
-#define _MM_VMNOR_i32 		__builtin_epi_vmnor_2xi1 //TODO
+//#define _MM_VMFIRST_i64 	__builtin_epi_vmfirst_1xi1 
+#define _MM_VMFIRST_i64(op1, op2) vfirst_m_b64(op1) //This function is not found in epi's testcases
 
-#define _MM_VMOR_i64 		__builtin_epi_vmor_1xi1 //TODO
-#define _MM_VMOR_i32 		__builtin_epi_vmor_2xi1 //TODO
+//#define _MM_VMFIRST_i32 	__builtin_epi_vmfirst_2xi1
+#define _MM_VMFIRST_i32(op1, op2) vfirst_m_b32(op1) //This function is not found in epi's testcases
 
-#define _MM_VMXOR_i64 		__builtin_epi_vmxor_1xi1 //TODO
-#define _MM_VMXOR_i32 		__builtin_epi_vmxor_2xi1 //TODO
+//#define _MM_VMPOPC_i64 		__builtin_epi_vmpopc_1xi1
+#define _MM_VMPOPC_i64(op1, op2) vpopc_m_b64(op1) //This function is not found in epi's testcases
+//#define _MM_VMPOPC_i32 		__builtin_epi_vmpopc_2xi1 
+#define _MM_VMPOPC_i32(op1, op2) vpopc_m_b32(op1) //This function is not found in epi's testcases
 
+//#define _MM_VMAND_i64 		__builtin_epi_vmand_1xi1
+#define _MM_VMAND_i64(op1, op2, op3) vmand_mm_b64(op1, op2)
+
+//#define _MM_VMAND_i32 		__builtin_epi_vmand_2xi1 
+#define _MM_VMAND_i32(op1, op2, op3) vmand_mm_b32(op1, op2)
+ 
+//#define _MM_VMNOR_i64 		__builtin_epi_vmnor_1xi1 
+#define _MM_VMNOR_i64(op1, op2, op3) vmnor_mm_b64(op1, op2)
+
+//#define _MM_VMNOR_i32 		__builtin_epi_vmnor_2xi1 
+#define _MM_VMNOR_i32(op1, op2, op3) vmnor_mm_b32(op1, op2)
+
+//#define _MM_VMOR_i64 		__builtin_epi_vmor_1xi1
+#define _MM_VMOR_i64(op1, op2, op3) vmor_mm_b64(op1, op2)
+
+//#define _MM_VMOR_i32 		__builtin_epi_vmor_2xi1
+#define _MM_VMOR_i32(op1, op2, op3) vmor_mm_b32(op1, op2)
+
+//#define _MM_VMXOR_i64 		__builtin_epi_vmxor_1xi1 
+#define _MM_VMXOR_i64(op1, op2, op3) vmxor_mm_b64(op1, op2)
+
+//#define _MM_VMXOR_i32 		__builtin_epi_vmxor_2xi1
+#define _MM_VMXOR_i32(op1, op2, op3) vmxor_mm_b32(op1, op2)
 
 // OPERATIONS TO CREATE A MASK
 
