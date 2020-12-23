@@ -1,3 +1,4 @@
+#include "riscv_vector.h"
 #define _MM_ALIGN64 __attribute__((aligned (64)))
 
 #define MUSTINLINE __attribute__((always_inline))
@@ -122,10 +123,10 @@ vint64m1_t vmv_v_x_i64m1 (int64_t src);
 #define _MM_SLL_i32(op1, op2, op3) vsll_vv_i32m1(op1, op2)
 
 //#define _MM_SRL_i64     	__builtin_epi_vsrl_1xi64
-#define _MM_SRL_i64(op1, op2, op3) vsrl_vv_i64m1(op1, op2)
+#define _MM_SRL_i64(op1, op2, op3) vsrl_vv_u64m1(op1, op2)
 
 //#define _MM_SRL_i32     	__builtin_epi_vsrl_2xi32
-#define _MM_SRL_i32(op1, op2, op3) vsrl_vv_i32m1(op1, op2)
+#define _MM_SRL_i32(op1, op2, op3) vsrl_vv_u32m1(op1, op2)
 
 //#define _MM_AND_i64     	__builtin_epi_vand_1xi64
 #define _MM_AND_i64(op1, op2, op3) vand_vv_i64m1(op1, op2)
@@ -300,11 +301,21 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_VFSGNJX_f32 	__builtin_epi_vfsgnjx_2xf32
 #define _MM_VFSGNJX_f32(op1, op2, op3) vfsgnjx_vv_f32m1(op1, op2)
 
+/*
+0.7.1:
+__epi_1xf64 test_vfmerge_1xf64(__epi_1xf64 arg_0, __epi_1xf64 arg_1, __epi_1xi1 arg_2, unsigned long int arg_3)
+{
+    return __builtin_epi_vfmerge_1xf64(arg_0, arg_1, arg_2, arg_3);
+}
+
+0.9:
+vfloat64m1_t vmerge_vvm_f64m1 (vbool64_t mask, vfloat64m1_t op1, vfloat64m1_t op2);
+*/
 //#define _MM_MERGE_f64  		__builtin_epi_vfmerge_1xf64
-#define _MM_MERGE_f64(op1, op2, op3) vfmerge_vv_f64m1(op1, op2)
+#define _MM_MERGE_f64(op1, op2, op3, op4) vmerge_vvm_f64m1(op3, op1, op2)
 
 //#define _MM_MERGE_f32 		__builtin_epi_vfmerge_2xf32
-#define _MM_MERGE_f32(op1, op2, op3) vfmerge_vv_f32m1(op1, op2)
+#define _MM_MERGE_f32(op1, op2, op3, op4) vmerge_vvm_f32m1(op3, op1, op2)
 
 //#define _MM_REDSUM_f64  	__builtin_epi_vfredsum_1xf64 
 #define _MM_REDSUM_f64(op1, op2, op3) vfredsum_vs_f64m1_f64m1(op2, op1, op2)
@@ -331,8 +342,11 @@ vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 //#define _MM_NMSUB_f64  		__builtin_epi_vfnmsub_1xf64 error
 //#define _MM_NMSUB_f32  		__builtin_epi_vfnmsub_2xf32 error
 
-#define _MM_MADD_f64  		__builtin_epi_vfmadd_1xf64
-#define _MM_MADD_f32  		__builtin_epi_vfmadd_2xf32
+//#define _MM_MADD_f64  		__builtin_epi_vfmadd_1xf64
+#define _MM_MADD_f64(op1, op2, op3, op4) vfmadd_vv_f64m1(op1, op2, op3)
+
+//#define _MM_MADD_f32  		__builtin_epi_vfmadd_2xf32
+#define _MM_MADD_f32(op1, op2, op3, op4) vfmadd_vv_f32m1(op1, op2, op3)
 
 //#define _MM_MADD_f64_MASK  	__builtin_epi_vfmadd_1xf64_mask
 //#define _MM_MADD_f32_MASK  	__builtin_epi_vfmadd_2xf32_mask
