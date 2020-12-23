@@ -20,10 +20,10 @@
 // INTEGER INTRINSICS
 
 //#define _MM_LOAD_i64        __builtin_epi_vload_1xi64
-#define _MM_LOAD_i64(op1, op2, op3)     vle64_v_i64m1(op1, op2)
+#define _MM_LOAD_i64(op1, op2)     vle64_v_i64m1(op1)
 
 //#define _MM_LOAD_i32    	__builtin_epi_vload_2xi32
-#define _MM_LOAD_i32(op1, op2, op3)     vle32_v_i32m1(op1, op2)
+#define _MM_LOAD_i32(op1, op2)     vle32_v_i32m1(op1)
 
 //#define _MM_LOAD_INDEX_i64 __builtin_epi_vload_indexed_1xi64
 #define _MM_LOAD_INDEX_i64(op1, op2, op3)  vlxei64_v_i64m1(op1, op2)
