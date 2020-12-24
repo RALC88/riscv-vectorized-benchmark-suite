@@ -33,7 +33,7 @@ _MMR_f32 xInt_vector;
 _MMR_f32 xResult;
 
 //unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
-unsigned long int  gvl = vsetvl_e32m1(end) //PLCT
+unsigned long int  gvl = vsetvl_e32m1(end); //PLCT
 
 xFloat_vector = _MM_LOAD_f32(float_vector,gvl);
 xInt_vector = _MM_LOAD_i32(int_vector,gvl);

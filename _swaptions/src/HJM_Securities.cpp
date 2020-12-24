@@ -114,7 +114,7 @@ void * worker(void *arg){
       #ifdef USE_RISCV_VECTOR
         // Vector seed to get the randon number with vector code
         // unsigned long int gvl = __builtin_epi_vsetvl(NUM_TRIALS, __epi_e64, __epi_m1);
-        unsigned long int gvl = vsetvl_e64m1(NUM_TRIALS) //PLCT
+        unsigned long int gvl = vsetvl_e64m1(NUM_TRIALS); //PLCT
         swaption_seed_vector = (long*)malloc(gvl*sizeof(long));
         for(int j=0; j < gvl; j++) {
         swaption_seed_vector[j] = swaption_seed + j + (i * gvl);

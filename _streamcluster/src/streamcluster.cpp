@@ -659,7 +659,7 @@ float dist(Point p1, Point p2, int dim )
   float result=0.0;
   int i;
   //unsigned long int gvl = __builtin_epi_vsetvl(dim, __epi_e32, __epi_m1);
-  unsigned long int gvl = vsetvl_e32m1(dim) //PLCT  
+  unsigned long int gvl = vsetvl_e32m1(dim); //PLCT  
 
  _MMR_f32 result1,result2, _aux, _diff, _coord1, _coord2;
 
@@ -668,7 +668,7 @@ float dist(Point p1, Point p2, int dim )
   for (i=0;i<dim;i=i+gvl) {  
 
    // gvl = __builtin_epi_vsetvl(dim-i, __epi_e32, __epi_m1);
-   gvl = vsetvl_e32m1(dim-i) //PLCT
+   gvl = vsetvl_e32m1(dim-i); //PLCT
 
     _coord1 = _MM_LOAD_f32(&(p1.coord[i]),gvl);
     _coord2 = _MM_LOAD_f32(&(p2.coord[i]),gvl);
