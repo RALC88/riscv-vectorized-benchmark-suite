@@ -1865,10 +1865,14 @@ void outcenterIDs( Points* centers, long* centerIDs, char* outfile ) {
     if( is_a_median[i] ) {
       fprintf(fp, "%u\n", centerIDs[i]);
       fprintf(fp, "%lf\n", centers->p[i].weight);
+      printf("%u\n", centerIDs[i]);
+      printf("%lf\n", centers->p[i].weight);
       for( int k = 0; k < centers->dim; k++ ) {
 	fprintf(fp, "%lf ", centers->p[i].coord[k]);
+        printf("%lf ", centers->p[i].coord[k]);
       }
       fprintf(fp,"\n\n");
+      printf("\n\n");
     }
   }
   fclose(fp);
