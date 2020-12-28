@@ -1,37 +1,24 @@
 #makefile
+GCC_TOOLCHAIN_DIR := /home/liaochunyu/cxo/newlib/
+SYSROOT_DIR := $(GCC_TOOLCHAIN_DIR)/riscv64-unknown-elf
 
-start:
-	mkdir bin; \
-	rm bin/*.*
+LLVM := /home/liaochunyu/rvv-llvm/build/
+SPIKE := /home/liaochunyu/riscv-isa-sim/build/spike
+PK := /home/liaochunyu/riscv-pk/build/pk
+
+target = bin/rvv-test
 
 serial:
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -c -o src/axpy_serial.o src/axpy.c
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -c -o src/main_serial.o src/main.c
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -c -o src/utils_serial.o src/utils.c
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -o bin/axpy_serial.exe src/*.o -lm
-	rm src/*.o
-	${LLVM}/bin/llvm-objdump  -mattr=+m,+f,+d,+a,+c,+epi -ds  bin/axpy_serial.exe > bin/axpy_serial.dump
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -c -o src/axpy.o src/axpy.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR) -c -o src/main.o src/main.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf  -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR) -c -o src/utils.o src/utils.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -O2 -o $(target) src/*.o -lm
+
 vector:
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -O2 -c -o src/utils.o src/utils.c ; \
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -O2 -c -o src/axpy.o src/axpy.c ; \
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -O2 -c -o src/main.o src/main.c ; \
-	${LLVM}/bin/clang -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64g -O2 -o bin/axpy_vector.exe src/*.o -lm ; \
-	rm src/*.o ; \
-	${LLVM}/bin/llvm-objdump  -mattr=+m,+f,+d,+a,+c,+epi -ds   bin/axpy_vector.exe > bin/axpy_vector.dump ; \
-
-host:
-	echo "host"
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/axpy.o  src/axpy.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/main.o  src/main.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/utils.o  src/utils.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -o  bin/axpy_host.exe  src/*.o  -lm; \
-# 	rm src/*.o; \
-# 	objdump -dC bin/axpy_host.exe > bin/axpy_host.dump ;
-
-copy:
-	rm -r ../../Test/_axpy/bin/*.exe; \
-	cp -r bin/*exe ../../Test/_axpy/bin;
-
-clean:
-	rm bin/*.dump; \
-	rm bin/*.exe;
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR  -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -c -o src/utils.o src/utils.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -c -o src/axpy.o src/axpy.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR  -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR) -c -o src/main.o src/main.c
+	${LLVM}/bin/clang  -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64gcv1p0 -menable-experimental-extensions -O2  --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR) -o $(target) src/*.o -lm  
+	
+runspike :
+	$(SPIKE) --isa=rv64gcv $(PK) $(target) 256
