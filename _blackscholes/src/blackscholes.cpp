@@ -715,16 +715,18 @@ int main (int argc, char **argv)
     file = fopen(outputFile, "w");
     if(file == NULL) {
       printf("ERROR: Unable to open file `%s'.\n", outputFile);
-      exit(1);
+    //  exit(1);
     }
-    rv = fprintf(file, "%i\n", numOptions);
+    //rv = fprintf(file, "%i\n", numOptions);
+    printf("%i\n", numOptions);
     if(rv < 0) {
       printf("ERROR: Unable to write to file `%s'.\n", outputFile);
       fclose(file);
       exit(1);
     }
     for(i=0; i<numOptions; i++) {
-      rv = fprintf(file, "%.18f\n", prices[i]);
+      //rv = fprintf(file, "%.18f\n", prices[i]);
+      printf("%.18f\n", prices[i]);
       if(rv < 0) {
         printf("ERROR: Unable to write to file `%s'.\n", outputFile);
         fclose(file);

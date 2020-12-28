@@ -1,27 +1,19 @@
 #makefile
+GCC_TOOLCHAIN_DIR := /home/liaochunyu/cxo/newlib/
+SYSROOT_DIR := $(GCC_TOOLCHAIN_DIR)/riscv64-unknown-elf
 
-start:
-	mkdir bin; \
-	rm bin/*.*
+LLVM := /home/liaochunyu/rvv-llvm/build/
+SPIKE := /home/liaochunyu/riscv-isa-sim/build/spike
+PK := /home/liaochunyu/riscv-pk/build/pk
+
+target = bin/rvv-test
 
 serial:
-	${LLVM}/bin/clang++ -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -c -o src/blackscholes_serial.o src/blackscholes.cpp
-	${LLVM}/bin/clang++ -mepi -Wall --target=riscv64-unknown-elf -march=rv64g -O2 -o bin/blackscholes_serial.exe src/blackscholes_serial.o -lm
-	rm src/*.o
-	${LLVM}/bin/llvm-objdump  -mattr=+m,+f,+d,+a,+c,+epi -ds  bin/blackscholes_serial.exe > bin/blackscholes_serial.dump
+	${LLVM}/bin/clang++ --target=riscv64-unknown-elf -march=rv64gcv1p0 -menable-experimental-extensions --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR) -O2 -o $(target) src/blackscholes.cpp -lm
+
 vector:
-	${LLVM}/bin/clang++ -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64g -O2 -c -o src/blackscholes.o src/blackscholes.cpp ; \
-	${LLVM}/bin/clang++ -mepi -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64g -O2 -o bin/blackscholes_vector.exe src/*.o -lm ; \
-	rm src/*.o ; \
-	${LLVM}/bin/llvm-objdump  -mattr=+m,+f,+d,+a,+c,+epi -ds   bin/blackscholes_vector.exe > bin/blackscholes_vector.dump ;
+	${LLVM}/bin/clang++ --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR   -march=rv64gcv1p0 -menable-experimental-extensions --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -O2 -o $(target)  src/blackscholes.cpp -lm
 
-host:
-	gcc -O2 -fopenmp src/blackscholes.cpp -o bin/blackscholes_host.exe -lm ;
 
-copy:
-	rm -r ../../Test/_blackscholes/bin/*.exe; \
-	cp -r bin/*exe ../../Test/_blackscholes/bin;
-
-clean:
-	rm bin/*.dump; \
-	rm bin/*.exe;
+runspike :
+	$(SPIKE) --isa=rv64gcv $(PK) $(target) 1 ./input/in_64K.input prices.txt
