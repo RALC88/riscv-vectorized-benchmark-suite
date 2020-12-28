@@ -200,7 +200,7 @@ int HJM_Swaption_Blocking(FTYPE *pdSwaptionPrice, //Output vector that will stor
       
       #ifdef USE_RISCV_VECTOR
             //unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE_AUX, __epi_e64, __epi_m1);
-            unsigned long int gvl = vsetvl_e64m1(BLOCKSIZE_AUX) //PLCT
+            unsigned long int gvl = vsetvl_e64m1(BLOCKSIZE_AUX); //PLCT
             _MMR_f64    xpdSwapDiscountFactors;
             _MMR_f64    xpdSwapPayoffs;
             _MMR_f64    xdFixedLegValue             = _MM_SET_f64(0.0,gvl);
