@@ -159,8 +159,10 @@ routing_cost_t annealer_thread::calculate_delta_routing_cost_vector(netlist_elem
         //int* mask;
         //mask = (int*)malloc(gvl*sizeof(int));
         //for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
-        __epi_2xi1  xMask = __builtin_epi_cast_2xi1_2xi32(_MM_LOAD_i32(mask,gvl));
-
+        
+        //__epi_2xi1  xMask = __builtin_epi_cast_2xi1_2xi32(_MM_LOAD_i32(mask,gvl));
+        _MMR_MASK_i32 _MM_CAST_i1_i32(_MM_LOAD_i32(mask,gvl)); //PLCT
+        
         _MMR_i32 xAFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(a_loc->y,gvl),_MM_SET_i32(a_loc->x,gvl),xMask,gvl);
         _MMR_i32 xBFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(b_loc->y,gvl),_MM_SET_i32(b_loc->x,gvl),xMask,gvl);
 
