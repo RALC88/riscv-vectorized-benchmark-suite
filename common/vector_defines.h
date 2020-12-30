@@ -460,17 +460,29 @@ vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 
 #define _MMR_MASK_i64   	vbool64_t //__epi_1xi1
 #define _MMR_MASK_i32   	vbool32_t //__epi_2xi1
-/*__epi_1xi1 test_cast_1xi1_1xi64(__epi_1xi64 arg_0)
+/*
+data type -> mask type
+__epi_1xi1 test_cast_1xi1_1xi64(__epi_1xi64 arg_0)
 {
     return __builtin_epi_cast_1xi1_1xi64(arg_0);
 }
 trunc <vscale x 1 x i64> [[ARG_0:%.*]] to <vscale x 1 x i1>
-*/
-#define _MM_CAST_i1_i64  	__builtin_epi_cast_1xi1_1xi64 //TODO, not support?
-#define _MM_CAST_i1_i32  	__builtin_epi_cast_2xi1_2xi32 //TODO, not support?
 
-#define _MM_CAST_i64_i1  	__builtin_epi_cast_1xi64_1xi1 //TODO, not support?
-#define _MM_CAST_i32_i1  	__builtin_epi_cast_2xi32_2xi1 //TODO, not support?
+https://github.com/riscv/rvv-intrinsic-doc/issues/37
+
+*/
+//#define _MM_CAST_i1_i64  	__builtin_epi_cast_1xi1_1xi64 
+#define _MM_CAST_i1_i64(op1) vmseq_vx_i64m1_b64(op1, 1)
+
+//#define _MM_CAST_i1_i32  	__builtin_epi_cast_2xi1_2xi32
+#define _MM_CAST_i1_i32(op1) vmseq_vx_i32m1_b32(op1, 1)
+
+// mask type -> data type
+//#define _MM_CAST_i64_i1  	__builtin_epi_cast_1xi64_1xi1 
+#define _MM_CAST_i64_i1(op1) vmerge_vxm_i64m1(op1, vundefined_i64m1(), 1)
+
+//#define _MM_CAST_i32_i1  	__builtin_epi_cast_2xi32_2xi1
+#define _MM_CAST_i32_i1(op1) vmerge_vxm_i32m1(op1, vundefined_i32m1(), 1)
 
 // OPERATIONS WITH MASKS
  
