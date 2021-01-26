@@ -222,7 +222,6 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     xfXd1   = _MM_MERGE_f32(_MM_SUB_f32(_MM_SET_f32(1.0,gvl),xfXd1,gvl),xfXd1, xMask,gvl);
     xStockPrice = _MM_LOAD_f32(sptprice,gvl);
     xOptionPrice1 = _MM_MUL_f32(xStockPrice, xfXd1,gvl);
-    //FENCE();
     xfXd2   = _MM_MERGE_f32(_MM_SUB_f32(_MM_SET_f32(1.0,gvl),xfXd2,gvl),xfXd2, xMask,gvl);
     xOptionPrice2 = _MM_MUL_f32(xFutureValueX, xfXd2,gvl);
     xOptionPrice = _MM_SUB_f32(xOptionPrice2,xOptionPrice1,gvl);
@@ -465,6 +464,7 @@ int bs_thread(void *tid_ptr) {
             }
 #endif
         }
+        FENCE();
     }
 
 #ifdef ENABLE_PARSEC_HOOKS
