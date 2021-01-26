@@ -125,12 +125,9 @@ _MMR_f32 CNDF_SIMD  (_MMR_f32 xInput ,unsigned long int gvl)
   expValues   = _MM_MUL_f32(expValues, _MM_SET_f32(-0.5,gvl),gvl);
 
   xNPrimeofX = _MM_EXP_f32(expValues ,gvl);
-  FENCE();
   xNPrimeofX = _MM_MUL_f32(xNPrimeofX, _MM_SET_f32(inv_sqrt_2xPI,gvl),gvl);
-  //xK2 = _MM_MUL_f32(_MM_SET_f32(0.2316419,gvl), xInput,gvl);
-  //xK2 = _MM_ADD_f32(xK2, xOne,gvl);
-  xK2   = _MM_SET_f32(0.2316419,gvl);
-  xK2   = _MM_MADD_f32(xK2,xInput,xOne,gvl);
+
+  xK2   = _MM_MADD_f32(_MM_SET_f32(0.2316419,gvl),xInput,xOne,gvl);
 
   xK2   = _MM_DIV_f32(xOne,xK2,gvl);
   xK2_2 = _MM_MUL_f32(xK2, xK2,gvl);
@@ -141,17 +138,15 @@ _MMR_f32 CNDF_SIMD  (_MMR_f32 xInput ,unsigned long int gvl)
   xLocal_1 = _MM_MUL_f32(xK2, _MM_SET_f32(0.319381530,gvl),gvl);
   xLocal_2 = _MM_MUL_f32(xK2_2, _MM_SET_f32(-0.356563782,gvl),gvl);
 
-  xLocal_3 = _MM_MUL_f32(xK2_3, _MM_SET_f32(1.781477937,gvl),gvl);
-  xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
-  //xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_3,_MM_SET_f32(1.781477937,gvl),gvl);
-
-  //xLocal_3 = _MM_MUL_f32(xK2_4, _MM_SET_f32(-1.821255978,gvl),gvl);
+  //xLocal_3 = _MM_MUL_f32(xK2_3, _MM_SET_f32(1.781477937,gvl),gvl);
   //xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
+  xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_3,_MM_SET_f32(1.781477937,gvl),gvl);
+
   xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_4,_MM_SET_f32(-1.821255978,gvl),gvl);
 
-  xLocal_3 = _MM_MUL_f32(xK2_5, _MM_SET_f32(1.330274429,gvl),gvl);
-  xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
-  //xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_5,_MM_SET_f32(1.330274429,gvl),gvl);
+  //xLocal_3 = _MM_MUL_f32(xK2_5, _MM_SET_f32(1.330274429,gvl),gvl);
+  //xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
+  xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_5,_MM_SET_f32(1.330274429,gvl),gvl);
 
   xLocal_1 = _MM_ADD_f32(xLocal_2, xLocal_1,gvl);
 
@@ -193,12 +188,10 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     _MMR_f32 xfXd1;
     _MMR_f32 xfXd2;
     
-    FENCE();
     xStrikePrice = _MM_LOAD_f32(strike,gvl);
     xStockPrice = _MM_LOAD_f32(sptprice,gvl);
     xStrikePrice = _MM_DIV_f32(xStockPrice,xStrikePrice,gvl);
     xLogTerm = _MM_LOG_f32(xStrikePrice,gvl);
-    //FENCE();
     xRiskFreeRate = _MM_LOAD_f32(rate,gvl);
     xVolatility = _MM_LOAD_f32(volatility,gvl);
     xTime = _MM_LOAD_f32(time,gvl);
@@ -207,13 +200,10 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     xRatexTime = _MM_VFSGNJN_f32(xRatexTime, xRatexTime,gvl);
 
     xFutureValueX = _MM_EXP_f32(xRatexTime,gvl);
-    FENCE();
     xPowerTerm = _MM_MUL_f32(xVolatility, xVolatility,gvl);
     xPowerTerm = _MM_MUL_f32(xPowerTerm, _MM_SET_f32(0.5,gvl),gvl);
     xD1 = _MM_ADD_f32( xRiskFreeRate , xPowerTerm,gvl);
     
-    //xD1 = _MM_MUL_f32(xD1, xTime,gvl);
-    //xD1 = _MM_ADD_f32(xD1,xLogTerm,gvl);
     xD1   = _MM_MADD_f32(xD1,xTime,xLogTerm,gvl);
 
     xDen = _MM_MUL_f32(xVolatility, xSqrtTime,gvl);
@@ -224,7 +214,6 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     xfXd2 = CNDF_SIMD( xD2 ,gvl);
 
     xStrikePrice = _MM_LOAD_f32(strike,gvl);
-    FENCE();
     xFutureValueX = _MM_MUL_f32(xFutureValueX, xStrikePrice,gvl);
 
     xOtype    = _MM_LOAD_i32(otype,gvl);
@@ -233,13 +222,12 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     xfXd1   = _MM_MERGE_f32(_MM_SUB_f32(_MM_SET_f32(1.0,gvl),xfXd1,gvl),xfXd1, xMask,gvl);
     xStockPrice = _MM_LOAD_f32(sptprice,gvl);
     xOptionPrice1 = _MM_MUL_f32(xStockPrice, xfXd1,gvl);
-    FENCE();
+    //FENCE();
     xfXd2   = _MM_MERGE_f32(_MM_SUB_f32(_MM_SET_f32(1.0,gvl),xfXd2,gvl),xfXd2, xMask,gvl);
     xOptionPrice2 = _MM_MUL_f32(xFutureValueX, xfXd2,gvl);
     xOptionPrice = _MM_SUB_f32(xOptionPrice2,xOptionPrice1,gvl);
     xOptionPrice = _MM_VFSGNJX_f32(xOptionPrice,xOptionPrice,gvl);
     _MM_STORE_f32(OptionPrice, xOptionPrice,gvl);
-    FENCE();
 }
 
 #endif // USE_RISCV_VECTOR
@@ -443,8 +431,8 @@ int bs_thread(void *tid_ptr) {
     int end = start + (numOptions / nThreads);
 
     unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
-    fptype* price;
-    price = (fptype*)malloc(gvl*sizeof(fptype));
+    //fptype* price;
+    //price = (fptype*)malloc(gvl*sizeof(fptype));
     //price = aligned_alloc(64, gvl*sizeof(fptype));
 
 #ifdef ENABLE_PARSEC_HOOKS
@@ -461,17 +449,17 @@ int bs_thread(void *tid_ptr) {
             // Calling main function to calculate option value based on Black & Scholes's
             // equation.
             gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
-            BlkSchlsEqEuroNoDiv_vector( price, gvl, &(sptprice[i]), &(strike[i]),
+            BlkSchlsEqEuroNoDiv_vector( &(prices[i]), gvl, &(sptprice[i]), &(strike[i]),
                                 &(rate[i]), &(volatility[i]), &(otime[i]), &(otype[i])/*,&(otype_d[i])*/, 0,gvl);
-            for (k=0; k<gvl; k++) {
-              prices[i+k] = price[k];
-            }
+            //for (k=0; k<gvl; k++) {
+            //  prices[i+k] = price[k];
+            //}
 #ifdef ERR_CHK
             for (k=0; k<gvl; k++) {
-                priceDelta = data[i+k].DGrefval - price[k];
+                priceDelta = data[i+k].DGrefval - prices[k];
                 if (fabs(priceDelta) >= 1e-4) {
                     printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
-                           i + k, price[k], data[i+k].DGrefval, priceDelta);
+                           i + k, prices[k], data[i+k].DGrefval, priceDelta);
                     numError ++;
                 }
             }
@@ -640,6 +628,7 @@ int main (int argc, char **argv)
     gettimeofday(&tv2_0, &tz_0);
     elapsed0 = (double) (tv2_0.tv_sec-tv1_0.tv_sec) + (double) (tv2_0.tv_usec-tv1_0.tv_usec) * 1.e-6; 
     printf("\n\nBlackScholes Initialization took %8.8lf secs   \n", elapsed0 );
+    //if (elapsed0>0.00000001) { return 0;}
 //#endif
 
 //#ifdef USE_RISCV_VECTOR
@@ -708,7 +697,8 @@ int main (int argc, char **argv)
     elapsed1 = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6; 
     printf("\n\nBlackScholes Kernel took %8.8lf secs   \n", elapsed1 );
 //#endif
-
+    //if (elapsed0>0.00000001) { return 0;}
+    
     //Write prices to output file
     file = fopen(outputFile, "w");
     if(file == NULL) {
