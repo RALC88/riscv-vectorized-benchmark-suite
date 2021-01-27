@@ -442,7 +442,8 @@ int bs_thread(void *tid_ptr) {
     int start = tid * (numOptions / nThreads);
     int end = start + (numOptions / nThreads);
 
-    unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
+    // unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
+    unsigned long int gvl = vsetvl_e32m1(end); //PLCT
     fptype* price;
     price = (fptype*)malloc(gvl*sizeof(fptype));
     //price = aligned_alloc(64, gvl*sizeof(fptype));
@@ -460,7 +461,8 @@ int bs_thread(void *tid_ptr) {
 #endif //ENABLE_OPENMP
             // Calling main function to calculate option value based on Black & Scholes's
             // equation.
-            gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
+            // gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
+            gvl = vsetvl_e32m1(end-i); //PLCT
             BlkSchlsEqEuroNoDiv_vector( price, gvl, &(sptprice[i]), &(strike[i]),
                                 &(rate[i]), &(volatility[i]), &(otime[i]), &(otype[i])/*,&(otype_d[i])*/, 0,gvl);
             for (k=0; k<gvl; k++) {
@@ -713,16 +715,18 @@ int main (int argc, char **argv)
     file = fopen(outputFile, "w");
     if(file == NULL) {
       printf("ERROR: Unable to open file `%s'.\n", outputFile);
-      exit(1);
+    //  exit(1);
     }
-    rv = fprintf(file, "%i\n", numOptions);
+    //rv = fprintf(file, "%i\n", numOptions);
+    printf("%i\n", numOptions);
     if(rv < 0) {
       printf("ERROR: Unable to write to file `%s'.\n", outputFile);
       fclose(file);
       exit(1);
     }
     for(i=0; i<numOptions; i++) {
-      rv = fprintf(file, "%.18f\n", prices[i]);
+      //rv = fprintf(file, "%.18f\n", prices[i]);
+      printf("%.18f\n", prices[i]);
       if(rv < 0) {
         printf("ERROR: Unable to write to file `%s'.\n", outputFile);
         fclose(file);

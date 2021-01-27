@@ -59,14 +59,15 @@ void kernel_jacobi_2d_vector(int tsteps,int n, DATA_TYPE **A,DATA_TYPE **B)
     int size_y = n-2;
     int size_x = n-2;
 
-    unsigned long int gvl = __builtin_epi_vsetvl(size_y, __epi_e64, __epi_m1);
+    // unsigned long int gvl = __builtin_epi_vsetvl(size_y, __epi_e64, __epi_m1);
+    unsigned long int gvl =  vsetvl_e64m1(size_y); //PLCT
 
     xConstant = _MM_SET_f64(0.20,gvl);
 
     for (int j=1; j<=size_x; j=j+gvl) 
     {
-        gvl = __builtin_epi_vsetvl(size_y-j+1, __epi_e64, __epi_m1);
-
+        // gvl = __builtin_epi_vsetvl(size_y-j+1, __epi_e64, __epi_m1);
+        gvl =  vsetvl_e64m1(size_y-j+1); //PLCT
         xU = _MM_LOAD_f64(&A[1][j],gvl);
         xUtop = _MM_LOAD_f64(&A[0][j],gvl);
         xUbottom = _MM_LOAD_f64(&A[2][j],gvl);

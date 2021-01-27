@@ -6,25 +6,25 @@ The RISC-V Vectorized Benchmark Suite is a collection composed of seven data-par
 
 The benchmark suite with all its applications and input sets is available as open source free of charge. Some of the benchmark programs have their own licensing terms which might limit their use in some cases.
 
-The implementation is based on the Working draft of the proposed RISC-V V vector extension v0.7.1
-https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1
-
+The implementation is based on the working draft of the proposed [RISC-V V vector extension v1.0 Spec](https://github.com/riscv/riscv-v-spec) and [intrinsic API](https://github.com/riscv/rvv-intrinsic-doc).
 
 If you use this software or a modified version of it for your research, please cite the paper:
 Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
 
+
+
 ## Pakage Structure
 
     Vectorized_Benchmark_Suite/ : The Vectorized Benchmark Suite
+        _axpy/                  : axpy main folder
+        ...../src               : axpy sources
+        ...../bin               : axpy binary
         blackscholes/           : Blackscholes main folder
         ...../src               : Blackscholes sources
         ...../bin               : Blackscholes binary
         canneal/                : canneal main folder
         ...../src               : canneal sources
         ...../bin               : canneal binary
-        heatequation/           : heatequation main folder
-        ...../src               : heatequation sources
-        ...../bin               : heatequation binary
         particlefilter/         : particlefilter main folder
         ...../src               : particlefilter sources
         ...../bin               : particlefilter binary
@@ -41,7 +41,7 @@ Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez
 
 ## Building Vectorized Applications 
 
-The RISC-V Vectorized Bencmark Suite has been successfully tested on Ubuntu 18 and Centos7
+The RISC-V Vectorized Bencmark Suite has been successfully tested on [Spike RISC-V ISA Simulator](https://github.com/riscv/riscv-isa-sim)
 
 ### Setting up the environment
 
@@ -49,9 +49,10 @@ The Suite includes a makefile to compile every application, in order to use it, 
 
 Setting the Vector Compiler path
 ```
-export LLVM=$TOP/epi-toolchain
-export PATH=$PATH:$LLVM/bin
+export LLVM=$TOP/riscv-toolchain
 ```
+
+Currently, the Suite can only be compiled by the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm). We will update the Suite to be compiled by the upstream LLVM when it is available.
 
 ### Compile using  clang for RISCV Vector Version
 
@@ -69,20 +70,15 @@ make blackscholes
 ```
 The same for the other applications ...
 
-Also you can compile all the applications by typing:
-```
-make all 
-```
 
 ### Running applications
 
-There are provided 5 different simulation sizes (arguments to run the application). Assuming that the application is running on a simulator, is recommended to not use "native" simulation size.
+There are provided 5 different simulation sizes (arguments to run the application). But I only use it for functional testing, without calculating the time.
 ```
-simtiny : takes seconds to be executed on gem5
-simsmall : takes around 15 minutes to be executed on gem5
-simmedium : takes around 1  hour to be executed on gem5
-simlarge : takes around 8 hours to be executed on gem5
-native : only for native hardware
+simtiny 
+simsmall
+simmedium
+simlarge 
 ```
 
 Whe you are executing an application, you must write the following arguments to run a predefined simsize.
@@ -138,19 +134,6 @@ matmul_args         = "1024 1024 1024"
 axpy_args           = "2048"
 ```  
 
-#### native
-```
-blackscholes_args   = "1 input/in_10M.input prices.txt"
-canneal_args        = "1 15000 2000 input/2500000.nets 6000"
-streamcluster_args  = "10 20 128 1000000 200000 5000 none output.txt 1"
-swaptions_args      = "-ns 128 -sm 1000000 -nt 1"
-particlefilter_args = "-x 256 -y 256 -z 24 -np 65536"
-pathfinder_args     = "32768 4096 output.txt"
-heatequation_args   = " input/test_large.input output.ppm"
-matmul_args         = "2048 2048 2048"
-axpy_args           = "4096"
-```  
-
 #### Example of execution blackscholes serial version.
 ```
 ./blackscholes_serial 1 input/in_64K.input prices.txt
@@ -162,9 +145,12 @@ axpy_args           = "4096"
 
 ```
 
-More info about how to execute the serial and vectorized versions on the gem5 Vector Architecture model can be found in he README file located in https://github.com/RALC88/gem5/blob/develop/src/cpu/vector_engine/README.md
+You will also need to install the [riscv-pk](https://github.com/riscv/riscv-pk) in order for Spike to run
 
 ## Contact
 Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
 PhD. Student at UPC Barcelona   
 BSC - Barcelona Supercomputing Center
+
+Chunyu Liao chunyu@iscas.ac.cn
+PLCT Lab

@@ -417,8 +417,9 @@ int Discount_Factors_Blocking_vector(FTYPE *pdDiscountFactors,
 	FTYPE ddelt;			//HJM time-step length
 	ddelt = (FTYPE) (dYears/iN);
 
-	unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE, __epi_e64, __epi_m1);
-	_MMR_f64 	xDdelt;
+	// unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE, __epi_e64, __epi_m1);
+	unsigned long int gvl = vsetvl_e64m1(BLOCKSIZE); //PLCT
+    _MMR_f64 	xDdelt;
 	_MMR_f64   	xpdRatePath;
 
 	xDdelt = _MM_SET_f64(ddelt,gvl);

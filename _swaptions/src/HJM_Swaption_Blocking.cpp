@@ -199,8 +199,8 @@ int HJM_Swaption_Blocking(FTYPE *pdSwaptionPrice, //Output vector that will stor
       // Simulation
       
       #ifdef USE_RISCV_VECTOR
-            unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE_AUX, __epi_e64, __epi_m1);
-            
+            //unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE_AUX, __epi_e64, __epi_m1);
+            unsigned long int gvl = vsetvl_e64m1(BLOCKSIZE_AUX); //PLCT
             _MMR_f64    xpdSwapDiscountFactors;
             _MMR_f64    xpdSwapPayoffs;
             _MMR_f64    xdFixedLegValue             = _MM_SET_f64(0.0,gvl);
@@ -221,13 +221,16 @@ int HJM_Swaption_Blocking(FTYPE *pdSwaptionPrice, //Output vector that will stor
             // ========= end simulation ======================================
             //xdSumSimSwaptionPrice       = _MM_LOAD_f64(&dSumSimSwaptionPrice,1);
             //xdSumSquareSimSwaptionPrice = _MM_LOAD_f64(&dSumSquareSimSwaptionPrice,1);
+            vsetvl_e64m1(1);
             xdSumSimSwaptionPrice       = _MM_SET_f64(dSumSimSwaptionPrice,1);
             xdSumSquareSimSwaptionPrice = _MM_SET_f64(dSumSquareSimSwaptionPrice,1);
 
             // accumulate into the aggregating variables =====================
+            vsetvl_e64m1(BLOCKSIZE_AUX);
             xdSumSimSwaptionPrice = _MM_REDSUM_f64(xdFixedLegValue,xdSumSimSwaptionPrice,gvl);
             xdSumSquareSimSwaptionPrice = _MM_REDSUM_f64(_MM_MUL_f64(xdFixedLegValue,xdFixedLegValue,gvl),xdSumSquareSimSwaptionPrice,gvl);
 
+             vsetvl_e64m1(1);
             _MM_STORE_f64(&dSumSimSwaptionPrice,xdSumSimSwaptionPrice,1);
             _MM_STORE_f64(&dSumSquareSimSwaptionPrice,xdSumSquareSimSwaptionPrice,1);
             FENCE();

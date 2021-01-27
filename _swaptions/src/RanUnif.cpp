@@ -36,8 +36,8 @@ FTYPE RanUnif( long *s )
 void RanUnif_vector( long *s , int iFactors , int iN ,int  BLOCKSIZE , FTYPE **randZ )
 {
   // uniform random number generator
-  unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE, __epi_e64, __epi_m1);
-
+  // unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE, __epi_e64, __epi_m1);
+  unsigned long int gvl =  vsetvl_e64m1(BLOCKSIZE); //PLCT
   _MMR_i64    k1;
   _MMR_i64      zero;
   _MMR_MASK_i64   mask1;
