@@ -56,7 +56,7 @@ __epi_1xi64 test_vadd_1xi64_mask(__epi_1xi64 arg_0, __epi_1xi64 arg_1, __epi_1xi
 {
     return __builtin_epi_vadd_1xi64_mask(arg_0, arg_1, arg_2, arg_3, arg_4);
 }
-0.9
+0.9/1.0:
 vint64m1_t vadd_vv_i64m1_m (vbool64_t mask, vint64m1_t maskedoff, vint64m1_t op1, vint64m1_t op2);
 */
 #define _MM_ADD_i64_MASK(op1, op2, op3, op4, op5) vadd_vv_i64m1_m(op4, op1, op2, op3)
@@ -95,7 +95,7 @@ __epi_1xi64 test_vbroadcast_1xi64(signed long int arg_0, unsigned long int arg_1
     return __builtin_epi_vbroadcast_1xi64(arg_0, arg_1);
 }
 
-0.9:
+0.9/1.0:
 vint64m1_t vmv_v_x_i64m1 (int64_t src);
 */
 //#define _MM_SET_i64     	__builtin_epi_vbroadcast_1xi64
@@ -173,7 +173,7 @@ bb.0.entry:
   %3:vr = PseudoVREDSUM_VS_M1 %4:vr(tied-def 0), %0:vr, %1:vr, $noreg, $noreg, -1, implicit $vl, implicit $vtype
   $v16 = COPY %3:vr
   PseudoRET implicit $v16
-0.9
+0.9/1.0:
 vint64m1_t vredsum_vs_i64m1_i64m1 (vint64m1_t dst, vint64m1_t vector, vint64m1_t scalar);
 */
 //#define _MM_REDSUM_i64   	__builtin_epi_vredsum_1xi64 
@@ -188,7 +188,7 @@ __epi_1xi64 test_vmerge_1xi64(__epi_1xi64 arg_0, __epi_1xi64 arg_1, __epi_1xi1 a
 {
     return __builtin_epi_vmerge_1xi64(arg_0, arg_1, arg_2, arg_3);
 }
-0.9
+0.9/1.0:
 vint64m1_t vmerge_vvm_i64m1 (vbool64_t mask, vint64m1_t op1, vint64m1_t op2);
 */
 //#define _MM_MERGE_i64         __builtin_epi_vmerge_1xi64
@@ -308,7 +308,7 @@ __epi_1xf64 test_vfmerge_1xf64(__epi_1xf64 arg_0, __epi_1xf64 arg_1, __epi_1xi1 
     return __builtin_epi_vfmerge_1xf64(arg_0, arg_1, arg_2, arg_3);
 }
 
-0.9:
+0.9/1.0:
 vfloat64m1_t vmerge_vvm_f64m1 (vbool64_t mask, vfloat64m1_t op1, vfloat64m1_t op2);
 */
 //#define _MM_MERGE_f64  		__builtin_epi_vfmerge_1xf64
@@ -390,7 +390,7 @@ __epi_2xi32 test_vslideup_2xi32(__epi_2xi32 arg_0, unsigned long int arg_1, unsi
 {
     return __builtin_epi_vslideup_2xi32(arg_0, arg_1, arg_2);
 }
-0.9
+0.9/1.0:
 vint32m2_t vslideup_vx_i32m2 (vint32m2_t dst, vint32m2_t src, size_t offset)
 */
 #define _MM_VSLIDEUP_i32    __builtin_epi_vslideup_2xi32 //TODO, not being used
