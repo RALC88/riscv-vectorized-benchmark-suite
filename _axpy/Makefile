@@ -1,10 +1,10 @@
 #makefile
-GCC_TOOLCHAIN_DIR := /home/liaochunyu/cxo/newlib/
+GCC_TOOLCHAIN_DIR := /newlib/
 SYSROOT_DIR := $(GCC_TOOLCHAIN_DIR)/riscv64-unknown-elf
 
-LLVM := /home/liaochunyu/rvv-llvm/build/
-SPIKE := /home/liaochunyu/riscv-isa-sim/build/spike
-PK := /home/liaochunyu/riscv-pk/build/pk
+LLVM := /llvm/build/
+SPIKE := spike
+PK := pk
 
 target = bin/rvv-test
 

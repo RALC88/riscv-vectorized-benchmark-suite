@@ -1,11 +1,11 @@
 #makefile
 
-GCC_TOOLCHAIN_DIR := /home/liaochunyu/cxo/newlib/
+GCC_TOOLCHAIN_DIR := /newlib/
 SYSROOT_DIR := $(GCC_TOOLCHAIN_DIR)/riscv64-unknown-elf
 
-LLVM := /home/liaochunyu/rvv-llvm/build/
-SPIKE := /home/liaochunyu/riscv-isa-sim/build/spike
-PK := /home/liaochunyu/riscv-pk/build/pk
+LLVM := /llvm/build/
+SPIKE := spike
+PK := pk
 
 target = bin/rvv-test
 
@@ -21,12 +21,6 @@ serial:
 	rm src/*.o; \
 	${LLVM}/bin/llvm-objdump -D --mattr=+experimental-v ./bin/rvv-test > ./bin/dump_serial
 
-x86:
-	for entry in src/*.cpp ; do \
-        ${LLVM}/bin/clang++   -Wall -O2 -c -o  $$entry.o  $$entry ; \
-    done
-	${LLVM}/bin/clang++   -Wall  -O2  -o $(target)  src/*.cpp.o -lm
-	$(target) -ns 8 -sm 512 -nt 1
 
 vector:
 	${LLVM}/bin/clang++  -Wall --target=riscv64-unknown-elf -DUSE_RISCV_VECTOR -march=rv64gcv1p0 -menable-experimental-extensions --sysroot=$(SYSROOT_DIR) --gcc-toolchain=$(GCC_TOOLCHAIN_DIR)  -O2 -c -o src/CumNormalInv.o src/CumNormalInv.cpp
@@ -45,17 +39,6 @@ vector:
 runspike :
 	$(SPIKE) --isa=rv64gcv $(PK) $(target) -ns 8 -sm 512 -nt 1
 
-host:
-	for entry in src/*.cpp ; do \
-		g++ -O2 -g -funroll-loops -fprefetch-loop-arrays -fpermissive -fno-exceptions -static-libgcc -c -o  $$entry.o  $$entry ; \
-	done
-	g++ -O2 -g -funroll-loops -fprefetch-loop-arrays -fpermissive -fno-exceptions -static-libgcc -o  bin/swaptions_host.exe  src/*.o  -lm;
-	rm src/*.o;
-
-copy:
-	rm -r ../../Test/_swaptions/bin/*.exe; \
-	cp -r bin/*exe ../../Test/_swaptions/bin/;
 
 clean:
-	rm bin/*.dump
-	rm bin/*.exe
+	rm bin/*
