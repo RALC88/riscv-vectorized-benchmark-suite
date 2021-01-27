@@ -6,8 +6,7 @@ The RISC-V Vectorized Benchmark Suite is a collection composed of seven data-par
 
 The benchmark suite with all its applications and input sets is available as open source free of charge. Some of the benchmark programs have their own licensing terms which might limit their use in some cases.
 
-The implementation is based on the Working draft of the proposed RISC-V V vector extension v0.7.1 and then updated to V1.0
-https://github.com/riscv/riscv-v-spec and RISC-V Vector Extension Intrinsic Document https://github.com/riscv/rvv-intrinsic-doc
+The implementation is based on the working draft of the proposed [RISC-V V vector extension v1.0 Spec](https://github.com/riscv/riscv-v-spec) and [intrinsic API](https://github.com/riscv/rvv-intrinsic-doc).
 
 If you use this software or a modified version of it for your research, please cite the paper:
 Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
@@ -42,7 +41,7 @@ Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez
 
 ## Building Vectorized Applications 
 
-The RISC-V Vectorized Bencmark Suite has been successfully tested on Spike RISC-V ISA Simulator https://github.com/riscv/riscv-isa-sim
+The RISC-V Vectorized Bencmark Suite has been successfully tested on [Spike RISC-V ISA Simulator](https://github.com/riscv/riscv-isa-sim)
 
 ### Setting up the environment
 
@@ -50,12 +49,10 @@ The Suite includes a makefile to compile every application, in order to use it, 
 
 Setting the Vector Compiler path
 ```
-export LLVM=$TOP/riscv-gnu-toolchain
-export PATH=$PATH:$LLVM/bin
+export LLVM=$TOP/riscv-toolchain
 ```
-Test successfully used source code
-LLVM: https://github.com/isrc-cas/rvv-llvm
-riscv-gnu-toolchain: https://github.com/riscv/riscv-gnu-toolchain
+
+Currently, the Suite can only be compiled by the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm). We will update the Suite to be compiled by the upstream LLVM when it is available.
 
 ### Compile using  clang for RISCV Vector Version
 
@@ -148,8 +145,12 @@ axpy_args           = "2048"
 
 ```
 
-You will also need to install the pk in order for Spike to run https://github.com/riscv/riscv-pk
+You will also need to install the [riscv-pk](https://github.com/riscv/riscv-pk) in order for Spike to run
 
 ## Contact
-ChunyuLiao liaochunyu126@126.com
+Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
+PhD. Student at UPC Barcelona   
+BSC - Barcelona Supercomputing Center
+
+Chunyu Liao chunyu@iscas.ac.cn
 PLCT Lab
