@@ -2,13 +2,15 @@
 
 ## Overview
 
-The RISC-V Vectorized Benchmark Suite is a collection composed of seven data-parallel applications from different domains. The suite focuses on benchmarking vector microarchitectures; nevertheless, it can be used as well for Multimedia SIMD microarchitectures. Current implementation is targeting RISC-V Architectures; however, it can be easily ported to any Vector/SIMD ISA thanks to a wrapper library which we developed to map vector intrinsics and math functions to the target architecture.
+The RISC-V Vectorized Benchmark Suite is a collection composed of data-parallel applications from different domains. The suite focuses on benchmarking vector microarchitectures; nevertheless, it can be used as well for Multimedia SIMD microarchitectures. Current implementation is targeting RISC-V Architectures; however, it can be easily ported to any Vector/SIMD ISA thanks to a wrapper library which we developed to map vector intrinsics and math functions to the target architecture.
 
 The benchmark suite with all its applications and input sets is available as open source free of charge. Some of the benchmark programs have their own licensing terms which might limit their use in some cases.
 
-The implementation is based on the Working draft of the proposed RISC-V V vector extension v0.7.1
-https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1
+Currently there are two implementations based on the Working draft of the proposed RISC-V V vector extension [v0.7](https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1) and [v1.0](https://github.com/riscv/riscv-v-spec):
 
+Vectorized Bencmark Suite for rvv-0.7. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7).
+
+Vectorized Bencmark Suite for rvv-1.0. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0).
 
 If you use this software or a modified version of it for your research, please cite the paper:
 Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
