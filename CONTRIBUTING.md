@@ -1,5 +1,5 @@
-If you've made changes to RISC-V Vectorized Bencmark Suite that might benefit others, we strongly encourage
-you to contribute those changes to the public RISC-V Vectorized Bencmark Suite repository. There are
+If you've made changes to RiVEC Bencmark Suite that might benefit others, we strongly encourage
+you to contribute those changes to the public RiVEC Bencmark Suite repository. There are
 several reasons to do this:
  * Share your work with others, so that they can benefit from new functionality.
  * Support the scientific principle by enabling others to evaluate your
@@ -13,8 +13,8 @@ several reasons to do this:
    them in ways you did not have time to do.
  * You will have the satisfaction of contributing back to the community.
 
-
-We are happy to report that progress is being made on integrating the RISC-V Vectorized Bencmark Suite and the Vector Architecture model on the official gem5-resources and gem5-public repositories respectively. Then, while both tools are under review, access to these temporary repositories will be available. Then, contributions can be done in this temporary repository.
+New vectorized applications are welcome. We strongly encourage you to contribute with new apps to 
+enrich the scenarios and diversity in the RiVEC Bencmark Suite.
 
 ## Contact
 Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
