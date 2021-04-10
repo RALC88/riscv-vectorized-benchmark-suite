@@ -9,11 +9,18 @@
 #include <string>
 
 using namespace std;
-/************************************************************************/
-// RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
+
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #ifdef USE_RISCV_VECTOR
 #include "../../common/vector_defines.h"
 #endif
+
 /************************************************************************/
 
 //Enable RESULT_PRINT in order to see the result vector, for instruction count it should be disable
@@ -102,7 +109,7 @@ void init(int argc, char** argv)
 
 void fatal(char *s)
 {
-	fprintf(stderr, "error: %s\n", s);
+    fprintf(stderr, "error: %s\n", s);
 
 }
 
