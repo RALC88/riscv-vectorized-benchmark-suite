@@ -9,6 +9,13 @@
  */
 /* jacobi-2d.c: this file is part of PolyBench/C */
 
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #include <time.h>
 #include <sys/time.h>
 #include <assert.h>
@@ -17,12 +24,11 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
-/************************************************************************/
-// RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
+
+
 #ifdef USE_RISCV_VECTOR
 #include "../../common/vector_defines.h"
 #endif
-/************************************************************************/
 
 using namespace std;
 #define DATA_TYPE double
@@ -38,8 +44,8 @@ void init_array (int n, DATA_TYPE **A, DATA_TYPE **B)
   for (i = 0; i < n; i++)
     for (j = 0; j < n; j++)
       {
-    	A[i][j] = ((DATA_TYPE) i*(j+2) + 2) / n;
-    	B[i][j] = ((DATA_TYPE) i*(j+3) + 3) / n;
+      A[i][j] = ((DATA_TYPE) i*(j+2) + 2) / n;
+      B[i][j] = ((DATA_TYPE) i*(j+3) + 3) / n;
       }
 }
 
@@ -105,11 +111,11 @@ void kernel_jacobi_2d(int tsteps,int n, DATA_TYPE **A,DATA_TYPE **B)
   for (t = 0; t < tsteps; t++)
     {
       for (i = 1; i < n - 1; i++)
-	     for (j = 1; j < n - 1; j++)
-	       B[i][j] = (0.2) * (A[i][j] + A[i][j-1] + A[i][1+j] + A[1+i][j] + A[i-1][j]);
+       for (j = 1; j < n - 1; j++)
+         B[i][j] = (0.2) * (A[i][j] + A[i][j-1] + A[i][1+j] + A[1+i][j] + A[i-1][j]);
       for (i = 1; i < n - 1; i++)
-	     for (j = 1; j < n - 1; j++)
-	       A[i][j] = (0.2) * (B[i][j] + B[i][j-1] + B[i][1+j] + B[1+i][j] + B[i-1][j]);
+       for (j = 1; j < n - 1; j++)
+         A[i][j] = (0.2) * (B[i][j] + B[i][j-1] + B[i][1+j] + B[1+i][j] + B[i-1][j]);
     }
 #else
     for (t = 0; t < tsteps; t++)
