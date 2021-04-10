@@ -3,6 +3,13 @@
 //Authors: Mark Broadie, Jatin Dewanwala
 //Collaborator: Mikhail Smelyanskiy, Intel, Jike Chong (Berkeley)
 
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

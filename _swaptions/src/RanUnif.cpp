@@ -5,6 +5,13 @@
 /* See "Random Number Generators: Good Ones Are Hard To Find", */
 /*     Park & Miller, CACM 31#10 October 1988 pages 1192-1201. */
 
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

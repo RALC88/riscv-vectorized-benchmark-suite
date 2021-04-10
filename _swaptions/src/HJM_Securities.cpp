@@ -3,6 +3,7 @@
 //Authors: Mark Broadie, Jatin Dewanwala
 //Collaborator: Mikhail Smelyanskiy, Jike Chong, Intel
 //Modified by Christian Bienia for the PARSEC Benchmark Suite
+//Modified by Cristóbal Ramírez for the RiVEC Benchmark Suite
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +13,7 @@
 // #include <time.h>
 // #include <sys/time.h>
 
+#include "../../common/riscv_util.h"
 
 #include "nr_routines.h"
 #include "HJM.h"
@@ -306,11 +308,24 @@ int main(int argc, char *argv[])
 	__parsec_roi_begin();
 #endif
 
+#ifdef USE_RVA
+    unsigned long int max_gvl = __builtin_epi_vsetvlmax(__epi_e64, __epi_m1);
+    long int* virtual_vrf = (long int*)malloc(max_gvl*sizeof(long int) * 64);
+    _MMR_i64  xZero ;
+    __builtin_epi_vstore_1xi64(virtual_vrf,xZero,max_gvl);
+    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,max_gvl );
+#endif // USE_RVA
+    
 //#ifdef USE_RISCV_VECTOR
      struct timeval tv1_0, tv2_0;
      struct timezone tz_0;
      double elapsed0=0.0;
      gettimeofday(&tv1_0, &tz_0);
+
+    // Start instruction and cycles count of the region of interest
+    unsigned long cycles1, cycles2, instr2, instr1;
+    instr1 = get_inst_count();
+    cycles1 = get_cycles_count();
 //#endif
 
 #ifdef ENABLE_THREADS
@@ -339,10 +354,21 @@ int main(int argc, char *argv[])
 #endif //ENABLE_THREADS
 
 //#ifdef USE_RISCV_VECTOR
+    // End instruction and cycles count of the region of interest
+    instr2 = get_inst_count();
+    cycles2 = get_cycles_count();
+    // Instruction and cycles count of the region of interest
+    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+
      gettimeofday(&tv2_0, &tz_0);
      elapsed0 = (double) (tv2_0.tv_sec-tv1_0.tv_sec) + (double) (tv2_0.tv_usec-tv1_0.tv_usec) * 1.e-6; 
      printf("\n\nSwaption Pricing Routine took %8.8lf secs   \n", elapsed0 );
 //#endif
+
+#ifdef USE_RVA
+    free(virtual_vrf);
+#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
 	__parsec_roi_end();

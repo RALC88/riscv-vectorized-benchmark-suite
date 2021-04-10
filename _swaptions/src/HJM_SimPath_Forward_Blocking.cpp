@@ -72,10 +72,11 @@ void serialB(FTYPE **pdZ, FTYPE **randZ, int BLOCKSIZE, int iN, int iFactors)
             //for(int b=0; b<BLOCKSIZE; b+=BLOCKSIZE){
           		unsigned long int gvl = __builtin_epi_vsetvl(BLOCKSIZE, __epi_e64, __epi_m1);
     			CumNormalInv_vector(&randZ[l][BLOCKSIZE*j /*+ b*/] , &pdZ[l][BLOCKSIZE*j/* + b*/] , gvl);
-    			FENCE();
+    			//FENCE();
             //}
         }
     }
+    //FENCE();
 
 #else
 
