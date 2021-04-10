@@ -38,7 +38,7 @@ inline _MMR_f64 __cos_1xf64(_MMR_f64 x , unsigned long int gvl) {
 _MMR_i64   _ps_inv_sign_mask    = _MM_SET_i64(~0x8000000000000000,gvl);
 _MMR_f64   _ps_cephes_FOPI      = _MM_SET_f64(1.27323954473516,gvl); // 4 / M_PI
 _MMR_i64   _pi32_1              = _MM_SET_i64(1,gvl);
-_MMR_i64   _pi32_inv1              = _MM_SET_i64(~0x0000000000000001,gvl);
+_MMR_i64   _pi32_inv1           = _MM_SET_i64(~0x0000000000000001,gvl);
 _MMR_i64   _pi32_2              = _MM_SET_i64(2,gvl);
 _MMR_i64   _pi32_4              = _MM_SET_i64(4,gvl);
 _MMR_i64   _Zero                = _MM_SET_i64(0,gvl);
@@ -125,7 +125,6 @@ _MMR_MASK_i64 xMask;
 
   /* Evaluate the second polynom  (Pi/4 <= x <= 0) */
   _MMR_f64   _ps_sincof_p0      = _MM_SET_f64(-1.9515295891E-4,gvl);
-  FENCE();
   _MMR_f64   _ps_sincof_p1      = _MM_SET_f64(8.3321608736E-3,gvl);
   _MMR_f64   _ps_sincof_p2      = _MM_SET_f64(-1.6666654611E-1,gvl);
   _MMR_f64 y2;

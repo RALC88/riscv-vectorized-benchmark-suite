@@ -13,7 +13,7 @@ Vectorized Bencmark Suite for rvv-0.7. Click [here](https://github.com/RALC88/ri
 Vectorized Bencmark Suite for rvv-1.0. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0).
 
 If you use this software or a modified version of it for your research, please cite the paper:
-Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
+Cristóbal Ramírez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
 
 ## Vectorized apps
 
@@ -37,10 +37,9 @@ Cristóbal Ramirez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez
 ### LLVM Compiler 
 
 We provide precompiled binaries found in the folder bin. However, it is possible to recompile the codes for both rvv versions (0.7 and 1.0).
-To compile for [rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) it is possible to use the [LLVM EPI Compiler](https://ssh.hca.bsc.es/epi/ftp/?C=M;O=D). The provided binaries were compiler with the version llvm-EPI-0.7-development-toolchain-cross-2021-02-23-1523. Note that it the compiler is actively in development, so after a certain time, the old versions will disappear. We recommend to use the latest version.
+To compile for [rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) it is possible to use the [LLVM EPI Compiler](https://ssh.hca.bsc.es/epi/ftp/?C=M;O=D). The provided binaries were compiled with the version llvm-EPI-0.7-development-toolchain-cross-2021-02-23-1523. Note that the compiler is actively in development, so after a certain time, the old versions will disappear. We recommend to use the latest version.
 
-To compile for [rvv-1.0](https://github.com/RALC8.
-8/riscv-vectorized-benchmark-suite/tree/rvv-1.0) it is possible to use the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm)
+To compile for [rvv-1.0](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0) it is possible to use the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm)
 
 ### EPI builtins reference
 
@@ -58,14 +57,12 @@ export PATH=$PATH:$LLVM/bin
 
 ### Compile using  clang for RISCV Vector Version
 
-To compile any application you first enter in the subfolder and run the command make followed by the application name
+To compile any application run the command make followed by the application name
 ```
-cd _application
 make application 
 ```
 For example to compile blackscholes:
 ```
-cd _blackscholes
 make blackscholes 
 ```
 The same for the other applications ...

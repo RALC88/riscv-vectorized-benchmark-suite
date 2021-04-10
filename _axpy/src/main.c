@@ -1,9 +1,16 @@
+/*************************************************************************
+* Axpy Kernel
+* Author: Jesus Labarta
+* Barcelona Supercomputing Center
+*************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
 #include "utils.h" 
 
+#include "../../common/riscv_util.h"
 /*************************************************************************
 *GET_TIME
 *returns a long int representing the time
@@ -36,13 +43,6 @@ void axpy_ref(double a, double *dx, double *dy, int n) {
 void init_vector(double *pv, long n, double value)
 {
    for (int i=0; i<n; i++) pv[i]= value;
-//   int gvl = __builtin_epi_vsetvl(n, __epi_e64, __epi_m1);
-//   __epi_1xi64 v_value   = __builtin_epi_vbroadcast_1xi64(value, gvl);
-//   for (int i=0; i<n; ) {
-//    gvl = __builtin_epi_vsetvl(n - i, __epi_e64, __epi_m1);
-//      __builtin_epi_vstore_1xf64(&dx[i], v_res, gvl);
-//     i += gvl;
-//   }
 }
 
 int main(int argc, char *argv[])
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     long n;
 
     if (argc == 2)
-	n = 1024*atol(argv[1]); // input argument: vector size in Ks
+    n = 1024*atol(argv[1]); // input argument: vector size in Ks
     else
         n = (30*1024);
 
@@ -71,9 +71,23 @@ int main(int argc, char *argv[])
     end = get_time();
     printf("init_vector time: %f\n", elapsed_time(start, end));
 
-    printf ("doing reference axpy\n");
+    printf ("doing reference axpy , vector size %d\n",n);
     start = get_time();
+
+    // Start instruction and cycles count of the region of interest
+    unsigned long cycles1, cycles2, instr2, instr1;
+    instr1 = get_inst_count();
+    cycles1 = get_cycles_count();
+
     axpy_ref(a, dx, dy, n); 
+
+    // End instruction and cycles count of the region of interest
+    instr2 = get_inst_count();
+    cycles2 = get_cycles_count();
+    // Instruction and cycles count of the region of interest
+    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+
     end = get_time();
     printf("axpy_reference time: %f\n", elapsed_time(start, end));
 
@@ -81,15 +95,27 @@ int main(int argc, char *argv[])
     init_vector(dx, n, 1.0);
     init_vector(dy, n, 2.0);
 
-    printf ("doing vector axpy\n");
+    printf ("doing vector axpy, vector size %d\n",n);
     start = get_time();
+
+    // Start instruction and cycles count of the region of interest
+    instr1 = get_inst_count();
+    cycles1 = get_cycles_count();
+
     axpy_intrinsics(a, dx, dy, n);
+
+    // End instruction and cycles count of the region of interest
+    instr2 = get_inst_count();
+    cycles2 = get_cycles_count();
+    // Instruction and cycles count of the region of interest
+    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+
     end = get_time();
     printf("axpy_intrinsics time: %f\n", elapsed_time(start, end));
-    
+
     printf ("done\n");
     test_result(dy, dy_ref, n);
-
 
     free(dx); free(dy); free(dy_ref);
     return 0;
