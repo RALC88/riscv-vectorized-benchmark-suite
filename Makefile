@@ -1,8 +1,8 @@
 BASE_DIR := $(shell pwd)
 
-APPLICATION_DIRS := _axpy _blackscholes _swaptions _streamcluster _canneal _particlefilter _pathfinder _jacobi-2d
+APPLICATION_DIRS := _axpy _blackscholes _canneal _jacobi-2d _lavaMD _swaptions _streamcluster _somier _particlefilter _pathfinder 
 
-all: axpy blackscholes swaptions streamcluster canneal particlefilter pathfinder jacobi-2d
+all: axpy blackscholes canneal jacobi-2d lavaMD swaptions streamcluster somier particlefilter pathfinder
 
 axpy:
 	cd _axpy; 			\
@@ -16,20 +16,20 @@ blackscholes:
 	make vector; 		\
 	make serial;
 
-swaptions:
-	cd _swaptions; 		\
-	make start;			\
-	make vector; 		\
-	make serial;
-
-streamcluster:
-	cd _streamcluster; 	\
-	make start;			\
-	make vector; 		\
-	make serial;
-
 canneal:
 	cd _canneal; 		\
+	make start;			\
+	make vector; 		\
+	make serial;
+
+jacobi-2d:
+	cd _jacobi-2d;		\
+	make start;			\
+	make vector; 		\
+	make serial;
+
+lavaMD:
+	cd _lavaMD;		\
 	make start;			\
 	make vector; 		\
 	make serial;
@@ -46,14 +46,20 @@ pathfinder:
 	make vector; 		\
 	make serial;
 
-jacobi-2d:
-	cd _jacobi-2d;		\
+swaptions:
+	cd _swaptions; 		\
 	make start;			\
 	make vector; 		\
 	make serial;
 
-matmul:
-	cd _matmul; 		\
+somier:
+	cd _somier; 		\
+	make start;			\
+	make vector; 		\
+	make serial;
+
+streamcluster:
+	cd _streamcluster; 	\
 	make start;			\
 	make vector; 		\
 	make serial;
