@@ -37,7 +37,13 @@
 #include <time.h>
 #include <sys/time.h>
 
-// RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #ifdef USE_RISCV_VECTOR
 #include "../../common/vector_defines.h"
 #endif

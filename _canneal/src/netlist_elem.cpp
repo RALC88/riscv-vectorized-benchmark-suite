@@ -39,7 +39,13 @@
 
 using namespace std;
 
-// RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #ifdef USE_RISCV_VECTOR
 #include "../../common/vector_defines.h"
 #endif
@@ -140,10 +146,10 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
     gvl     = __builtin_epi_vsetvl(a_size, __epi_e32, __epi_m1);
 
     xresult_no_swap = _MM_REDSUM_f32(xNo_Swap,xresult_no_swap,gvl);
-    no_swap = _MM_VGETFIRST_f32(xresult_no_swap,gvl);
+    no_swap = _MM_VGETFIRST_f32(xresult_no_swap);
 
     xresult_yes_swap = _MM_REDSUM_f32(xYes_Swap,xresult_yes_swap,gvl);
-    yes_swap = _MM_VGETFIRST_f32(xresult_yes_swap,gvl);
+    yes_swap = _MM_VGETFIRST_f32(xresult_yes_swap);
     FENCE();
 
     return (double)(yes_swap - no_swap);
