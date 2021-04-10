@@ -7,15 +7,23 @@
 // Reference Source: Options, Futures, and Other Derivatives, 3rd Edition, Prentice 
 // Hall, John C. Hull,
 
+/*************************************************************************
+* RISC-V Vectorized Version
+* Author: Cristóbal Ramírez Lazo
+* email: cristobal.ramirez@bsc.es
+* Barcelona Supercomputing Center (2020)
+*************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
+#include "../../common/riscv_util.h"
+
 #include <time.h>
 #include <sys/time.h>
 
-// RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
 #ifdef USE_RISCV_VECTOR
 #include "../../common/vector_defines.h"
 #endif
@@ -137,15 +145,8 @@ _MMR_f32 CNDF_SIMD  (_MMR_f32 xInput ,unsigned long int gvl)
 
   xLocal_1 = _MM_MUL_f32(xK2, _MM_SET_f32(0.319381530,gvl),gvl);
   xLocal_2 = _MM_MUL_f32(xK2_2, _MM_SET_f32(-0.356563782,gvl),gvl);
-
-  //xLocal_3 = _MM_MUL_f32(xK2_3, _MM_SET_f32(1.781477937,gvl),gvl);
-  //xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
   xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_3,_MM_SET_f32(1.781477937,gvl),gvl);
-
   xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_4,_MM_SET_f32(-1.821255978,gvl),gvl);
-
-  //xLocal_3 = _MM_MUL_f32(xK2_5, _MM_SET_f32(1.330274429,gvl),gvl);
-  //xLocal_2 = _MM_ADD_f32(xLocal_2, xLocal_3,gvl);
   xLocal_2   = _MM_MACC_f32(xLocal_2,xK2_5,_MM_SET_f32(1.330274429,gvl),gvl);
 
   xLocal_1 = _MM_ADD_f32(xLocal_2, xLocal_1,gvl);
@@ -388,7 +389,7 @@ struct mainWork {
       fptype priceDelta = data[i].DGrefval - price;
       if( fabs(priceDelta) >= 1e-5 ){
         fprintf(stderr,"Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
-		i, price, data[i].DGrefval, priceDelta);
+    i, price, data[i].DGrefval, priceDelta);
         numError ++;
       }
 #endif
@@ -468,7 +469,7 @@ int bs_thread(void *tid_ptr) {
     }
 
 #ifdef ENABLE_PARSEC_HOOKS
-	__parsec_thread_end();
+  __parsec_thread_end();
 #endif
 
     return 0;
@@ -486,7 +487,7 @@ for (j=0; j<NUM_RUNS; j++) {
 #pragma omp parallel for private(i, price, priceDelta)
         for (i=0; i<numOptions; i++) {
 #else  //ENABLE_OPENMP
-	  for (i=start; i<end; i++) {
+    for (i=start; i<end; i++) {
 #endif //ENABLE_OPENMP
             /* Calling main function to calculate option value based on
              * Black & Scholes's equation.
@@ -499,15 +500,15 @@ for (j=0; j<NUM_RUNS; j++) {
 #ifdef ERR_CHK
             priceDelta = data[i].DGrefval - price;
             if( fabs(priceDelta) >= 1e-4 ){
-	      printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
-		     i, price, data[i].DGrefval, priceDelta);
-	      numError ++;
+        printf("Error on %d. Computed=%.5f, Ref=%.5f, Delta=%.5f\n",
+         i, price, data[i].DGrefval, priceDelta);
+        numError ++;
             }
 #endif
-	  }
-	}
+    }
+  }
 
-	return 0;
+  return 0;
 }
 
 #endif // USE_RISCV_VECTOR
@@ -537,10 +538,10 @@ int main (int argc, char **argv)
 #define __PARSEC_STRING(x) #x
 #define __PARSEC_XSTRING(x) __PARSEC_STRING(x)
         printf("PARSEC Benchmark Suite Version "__PARSEC_XSTRING(PARSEC_VERSION)"\n");
-	fflush(NULL);
+  fflush(NULL);
 #else
         printf("PARSEC Benchmark Suite\n");
-	fflush(NULL);
+  fflush(NULL);
 #endif //PARSEC_VERSION
 #ifdef ENABLE_PARSEC_HOOKS
    __parsec_bench_begin(__parsec_blackscholes);
@@ -631,11 +632,25 @@ int main (int argc, char **argv)
     //if (elapsed0>0.00000001) { return 0;}
 //#endif
 
+#ifdef USE_RVA
+    unsigned long int gvl = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
+    int* virtual_vrf = (int*)malloc(gvl*sizeof(int) * 64);
+    _MMR_i32  xZero ;//= _MM_SET_i32(0,gvl);
+    //configure_ve(&virtual_vrf);
+    __builtin_epi_vstore_2xi32(virtual_vrf,xZero,gvl);
+    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,gvl );
+#endif
+
 //#ifdef USE_RISCV_VECTOR
     struct timeval tv1, tv2;
     struct timezone tz;
     double elapsed1=0.0;
     gettimeofday(&tv1, &tz);
+
+    // Start instruction and cycles count of the region of interest
+    unsigned long cycles1, cycles2, instr2, instr1;
+    instr1 = get_inst_count();
+    cycles1 = get_cycles_count();
 //#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
@@ -693,9 +708,20 @@ int main (int argc, char **argv)
 #endif
 
 //#ifdef USE_RISCV_VECTOR
+    // End instruction and cycles count of the region of interest
+    instr2 = get_inst_count();
+    cycles2 = get_cycles_count();
+    // Instruction and cycles count of the region of interest
+    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+
     gettimeofday(&tv2, &tz);
     elapsed1 = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6; 
     printf("\n\nBlackScholes Kernel took %8.8lf secs   \n", elapsed1 );
+
+#ifdef USE_RVA
+    free(virtual_vrf);
+#endif
 //#endif
     //if (elapsed0>0.00000001) { return 0;}
     

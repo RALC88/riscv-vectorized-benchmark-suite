@@ -21,15 +21,6 @@ vector:
 	rm src/*.o
 	${LLVM}/bin/llvm-objdump  --mattr=+m,+f,+d,+a,+c,+experimental-v -ds  bin/axpy_vector.exe > bin/axpy_vector.dump
 
-host:
-	echo "host"
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/axpy.o  src/axpy.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/main.o  src/main.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -c -o  src/utils.o  src/utils.c ; \
-# 	gcc -O2 -g -Wall -std=c99 -o  bin/axpy_host.exe  src/*.o  -lm; \
-# 	rm src/*.o; \
-# 	objdump -dC bin/axpy_host.exe > bin/axpy_host.dump ;
-
 clean:
 	rm bin/*.dump; \
 	rm bin/*.exe;
