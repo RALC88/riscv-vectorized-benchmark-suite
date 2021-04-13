@@ -95,8 +95,6 @@
 #define _MM_MERGE_i64  		__builtin_epi_vmerge_1xi64
 #define _MM_MERGE_i32  		__builtin_epi_vmerge_2xi32
 
-//#define _MM_MADD_i64  		__builtin_epi_vmadd_1xi64
-//#define _MM_MADD_i32  		__builtin_epi_vmadd_2xi32
 //---------------------------------------------------------------------------
 // FLOATING POINT INTRINSICS
 
@@ -176,20 +174,8 @@
 #define _MM_MACC_f64  		__builtin_epi_vfmacc_1xf64
 #define _MM_MACC_f32  		__builtin_epi_vfmacc_2xf32
 
-//#define _MM_NMACC_f64  		__builtin_epi_vfnmacc_1xf64 error
-//#define _MM_NMACC_f32  		__builtin_epi_vfnmacc_2xf32 error
-
-//#define _MM_NMSAC_f64  		__builtin_epi_vfnmsac_1xf64 error
-//#define _MM_NMSAC_f32  		__builtin_epi_vfnmsac_2xf32 error
-
-//#define _MM_NMSUB_f64  		__builtin_epi_vfnmsub_1xf64 error
-//#define _MM_NMSUB_f32  		__builtin_epi_vfnmsub_2xf32 error
-
 #define _MM_MADD_f64  		__builtin_epi_vfmadd_1xf64
 #define _MM_MADD_f32  		__builtin_epi_vfmadd_2xf32
-
-//#define _MM_MADD_f64_MASK  	__builtin_epi_vfmadd_1xf64_mask
-//#define _MM_MADD_f32_MASK  	__builtin_epi_vfmadd_2xf32_mask
 
 //---------------------------------------------------------------------------
 // CONVERSION INTRINSICS

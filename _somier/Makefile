@@ -2,29 +2,23 @@
 CC=${LLVM}/bin/clang
 OBJDUMP=${LLVM}/bin/llvm-objdump
 
-CFLAGS += -O2 -mepi -mabi=lp64d
+CFLAGS += --target=riscv64-unknown-elf  -march=rv64g -mepi -O2 -fno-vectorize
 
 LDFLAGS = -lm -static
 IFLAGS = -I ./ -I ${VEHAVE_TOOLCHAIN}/include/vehave/ -I ${VEHAVE_TOOLCHAIN}/include/vehave-user/
-
-.PHONY: all all-linux
-
-all: all-linux
-
-all-linux: somier_serial.exe somier_vector.exe somier_vector_lmul2.exe somier_vector_lmul4.exe somier_vector_lmul8.exe somier_vector_rva.exe
 
 start:
 	rm *.exe
 	rm *.dump
 
-serial: somier_serial.exe somier_serial.dump
-vector: somier_vector.exe somier_vector.dump
+serial: somier_serial.exe somier_serial.dump clean_o
+vector: somier_vector.exe somier_vector.dump clean_o
 
 somier_serial.exe: main.seq.o somier.o utils.o forces.o
-	$(CC) -O2 -o $@ $+ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $+ $(LDFLAGS)
 
-somier_vector.exe: main.vec.o somier.o utils.o forces.o forces_prevec_lmul1.o somier_intr_lmul1.o
-	$(CC) -O2 -o $@ $+ $(LDFLAGS)
+somier_vector.exe: main.vec.o somier.o utils.o forces_prevec_lmul1.o somier_intr_lmul1.o
+	$(CC) $(CFLAGS) -o $@ $+ $(LDFLAGS)
 
 main.seq.o: main.c utils.h
 	$(CC) $(CFLAGS) $(IFLAGS) -DSEQ -c -o $@ $<
@@ -47,16 +41,15 @@ forces.o: forces.c utils.h
 forces_prevec_lmul1.o: intrinsics/forces_prevec_lmul1.c utils.h
 	$(CC) $(CFLAGS) -DUSE_RISCV_VECTOR $(IFLAGS) -c -o $@ $<
 
-#crear_dump: %.dump: %.exe
-#		${OBJDUMP} --mattr=+m,+f,+d,+a,+c -ds   $< > $@
-
 somier_serial.dump:
 	${OBJDUMP} --mattr=+m,+f,+d,+a,+c -ds  somier_serial.exe > somier_serial.dump
 
 somier_vector.dump:
 	${OBJDUMP} --mattr=+m,+f,+d,+a,+c,+experimental-v -ds  somier_vector.exe > somier_vector.dump
 
-.PHONY: clean
+clean_o:
+	rm -f *.o
+
 clean:
 	rm -f *.o
 	rm -f *.exe

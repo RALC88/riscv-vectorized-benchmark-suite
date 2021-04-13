@@ -153,7 +153,6 @@ _MMR_f32 CNDF_SIMD  (_MMR_f32 xInput ,unsigned long int gvl)
 
   xLocal   = _MM_MUL_f32(xLocal_1, xNPrimeofX,gvl);
   xLocal   = _MM_SUB_f32(xOne,xLocal,gvl);
-  //xLocal   = _MM_NMSUB_f32(xLocal,xNPrimeofX,xOne,gvl);
 
   xLocal   = _MM_SUB_f32_MASK(xLocal,xOne,xLocal,xMask,gvl); //sub(vs2,vs1)
   return xLocal;
@@ -632,15 +631,6 @@ int main (int argc, char **argv)
     //if (elapsed0>0.00000001) { return 0;}
 //#endif
 
-#ifdef USE_RVA
-    unsigned long int gvl = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
-    int* virtual_vrf = (int*)malloc(gvl*sizeof(int) * 64);
-    _MMR_i32  xZero ;//= _MM_SET_i32(0,gvl);
-    //configure_ve(&virtual_vrf);
-    __builtin_epi_vstore_2xi32(virtual_vrf,xZero,gvl);
-    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,gvl );
-#endif
-
 //#ifdef USE_RISCV_VECTOR
     struct timeval tv1, tv2;
     struct timezone tz;
@@ -718,12 +708,7 @@ int main (int argc, char **argv)
     gettimeofday(&tv2, &tz);
     elapsed1 = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6; 
     printf("\n\nBlackScholes Kernel took %8.8lf secs   \n", elapsed1 );
-
-#ifdef USE_RVA
-    free(virtual_vrf);
-#endif
 //#endif
-    //if (elapsed0>0.00000001) { return 0;}
     
     //Write prices to output file
     file = fopen(outputFile, "w");

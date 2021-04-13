@@ -308,14 +308,6 @@ int main(int argc, char *argv[])
 	__parsec_roi_begin();
 #endif
 
-#ifdef USE_RVA
-    unsigned long int max_gvl = __builtin_epi_vsetvlmax(__epi_e64, __epi_m1);
-    long int* virtual_vrf = (long int*)malloc(max_gvl*sizeof(long int) * 64);
-    _MMR_i64  xZero ;
-    __builtin_epi_vstore_1xi64(virtual_vrf,xZero,max_gvl);
-    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,max_gvl );
-#endif // USE_RVA
-    
 //#ifdef USE_RISCV_VECTOR
      struct timeval tv1_0, tv2_0;
      struct timezone tz_0;
@@ -365,10 +357,6 @@ int main(int argc, char *argv[])
      elapsed0 = (double) (tv2_0.tv_sec-tv1_0.tv_sec) + (double) (tv2_0.tv_usec-tv1_0.tv_usec) * 1.e-6; 
      printf("\n\nSwaption Pricing Routine took %8.8lf secs   \n", elapsed0 );
 //#endif
-
-#ifdef USE_RVA
-    free(virtual_vrf);
-#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
 	__parsec_roi_end();

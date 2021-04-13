@@ -16,10 +16,6 @@
 
 #include "timer.h"
 
-#ifdef USE_RVA
-#include "../common/vector_defines.h"
-#endif
-
 #include "../common/riscv_util.h"
 
 double Xcenter[3];
@@ -75,15 +71,6 @@ int main(int argc, char *argv[])
 
 START_TIME();
 
-#ifdef USE_RVA
-    unsigned long int gvl = __builtin_epi_vsetvlmax(__epi_e64, __epi_m1);
-    long int* virtual_vrf = (long int*)malloc(gvl*sizeof(long int) * 64);
-    _MMR_i64  xZero ;//= _MM_SET_i32(0,gvl);
-    //configure_ve(&virtual_vrf);
-    __builtin_epi_vstore_1xi64(virtual_vrf,xZero,gvl);
-    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,gvl );
-#endif
-
 // Start instruction and cycles count of the region of interest
 unsigned long cycles1, cycles2, instr2, instr1;
 instr1 = get_inst_count();
@@ -125,10 +112,6 @@ cycles2 = get_cycles_count();
 // Instruction and cycles count of the region of interest
 printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
 printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
-
-#ifdef USE_RVA
-    free(virtual_vrf);
-#endif
 
 STOP_TIME();
 #ifdef SEQ

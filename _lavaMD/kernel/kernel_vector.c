@@ -52,14 +52,6 @@ void  kernel_cpu(	par_str par,
 					FOUR_VECTOR* fv)
 {
 
-	#ifdef USE_RVA
-    unsigned long int gvl_rva = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
-    int* virtual_vrf = (int*)malloc(gvl_rva*sizeof(int) * 64);
-    _MMR_i32  xZero ;//= _MM_SET_i32(0,gvl_rva);
-    //configure_ve(&virtual_vrf);
-    __builtin_epi_vstore_2xi32(virtual_vrf,xZero,gvl_rva);
-    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,gvl_rva );
-	#endif
 	//======================================================================================================================================================150
 	//	Variables
 	//======================================================================================================================================================150
@@ -288,11 +280,6 @@ void  kernel_cpu(	par_str par,
 
 	printf("Total time:\n");
 	printf("%.12f s\n", 												(float) (time4-time0) / 1000000);
-
-	#ifdef USE_RVA
-    free(virtual_vrf);
-	#endif
-
 } // main
 
 #ifdef __cplusplus

@@ -967,14 +967,6 @@ int main(int argc, char * argv[]){
     long long endVideoSequence = get_time();
     printf("VIDEO SEQUENCE TOOK %f\n", elapsed_time(start, endVideoSequence));
 
-    #ifdef USE_RVA
-    unsigned long int max_gvl = __builtin_epi_vsetvlmax(__epi_e64, __epi_m1);
-    long int* virtual_vrf = (long int*)malloc(max_gvl*sizeof(long int) * 64);
-    _MMR_i64  xZero ;
-    __builtin_epi_vstore_1xi64(virtual_vrf,xZero,max_gvl);
-    printf("Virttual VRF base [%d] address  0x%X , gvl%d\n",virtual_vrf[0],virtual_vrf,max_gvl );
-    #endif // USE_RVA
-
     #ifdef USE_RISCV_VECTOR
     unsigned long int gvl = __builtin_epi_vsetvl(Nparticles, __epi_e64, __epi_m1);
     double* randu_vector_result = (double*)malloc(gvl*sizeof(double)); 
@@ -1013,10 +1005,6 @@ int main(int argc, char * argv[]){
     // Instruction and cycles count of the region of interest
     printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
     printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
-
-    #ifdef USE_RVA
-    free(virtual_vrf);
-    #endif
 
     #ifdef USE_RISCV_VECTOR
     free(randu_vector_result);
