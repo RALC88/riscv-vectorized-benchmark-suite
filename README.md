@@ -153,8 +153,12 @@ jacobi_2d_args      = "256 2000 output.txt"
 
 More info about how to execute the serial and vectorized versions on the gem5 Vector Architecture model can be found in he README file located in https://github.com/RALC88/gem5/blob/develop/src/cpu/vector_engine/README.md
 
+## Contributing
+
+New vectorized applications are welcome. We strongly encourage you to contribute with new apps to enrich the scenarios and diversity in the RiVEC Bencmark Suite.
+
 ## Acknowledgements
-We thank the [European Processor Initiative](https://www.european-processor-initiative.eu/) (EPI) project for allowing us to use and share some versions of the vector compiler they have worked on. And the Barcelona Supercomputing Center compiler team, specially to Roger Ferrer who have always support us and solved our doubts about compiler-related issues.
+We thank the [European Processor Initiative](https://www.european-processor-initiative.eu/) (EPI) project, and the Barcelona Supercomputing Center compiler team, specially to Roger Ferrer who have always support us and solved our doubts about compiler-related issues.
 
 ## Contact
 Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
