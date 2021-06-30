@@ -1,8 +1,10 @@
 #makefile
-GCC_TOOLCHAIN_DIR := /newlib/
+TEST_DIR := $HOME/plct-machine
+GCC_TOOLCHAIN_DIR := $(TEST_DIR)/riscv
 SYSROOT_DIR := $(GCC_TOOLCHAIN_DIR)/riscv64-unknown-elf
 
-LLVM := /llvm/build/
+LLVM := $(TEST_DIR)/rvv-llvm/build/install
+QEMU := $(TEST_DIR)/build-64/qemu-riscv64
 SPIKE := spike
 PK := pk
 
@@ -24,6 +26,9 @@ vector:
 
 runspike :
 	$(SPIKE) --isa=rv64gcv $(PK) $(target) -x 128 -y 128 -z 2 -np 256
+
+runqemu:
+	$(QEMU) -cpu plct-u64,x-v=true $(target) -x 128 -y 128 -z 2 -np 256
 
 
 clean:
