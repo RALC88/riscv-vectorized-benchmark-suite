@@ -1,4 +1,5 @@
 #makefile
+LLVM := /llvm/build/
 
 start:
 	mkdir -p bin; \
