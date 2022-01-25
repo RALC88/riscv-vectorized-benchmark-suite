@@ -53,7 +53,7 @@ _MMR_i64   emm2;
 
 _MMR_MASK_i64 xMask;
   /* take the absolute value */
-  x = (_MMR_f64)_MM_AND_i64((_MMR_i64)x, _ps_inv_sign_mask,gvl);
+  x = _MMR_i64_to_f64(_MM_AND_i64(_MMR_f64_to_i64(x), _ps_inv_sign_mask,gvl));
 
   /* scale by 4/Pi */
   y = _MM_MUL_f64(x, _ps_cephes_FOPI,gvl);
@@ -72,15 +72,15 @@ _MMR_MASK_i64 xMask;
   emm0 = _MM_XOR_i64(emm2, _MM_SET_i64(0xffffffffffffffff,gvl),gvl);
   emm0 = _MM_AND_i64(emm0, _pi32_4,gvl);
 
-  emm0 = _MM_SLL_i64(emm0, _MM_SET_i64(61,gvl),gvl);
+  emm0 = _MM_SLL_i64(emm0, _MM_SET_u64(61,gvl),gvl);
 
   /* get the polynom selection mask */
   emm2 = _MM_AND_i64(emm2, _pi32_2 ,gvl);
   xMask= _MM_VMSEQ_i64(emm2,_Zero,gvl);
   emm2 = _MM_MERGE_i64(_Zero,_MM_SET_i64(0xffffffffffffffff,gvl), xMask,gvl);
 
-  _MMR_f64 sign_bit =  (_MMR_f64)emm0;
-  _MMR_f64 poly_mask =  (_MMR_f64)emm2;
+  _MMR_f64 sign_bit =  _MMR_i64_to_f64(emm0);
+  _MMR_f64 poly_mask =  _MMR_i64_to_f64(emm2);
 
   /* The magic pass: "Extended precision modular arithmetic"
      x = ((x - y * DP1) - y * DP2) - y * DP3; */
@@ -141,11 +141,11 @@ _MMR_MASK_i64 xMask;
 
   /* select the correct result from the two polynoms */
   xmm3 = poly_mask;
-  y2 = (_MMR_f64)_MM_AND_i64((_MMR_i64)xmm3, (_MMR_i64)y2 , gvl); //, xmm3);
-  y = (_MMR_f64)_MM_AND_i64(_MM_XOR_i64((_MMR_i64)xmm3, _MM_SET_i64(0xffffffffffffffff,gvl),gvl),(_MMR_i64)y,gvl);   
+  y2 = _MMR_i64_to_f64(_MM_AND_i64(_MMR_f64_to_i64(xmm3), _MMR_f64_to_i64(y2) , gvl)); //, xmm3);
+  y = _MMR_i64_to_f64(_MM_AND_i64(_MM_XOR_i64(_MMR_f64_to_i64(xmm3), _MM_SET_i64(0xffffffffffffffff,gvl),gvl),_MMR_f64_to_i64(y),gvl));   
   y = _MM_ADD_f64(y, y2 ,gvl);
   /* update the sign */
-  y = (_MMR_f64)_MM_XOR_i64((_MMR_i64)y, (_MMR_i64)sign_bit , gvl);
+  y = _MMR_i64_to_f64(_MM_XOR_i64(_MMR_f64_to_i64(y), _MMR_f64_to_i64(sign_bit) , gvl));
 
   return y;
 }
@@ -170,7 +170,7 @@ _MMR_i32   emm2;
 
 _MMR_MASK_i32 xMask;
   /* take the absolute value */
-  x = (_MMR_f32)_MM_AND_i32((_MMR_i32)x, _ps_inv_sign_mask,gvl);
+  x = _MMR_i32_to_f32(_MM_AND_i32(_MMR_f32_to_i32(x), _ps_inv_sign_mask,gvl));
 
   /* scale by 4/Pi */
   y = _MM_MUL_f32(x, _ps_cephes_FOPI,gvl);
@@ -189,15 +189,15 @@ _MMR_MASK_i32 xMask;
   emm0 = _MM_XOR_i32(emm2, _MM_SET_i32(0xffffffff,gvl),gvl);
   emm0 = _MM_AND_i32(emm0, _pi32_4,gvl);
 
-  emm0 = _MM_SLL_i32(emm0, _MM_SET_i32(29,gvl),gvl);
+  emm0 = _MM_SLL_i32(emm0, _MM_SET_u32(29,gvl),gvl);
 
   /* get the polynom selection mask */
   emm2 = _MM_AND_i32(emm2, _pi32_2 ,gvl);
   xMask= _MM_VMSEQ_i32(emm2,_Zero,gvl);
   emm2 = _MM_MERGE_i32(_Zero,_MM_SET_i32(0xffffffff,gvl), xMask,gvl);
 
-  _MMR_f32 sign_bit =  (_MMR_f32)emm0;
-  _MMR_f32 poly_mask =  (_MMR_f32)emm2;
+  _MMR_f32 sign_bit =  _MMR_i32_to_f32(emm0);
+  _MMR_f32 poly_mask =  _MMR_i32_to_f32(emm2);
 
   /* The magic pass: "Extended precision modular arithmetic"
      x = ((x - y * DP1) - y * DP2) - y * DP3; */
@@ -257,11 +257,11 @@ _MMR_MASK_i32 xMask;
 
   /* select the correct result from the two polynoms */
   xmm3 = poly_mask;
-  y2 = (_MMR_f32)_MM_AND_i32((_MMR_i32)xmm3, (_MMR_i32)y2 , gvl); //, xmm3);
-  y = (_MMR_f32)_MM_AND_i32(_MM_XOR_i32((_MMR_i32)xmm3, _MM_SET_i32(0xffffffff,gvl),gvl),(_MMR_i32)y,gvl);   
+  y2 = _MMR_i32_to_f32(_MM_AND_i32(_MMR_f32_to_i32(xmm3), _MMR_f32_to_i32(y2), gvl)); //, xmm3);
+  y = _MMR_i32_to_f32(_MM_AND_i32(_MM_XOR_i32(_MMR_f32_to_i32(xmm3), _MM_SET_i32(0xffffffff,gvl),gvl),_MMR_f32_to_i32(y),gvl));   
   y = _MM_ADD_f32(y, y2 ,gvl);
   /* update the sign */
-  y = (_MMR_f32)_MM_XOR_i32((_MMR_i32)y, (_MMR_i32)sign_bit , gvl);
+  y = _MMR_i32_to_f32(_MM_XOR_i32(_MMR_f32_to_i32(y), _MMR_f32_to_i32(sign_bit), gvl));
 
   return y;
 }

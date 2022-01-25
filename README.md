@@ -52,7 +52,7 @@ Setting the Vector Compiler path
 export LLVM=$TOP/riscv-toolchain
 ```
 
-Currently, the Suite can only be compiled by the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm). We will update the Suite to be compiled by the upstream LLVM when it is available.
+Currently, the Suite can only be compiled by the [upstream LLVM](https://github.com/llvm/llvm-project). [upstream binutils](https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git) is also required if you encountered `prefixed ISA extension must separate with _` error until binutils 2.38 is released.
 
 ### Compile using  clang for RISCV Vector Version
 

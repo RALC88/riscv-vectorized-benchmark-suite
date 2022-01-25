@@ -46,7 +46,7 @@ _MMR_f64   _ps256_cephes_log_p6     = _MM_SET_f64(2.0000714765E-1,gvl);
 _MMR_f64   _ps256_cephes_log_p7     = _MM_SET_f64(-2.4999993993E-1,gvl);
 _MMR_f64   _ps256_cephes_log_p8     = _MM_SET_f64(3.3333331174E-1,gvl);
 _MMR_i64   _256_min_norm_pos        = _MM_SET_i64(0x0010000000000000,gvl);
-_MMR_f64   _ps256_min_norm_pos      = (_MMR_f64)_256_min_norm_pos;
+_MMR_f64   _ps256_min_norm_pos      = _MMR_i64_to_f64(_256_min_norm_pos);
 
 _MMR_i64   _x_i; 
 
@@ -69,12 +69,12 @@ _MMR_MASK_i64 invalid_mask = _MM_VFLE_f64(x,_MM_SET_f64(0.0f,gvl),gvl);
   x = _MM_MAX_f64(x, _ps256_min_norm_pos, gvl);  /* cut off denormalized stuff */
 
   // can be done with AVX2
-  imm0 = _MM_SRL_i64((_MMR_i64)x, _MM_SET_i64(52,gvl), gvl);
+  imm0 = _MMR_u64_to_i64(_MM_SRL_i64(_MMR_f64_to_u64(x), _MM_SET_u64(52,gvl), gvl));
 
   /* keep only the fractional part */
-  _x_i = _MM_AND_i64((_MMR_i64)x, _256_inv_mant_mask, gvl);
-  _x_i = _MM_OR_i64(_x_i, (_MMR_i64)_ps256_0p5, gvl);
-  x= (_MMR_f64)_x_i;
+  _x_i = _MM_AND_i64(_MMR_f64_to_i64(x), _256_inv_mant_mask, gvl);
+  _x_i = _MM_OR_i64(_x_i, _MMR_f64_to_i64(_ps256_0p5), gvl);
+  x= _MMR_i64_to_f64(_x_i);
 
   // this is again another AVX2 instruction
   imm0 = _MM_SUB_i64(imm0 ,_256_0x7f , gvl);
@@ -134,7 +134,7 @@ _MMR_f64 y = _ps256_cephes_log_p0;
   tmp = _MM_MUL_f64(e, _ps256_cephes_log_q2,gvl);
   x = _MM_ADD_f64(x, y,gvl);
   x = _MM_ADD_f64(x, tmp,gvl);
-  x = _MM_MERGE_f64(x,(_MMR_f64)_MM_SET_i64(0xffffffffffffffff,gvl), invalid_mask,gvl);
+  x = _MM_MERGE_f64(x,_MMR_i64_to_f64(_MM_SET_i64(0xffffffffffffffff,gvl)), invalid_mask,gvl);
 
   return x;
 }
@@ -155,7 +155,7 @@ _MMR_f32   _ps256_cephes_log_p6     = _MM_SET_f32(2.0000714765E-1,gvl);
 _MMR_f32   _ps256_cephes_log_p7     = _MM_SET_f32(-2.4999993993E-1,gvl);
 _MMR_f32   _ps256_cephes_log_p8     = _MM_SET_f32(3.3333331174E-1,gvl);
 _MMR_i32   _256_min_norm_pos        = _MM_SET_i32(0x00800000,gvl);
-_MMR_f32   _ps256_min_norm_pos      = (_MMR_f32)_256_min_norm_pos;
+_MMR_f32   _ps256_min_norm_pos      = _MMR_i32_to_f32(_256_min_norm_pos);
 
 _MMR_i32   _x_i; 
 
@@ -178,12 +178,12 @@ _MMR_MASK_i32 invalid_mask = _MM_VFLE_f32(x,_MM_SET_f32(0.0f,gvl),gvl);
   x = _MM_MAX_f32(x, _ps256_min_norm_pos, gvl);  /* cut off denormalized stuff */
 
   // can be done with AVX2
-  imm0 = _MM_SRL_i32((_MMR_i32)x, _MM_SET_i32(23,gvl), gvl);
+  imm0 = _MMR_u32_to_i32(_MM_SRL_i32(_MMR_f32_to_u32(x), _MM_SET_u32(23,gvl), gvl));
 
   /* keep only the fractional part */
-  _x_i = _MM_AND_i32((_MMR_i32)x, _256_inv_mant_mask, gvl);
-  _x_i = _MM_OR_i32(_x_i, (_MMR_i32)_ps256_0p5, gvl);
-  x= (_MMR_f32)_x_i;
+  _x_i = _MM_AND_i32(_MMR_f32_to_i32(x), _256_inv_mant_mask, gvl);
+  _x_i = _MM_OR_i32(_x_i, _MMR_f32_to_i32(_ps256_0p5), gvl);
+  x= _MMR_i32_to_f32(_x_i);
 
   // this is again another AVX2 instruction
   imm0 = _MM_SUB_i32(imm0 ,_256_0x7f , gvl);
@@ -243,7 +243,7 @@ _MMR_f32 y = _ps256_cephes_log_p0;
   tmp = _MM_MUL_f32(e, _ps256_cephes_log_q2,gvl);
   x = _MM_ADD_f32(x, y,gvl);
   x = _MM_ADD_f32(x, tmp,gvl);
-  x = _MM_MERGE_f32(x,(_MMR_f32)_MM_SET_i32(0xffffffff,gvl), invalid_mask,gvl);
+  x = _MM_MERGE_f32(x,_MMR_i32_to_f32(_MM_SET_i32(0xffffffff,gvl)), invalid_mask,gvl);
 
   return x;
 }

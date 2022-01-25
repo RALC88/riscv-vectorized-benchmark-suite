@@ -116,14 +116,14 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
 
         _MMR_i64   xLoc;
         xLoc = _MM_LOAD_i64((const long *)&(fan_locs[i/2]),gvl);
-        xLoc = _MM_LOAD_INDEX_i64(0,xLoc,gvl);
-        xLoc = _MM_LOAD_INDEX_i64(0,xLoc,gvl);
+        xLoc = _MM_LOAD_INDEX_i64(0,_MMR_i64_to_u64(xLoc),gvl);
+        xLoc = _MM_LOAD_INDEX_i64(0,_MMR_i64_to_u64(xLoc),gvl);
 
         FENCE();
         // gvl     = __builtin_epi_vsetvl(a_size-i, __epi_e32, __epi_m1);
         gvl = vsetvl_e32m1(a_size-i); //PLCT
 
-        xLoc2           =   (_MMR_i32)xLoc;
+        xLoc2           =   _MMR_i64_to_i32(xLoc);
 
         xNo_Swap_i      = _MM_SUB_i32(xOld_loc,xLoc2,gvl);
         xNo_Swap_aux    = _MM_VFCVT_F_X_f32(xNo_Swap_i,gvl); 

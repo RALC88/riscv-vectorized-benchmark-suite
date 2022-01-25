@@ -151,7 +151,7 @@ void output_printfile(int n,DATA_TYPE **A,  string& outfile ) {
 int main(int argc, char** argv)
 {
   if(argc!=4){
-        printf("Usage: pathfiner width N TSTEPS output_file\n");
+        printf("Usage: jacobi_2d N TSTEPS output_file\n");
         exit(0);
     }
 

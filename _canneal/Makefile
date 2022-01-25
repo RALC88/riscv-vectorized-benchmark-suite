@@ -6,7 +6,7 @@ LLVM := /llvm/build/
 SPIKE := spike
 PK := pk
 
-target = bin/rvv-test
+target = bin/canneal_vector.exe
 
 start:
 	mkdir bin ; \
