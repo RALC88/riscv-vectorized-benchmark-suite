@@ -108,9 +108,9 @@ _MMR_i64  tmp3;
         
         imm0  = _MM_VFCVT_X_F_i64(fx,gvl);
         imm0  = _MM_ADD_i64(imm0, _MM_SET_i64(1023,gvl),gvl); 
-        imm0  = _MM_SLL_i64(imm0, _MM_SET_i64(52,gvl),gvl);
+        imm0  = _MM_SLL_i64(imm0, _MM_SET_u64(52,gvl),gvl);
 
-        tmp4 = (_MMR_f64)imm0;
+        tmp4 = _MMR_i64_to_f64(imm0);
         y     = _MM_MUL_f64(y, tmp4,gvl);
         return y;
 }
@@ -191,9 +191,9 @@ _MMR_i32  tmp3;
         
         imm0  = _MM_VFCVT_X_F_i32(fx,gvl);
         imm0  = _MM_ADD_i32(imm0, _MM_SET_i32(0x7f,gvl),gvl); 
-        imm0  = _MM_SLL_i32(imm0, _MM_SET_i32(23,gvl),gvl);
+        imm0  = _MM_SLL_i32(imm0, _MM_SET_u32(23,gvl),gvl);
 
-        tmp4 = (_MMR_f32)imm0;
+        tmp4 = _MMR_i32_to_f32(imm0);
         y     = _MM_MUL_f32(y, tmp4,gvl);
         return y;
 }
