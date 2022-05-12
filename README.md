@@ -161,6 +161,5 @@ New vectorized applications are welcome. We strongly encourage you to contribute
 We thank the [European Processor Initiative](https://www.european-processor-initiative.eu/) (EPI) project, and the Barcelona Supercomputing Center compiler team, specially to Roger Ferrer who have always support us and solved our doubts about compiler-related issues.
 
 ## Contact
-Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
-PhD. Student at UPC Barcelona   
-BSC - Barcelona Supercomputing Center
+Cristóbal Ramírez Lazo
+cristobal.ramirez.lazo@gmail.com
