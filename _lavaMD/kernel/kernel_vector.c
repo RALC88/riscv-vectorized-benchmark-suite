@@ -251,6 +251,11 @@ void  kernel_cpu(	par_str par,
 
 				gvl = __builtin_epi_vsetvl(NUMBER_PAR_PER_BOX, __epi_e32, __epi_m1);
 
+				xfA_1_v  = _MM_LOAD_f32(&fA[i].v, 1);
+				xfA_1_x  = _MM_LOAD_f32(&fA[i].x, 1);
+				xfA_1_y  = _MM_LOAD_f32(&fA[i].y, 1);
+				xfA_1_z  = _MM_LOAD_f32(&fA[i].z, 1);
+
 				xfA_1_v  = _MM_REDSUM_f32(xfA_v,xfA_1_v,gvl);
 				xfA_1_x  = _MM_REDSUM_f32(xfA_x,xfA_1_x,gvl);
 				xfA_1_y  = _MM_REDSUM_f32(xfA_y,xfA_1_y,gvl);
