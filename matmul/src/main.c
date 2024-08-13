@@ -57,6 +57,7 @@ int main (int argc, char **argv)
 
     data_t *M1 = (data_t*)malloc(M*N*sizeof(data_t));
     data_t *M2 = (data_t*)malloc(N*K*sizeof(data_t));
+    data_t *result = (data_t*)malloc(N*K*sizeof(data_t));
     data_t *reference = (data_t*)malloc(M*N*sizeof(data_t));
 
     for (int i = 0; i < M; i++) {
@@ -129,6 +130,12 @@ int main (int argc, char **argv)
         printf("Verification failed!\n");
         return 1;
     }
+
+
+    free(M1);
+    free(M2);
+    free(result);
+    free(reference);
 
     return 0;
 }
