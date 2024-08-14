@@ -6,23 +6,19 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
-#include "utils.h" 
+#include <stdbool.h>
 
 #include "../../common/riscv_util.h"
-
-#ifdef USE_RISCV_VECTOR
-//#include "../../common/vector_defines.h"
-#endif
 
 #define DATA_TYPE 
 typedef double data_t;
 
+extern bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 #ifdef USE_RISCV_VECTOR
-static void matrixmul_intrinsics( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
+extern void matrixmul_intrinsics( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
 #else // !USE_RISCV_VECTOR
-static void matmul_serial( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
+extern void matmul_serial( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
 #endif
-static bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 
 
 int main (int argc, char **argv)
@@ -33,13 +29,14 @@ int main (int argc, char **argv)
 
     if (argc != 4){
         printf("Usage:\n\t%s <Rows> <Colums> <inputFile>\n", argv[0]);
-        xit(1);
+        exit(1);
     }
 
     int M = atoi(argv[1]);
-    int N = atoi(argv[1]);
+    int N = atoi(argv[2]);
     int K = N;
     char *inputFile = argv[3];
+    int numOptions;
 
     //Read input data from file
     file = fopen(inputFile, "r");

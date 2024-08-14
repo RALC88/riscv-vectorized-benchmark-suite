@@ -6,15 +6,15 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #define DATA_TYPE 
 typedef double data_t;
 
 #ifdef USE_RISCV_VECTOR
-
 #include <riscv_vector.h>
 
-static void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
+void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
 
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < m; j++) {
@@ -43,7 +43,7 @@ static void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, 
 
 #else // !USE_RISCV_VECTOR
 
-static void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
+void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < m; ++j) {
       c[i * m + j] = 0;
@@ -56,7 +56,7 @@ static void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p) 
 #endif
 
 
-static bool compare( size_t dm, size_t dn, data_t *a ,data_t *b) {
+bool compare( size_t dm, size_t dn, data_t *a ,data_t *b) {
     bool result = false;
     for (int i = 0; i < dm; i++) {
         for (int j = 0; j < dn; j++) {
