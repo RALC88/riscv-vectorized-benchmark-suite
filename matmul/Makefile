@@ -1,7 +1,7 @@
 #makefile
 
 start:
-	rm bin/*.*
+	rm -f bin/*.*
 
 serial:
 	echo "serial"
@@ -14,8 +14,8 @@ serial:
 vector:
 	echo "vector"
 	${RISCV}/bin/clang -march=rv64gcv -DUSE_RISCV_VECTOR -O2 -o bin/matrixmul_vector.exe src/matmul.c src/main.c
-	${RISCV}/bin/llvm-objdump -ds  bin/matrixmul_vector.exe > bin/matrixmul_vector.dump
+	${RISCV}/bin/llvm-objdump  --mattr=+m,+f,+d,+a,+c,+v -S  bin/matrixmul_vector.exe > bin/matrixmul_vector.dump
 
 clean:
-	rm bin/*.dump; \
-	rm bin/*.exe;
+	rm -f bin/*.dump; \
+	rm -f bin/*.exe;

@@ -13,6 +13,7 @@
 #define DATA_TYPE 
 typedef double data_t;
 
+void read_vector(FILE *file, double *vector, size_t size);
 extern bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 #ifdef USE_RISCV_VECTOR
 extern void matrixmul_intrinsics( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
@@ -23,83 +24,47 @@ extern void matmul_serial( size_t dm, size_t dk, size_t dn, data_t *c , data_t *
 
 int main (int argc, char **argv)
 {
-    FILE *file;
-    data_t * buffer;
-    int rv;
-
     if (argc != 4){
         printf("Usage:\n\t%s <Rows> <Colums> <inputFile>\n", argv[0]);
         exit(1);
     }
 
-    int M = atoi(argv[1]);
-    int N = atoi(argv[2]);
-    int K = N;
+    size_t M = atoi(argv[1]);
+    size_t N = atoi(argv[2]);
+    size_t K = N;
     char *inputFile = argv[3];
-    int numOptions;
+    
+    data_t *M1          = (data_t*)malloc(M*N*sizeof(data_t));
+    data_t *M2          = (data_t*)malloc(N*K*sizeof(data_t));
+    data_t *result      = (data_t*)malloc(N*K*sizeof(data_t));
+    data_t *reference   = (data_t*)malloc(M*N*sizeof(data_t));
 
     //Read input data from file
-    file = fopen(inputFile, "r");
+    FILE *file = fopen(inputFile, "r");
     if(file == NULL) {
       printf("ERROR: Unable to open file `%s'.\n", inputFile);
       exit(1);
     }
+    
+    char line[256];
+    
+    // Read Matrix A
+    fgets(line, sizeof(line), file);  // Read the header line
+    read_vector(file, M1, M*N);
 
-    rv = fscanf(file, "%i", &numOptions);
-    if(rv != 1) {
-      printf("ERROR: Unable to read from file `%s'.\n", inputFile);
-      fclose(file);
-      exit(1);
-    }
+    // Read Matrix B
+    fgets(line, sizeof(line), file);  // Read the header line
+    fgets(line, sizeof(line), file);  // Read the blank line
+    read_vector(file, M2, N*K);
 
-    data_t *M1 = (data_t*)malloc(M*N*sizeof(data_t));
-    data_t *M2 = (data_t*)malloc(N*K*sizeof(data_t));
-    data_t *result = (data_t*)malloc(N*K*sizeof(data_t));
-    data_t *reference = (data_t*)malloc(M*N*sizeof(data_t));
+    // Read Matrix Reference
+    fgets(line, sizeof(line), file);  // Read the header line
+    fgets(line, sizeof(line), file);  // Read the blank line
+    read_vector(file, reference, M*N);
 
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) {
-            rv = fscanf(file, "%f", M1[i*N+j]);
-            if(rv != M*N) {
-              printf("ERROR: Unable to read from file `%s'.\n", inputFile);
-              fclose(file);
-              exit(1);
-            }
-        }
- 
-    }
+    fclose(file);
 
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) {
-            rv = fscanf(file, "%f", M2[i*N+j]);
-            if(rv != M*N) {
-              printf("ERROR: Unable to read from file `%s'.\n", inputFile);
-              fclose(file);
-              exit(1);
-            }
-        }
- 
-    }
-
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) {
-            rv = fscanf(file, "%f", reference[i*N+j]);
-            if(rv != M*N) {
-              printf("ERROR: Unable to read from file `%s'.\n", inputFile);
-              fclose(file);
-              exit(1);
-            }
-        }
- 
-    }
-
-
-    rv = fclose(file);
-    if(rv != 0) {
-      printf("ERROR: Unable to close file `%s'.\n", inputFile);
-      exit(1);
-    }
-
+    //**************************************************
     
     long long start,end;
     start = get_time();
@@ -136,3 +101,26 @@ int main (int argc, char **argv)
 
     return 0;
 }
+
+void read_vector(FILE *file, double *vector, size_t size) {
+    double *ptr = vector;
+    int index = 0;
+    double value;
+
+    while (index < size) {
+        // Read ELEMENTS_PER_LINE values from each line
+        for (int i = 0; i < 20 && index < size; i++) {
+            if (fscanf(file, "%lf", &value) != 1) {
+                fprintf(stderr, "Error reading value\n");
+                exit(EXIT_FAILURE);
+            }
+            *(ptr + index++) = value;
+        }
+        // Handle the newline character if present
+        int ch = fgetc(file);
+        if (ch != '\n' && ch != EOF) {
+            ungetc(ch, file);
+        }
+    }
+}
+
