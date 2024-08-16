@@ -44,13 +44,13 @@ void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) 
 #else // !USE_RISCV_VECTOR
 
 void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
-  for (int i = 0; i < n; ++i)
-    for (int j = 0; j < m; ++j) {
-      c[i * m + j] = 0;
-      for (int k = 0; k < p; ++k) {
-        c[i * m + j] += a[i * p + k] * b[k * m + j];
-      }
-    }
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j) {
+            c[i * m + j] = 0;
+            for (int k = 0; k < p; ++k) {
+                c[i * m + j] += a[i * p + k] * b[k * m + j];
+            }
+        }
 }
 
 #endif

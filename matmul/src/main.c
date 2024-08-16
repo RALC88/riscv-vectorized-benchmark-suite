@@ -16,9 +16,9 @@ typedef double data_t;
 void read_vector(FILE *file, double *vector, size_t size);
 extern bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 #ifdef USE_RISCV_VECTOR
-extern void matrixmul_intrinsics( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
+extern void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) ;
 #else // !USE_RISCV_VECTOR
-extern void matmul_serial( size_t dm, size_t dk, size_t dn, data_t *c , data_t *a, data_t *b ) ;
+extern void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p);
 #endif
 
 
@@ -72,7 +72,7 @@ int main (int argc, char **argv)
 
 #ifdef USE_RISCV_VECTOR
 
-    matrixmul_intrinsics(M, K, N, result, M1, M2);
+    matrixmul_intrinsics(M1, M2, result, N, M, K);
     printf("matrixmul_intrinsics done\n");
     
     end = get_time();
@@ -80,7 +80,7 @@ int main (int argc, char **argv)
 
 #else // !USE_RISCV_VECTOR
 
-    matmul_serial(M, K, N, result, M1, M2);
+    matmul_serial(M1,M2,result, N, M, K);
     printf("matmul_serial done\n");
     
     end = get_time();
@@ -109,7 +109,7 @@ void read_vector(FILE *file, double *vector, size_t size) {
 
     while (index < size) {
         // Read ELEMENTS_PER_LINE values from each line
-        for (int i = 0; i < 20 && index < size; i++) {
+        for (int i = 0; i < 20 && index < size ; i++) {
             if (fscanf(file, "%lf", &value) != 1) {
                 fprintf(stderr, "Error reading value\n");
                 exit(EXIT_FAILURE);
