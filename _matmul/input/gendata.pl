@@ -57,8 +57,9 @@ sub printArray
 {
   my $arrayName = $_[0];
   my $arrayRef  = $_[1];
+  my $dimSize  = $_[2];
 
-  my $numCols = 20;
+  my $numCols = $dimSize;
   my $arrayLen = scalar(@{$arrayRef});
 
 
@@ -184,12 +185,10 @@ sub main()
     }
   }
   
-  print"# Matrix A \n"; 
-  printArray( "input1_data", \@values1 );
-  print"# Matrix B \n"; 
-  printArray( "input2_data", \@values2 );
-  print"# Matrix Reference \n"; 
-  printArray( "verify_data", \@results);
+  print $opts{"size"}," ",$opts{"size"},"\n"; 
+  printArray( "input1_data", \@values1, $opts{"size"});
+  printArray( "input2_data", \@values2, $opts{"size"});
+  printArray( "verify_data", \@results, $opts{"size"});
 
  
 }

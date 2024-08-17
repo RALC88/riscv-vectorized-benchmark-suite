@@ -13,7 +13,7 @@
 #define DATA_TYPE 
 typedef double data_t;
 
-void read_vector(FILE *file, double *vector, size_t size);
+void read_vector(FILE *file, double *vector, size_t size, size_t rowSize);
 extern bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 #ifdef USE_RISCV_VECTOR
 extern void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) ;
@@ -46,21 +46,19 @@ int main (int argc, char **argv)
       exit(1);
     }
     
-    char line[256];
+    char line[M];
     
     // Read Matrix A
     fgets(line, sizeof(line), file);  // Read the header line
-    read_vector(file, M1, M*N);
+    read_vector(file, M1, M*N,M);
 
     // Read Matrix B
-    fgets(line, sizeof(line), file);  // Read the header line
     fgets(line, sizeof(line), file);  // Read the blank line
-    read_vector(file, M2, N*K);
+    read_vector(file, M2, N*K,N);
 
     // Read Matrix Reference
-    fgets(line, sizeof(line), file);  // Read the header line
     fgets(line, sizeof(line), file);  // Read the blank line
-    read_vector(file, reference, M*N);
+    read_vector(file, reference, M*N,M);
 
     fclose(file);
 
@@ -102,14 +100,14 @@ int main (int argc, char **argv)
     return 0;
 }
 
-void read_vector(FILE *file, double *vector, size_t size) {
+void read_vector(FILE *file, double *vector, size_t size, size_t rowSize) {
     double *ptr = vector;
     int index = 0;
     double value;
 
     while (index < size) {
         // Read ELEMENTS_PER_LINE values from each line
-        for (int i = 0; i < 20 && index < size ; i++) {
+        for (int i = 0; i < rowSize && index < size ; i++) {
             if (fscanf(file, "%lf", &value) != 1) {
                 fprintf(stderr, "Error reading value\n");
                 exit(EXIT_FAILURE);
