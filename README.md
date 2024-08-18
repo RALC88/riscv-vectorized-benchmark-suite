@@ -2,15 +2,14 @@
 
 ## Overview
 
-The RiVEC Benchmark Suite is a collection composed of data-parallel applications from different domains. The suite focuses on benchmarking vector microarchitectures; nevertheless, it can be used as well for Multimedia SIMD microarchitectures. Current implementation is targeting RISC-V Architectures; however, it can be easily ported to any Vector/SIMD ISA thanks to a wrapper library which we developed to map vector intrinsics and math functions to the target architecture.
+The RiVEC Benchmark Suite is a collection composed of data-parallel applications from different domains. The suite focuses on benchmarking vector microarchitectures. Current implementation is targeting RISC-V Architectures; however, it can be easily ported to any Vector/SIMD ISA thanks to a wrapper library which we developed to map vector intrinsics and math functions to the target architecture.
 
 The benchmark suite with all its applications and input sets is available as open source free of charge. Some of the benchmark programs have their own licensing terms which might limit their use in some cases.
 
-Currently there are two implementations based on the Working draft of the proposed RISC-V V vector extension [v0.7](https://github.com/riscv/riscv-v-spec/releases/tag/0.7.1) and [v1.0](https://github.com/riscv/riscv-v-spec):
+RiVEC implements the lastest riscv intrinsics for rvv-1.0. It can be compiled with the latest [riscv-collab/riscv-gnu-toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). RiVEC has been successfully tested on Spike RISC-V ISA Simulator and qemu.
 
-Vectorized Bencmark Suite for rvv-0.7. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7).
+There is also an implementation based on the Working draft of the proposed RISC-V V vector extension v0.7. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7).
 
-Vectorized Bencmark Suite for rvv-1.0. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0).
 
 If you use this software or a modified version of it for your research, please cite the paper:
 Cristóbal Ramírez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramírez, and Adrián Cristal. 2020. A RISC-V Simulator and Benchmark Suite for Designing and Evaluating Vector Architectures. ACM Trans. Archit. Code Optim. 17, 4, Article 38 (October 2020), 29 pages. https://doi.org/10.1145/3422667
@@ -31,19 +30,40 @@ Cristóbal Ramírez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramíre
 | Swaptions         | Financial Analysis            | MapReduce Regular     | PARSEC      |
 
 
-## Building Vectorized Applications 
+## Building the rv64gcv baremetal toolchain with LLVM
+
+To compile the suite it is required to install the [RISC-V GNU Compiler Toolchain] (https://github.com/riscv-collab/riscv-gnu-toolchain). Next lines summarizes the commands to build the rv64gcv baremetal toolchain with LLVM. We strongly recommend to look at the official toolchain repository for more details.
 
 
-### LLVM Compiler 
+Set the installation PATH 
+```
+export RISCV="/your_path/build/riscv"
+export PATH="$RISCV:$PATH"
+```
 
-We provide precompiled binaries found in the folder bin. However, it is possible to recompile the codes for both rvv versions (0.7 and 1.0).
-To compile for [rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) it is possible to use the [LLVM EPI Compiler](https://ssh.hca.bsc.es/epi/ftp/?C=M;O=D). The provided binaries were compiled with the version llvm-EPI-0.7-development-toolchain-cross-2021-02-23-1523. Note that the compiler is actively in development, so after a certain time, the old versions will disappear. We recommend to use the latest version.
+Cloning the repository 
+```
+git clone https://github.com/riscv/riscv-gnu-toolchain
+```
 
-To compile for [rvv-1.0](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0) it is possible to use the [LLVM from PLCT](https://github.com/isrc-cas/rvv-llvm)
+Install dependencies
+```
+sudo apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
+```
 
-### EPI builtins reference
+Install RISC-V GNU Compiler Toolchain 
+```
+cd riscv-gnu-toolchain
+./configure --prefix=$RISCV --enable-llvm --disable-linux --with-arch=rv64gcv --with-cmodel=medany
+make -j37 all build-sim SIM=qemu
+```
 
-Here you can find the [EPI Builtins reference for rvv-0.7](https://repo.hca.bsc.es/gitlab/rferrer/epi-builtins-ref/-/tree/EPI-0.7) used to target RISC-V V-extension.
+
+### The RISC-V vector C intrinsics 
+
+As mentioned above, RiVEC implements the lastest riscv intrinsics for rvv-1.0.  RISC-V vector C intrinsics provide users interfaces in the C language level to directly leverage the RISC-V "V" extension.  More details can be found [here] (https://github.com/riscv-non-isa/rvv-intrinsic-doc/blob/main/doc/rvv-intrinsic-spec.adoc).
+
+Here a nice instrinsic viewer tool https://dzaima.github.io/intrinsics-viewer
 
 ### Setting up the environment
 
@@ -51,8 +71,8 @@ The Suite includes a makefile to compile every application, in order to use it, 
 
 Setting the Vector Compiler path
 ```
-export LLVM=$TOP/epi-toolchain
-export PATH=$PATH:$LLVM/bin
+export RISCV="/your_path/build/riscv"
+export PATH="$RISCV:$PATH"
 ```
 
 ### Compile using  clang for RISCV Vector Version
@@ -72,9 +92,40 @@ Also you can compile all the applications by typing:
 make all 
 ```
 
+### Running applications on Spike
+
+All the RiVEC applications can run on [Spike] (https://github.com/riscv-software-src/riscv-isa-sim).  We strongly recommend to look at the official Spike RISC-V ISA Simulator repository for more details.
+
+Install Spike RISC-V ISA Simulator
+```
+sudo apt-get install device-tree-compiler libboost-regex-dev libboost-system-dev
+git clone https://github.com/riscv-software-src/riscv-isa-sim.git
+cd riscv-isa-sim/
+mkdir build
+cd build/
+../configure --prefix=$RISCV --with-arch=rv64gcv
+make -j17
+make install
+```
+
+Once you have installed Spike you can run the following commands to run an applicaiton.
+```
+$RISCV/bin/spike --isa=rv64gcv pk _axpy/bin/axpy_vector.exe "256"
+```
+
+### Running applications on Qemu
+
+When building the rv64gcv baremetal toolchain with LLVM with the above provided commands, it was indicated to also install QEMU
+
+
+Running Axpy:
+```
+RISCV/bin/qemu-riscv64 -L $RISCV/sysroot ./_axpy/bin/axpy_vector.exe "256"
+```
+
 ### Running applications
 
-There are provided 5 different simulation sizes (arguments to run the application). Assuming that the application is running on a simulator, is recommended to not use "native" simulation size.
+There are provided 5 different simulation sizes (arguments to run the application).
 ```
 simtiny : takes seconds to be executed on gem5
 simsmall : takes around 15-30 minutes to be executed on gem5
