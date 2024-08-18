@@ -26,3 +26,12 @@ void axpy_intrinsics(double a, double *dx, double *dy, int n) {
     i += gvl;
   }
 }
+
+
+
+void axpy_serial(double a, double *dx, double *dy, int n) {
+   int i;
+   for (i=0; i<n; i++) {
+      dy[i] += a*dx[i];
+   }
+}
