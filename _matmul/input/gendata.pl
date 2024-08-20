@@ -31,7 +31,9 @@ sub usage()
   print "\n";
   print " Options:\n";
   print "  --help  print this message\n";
-  print "  --size  size of input data [64]\n";
+  print "  --dimM  size of input data [64]\n";
+  print "  --dimK  size of input data [64]\n";
+  print "  --dimN  size of input data [64]\n";
   print "  --seed  random seed [1]\n";
   print "$usageMsg";
 
@@ -42,9 +44,11 @@ sub processCommandLine()
 {
 
   $opts{"help"} = 0;
-  $opts{"size"} = 64;
+  $opts{"dimM"} = 64;
+  $opts{"dimK"} = 64;
+  $opts{"dimN"} = 64;
   $opts{"seed"} = 1;
-  Getopt::Long::GetOptions( \%opts, 'help|?', 'size:i', 'seed:i' ) or usage();
+  Getopt::Long::GetOptions( \%opts, 'help|?', 'dimM:i', 'dimK:i', 'dimN:i', 'seed:i' ) or usage();
   $opts{"help"} and usage();
 
 }
@@ -161,9 +165,13 @@ sub main()
   # create random input arrays
   my $mat_values1;
   my $mat_values2;
-  for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
-    for ( my $j = 0; $j < $opts{"size"}; $j++ ) {
+  for ( my $i = 0; $i < $opts{"dimM"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"dimK"}; $j++ ) {
       $mat_values1->[$i][$j] = int(rand(4));
+    }
+  }
+  for ( my $i = 0; $i < $opts{"dimK"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"dimN"}; $j++ ) {
       $mat_values2->[$i][$j] = int(rand(4));
     }
   }
@@ -174,21 +182,29 @@ sub main()
   my @values1;
   my @values2;
   my @results;
-  for ( my $i = 0; $i < $opts{"size"}; $i++ ) {
-    for ( my $j = 0; $j < $opts{"size"}; $j++ ) {
-    my $value1 = $mat_values1->[$i][$j];
-    my $value2 = $mat_values2->[$i][$j];
-    my $result = $mat_results->[$i][$j];
-    push( @values1, $value1 );
-    push( @values2, $value2 );
-    push( @results, $result );
+  for ( my $i = 0; $i < $opts{"dimM"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"dimK"}; $j++ ) {
+        my $value1 = $mat_values1->[$i][$j];
+        push( @values1, $value1 );
+    }
+  }
+  for ( my $i = 0; $i < $opts{"dimK"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"dimN"}; $j++ ) {
+        my $value2 = $mat_values2->[$i][$j];
+        push( @values2, $value2 );
+    }
+  }
+  for ( my $i = 0; $i < $opts{"dimM"}; $i++ ) {
+    for ( my $j = 0; $j < $opts{"dimN"}; $j++ ) {
+        my $result = $mat_results->[$i][$j];
+        push( @results, $result );
     }
   }
   
-  print $opts{"size"}," ",$opts{"size"},"\n"; 
-  printArray( "input1_data", \@values1, $opts{"size"});
-  printArray( "input2_data", \@values2, $opts{"size"});
-  printArray( "verify_data", \@results, $opts{"size"});
+  print $opts{"dimM"}," ",$opts{"dimK"}," ",$opts{"dimN"},"\n"; 
+  printArray( "input1_data", \@values1, $opts{"dimK"});
+  printArray( "input2_data", \@values2, $opts{"dimN"});
+  printArray( "verify_data", \@results, $opts{"dimN"});
 
  
 }

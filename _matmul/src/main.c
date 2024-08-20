@@ -13,6 +13,7 @@
 #define DATA_TYPE 
 typedef double data_t;
 
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *K, size_t *N);
 void read_vector(FILE *file, double *vector, size_t size, size_t rowSize);
 extern bool compare( size_t dm, size_t dn, data_t *a , data_t *b) ;
 #ifdef USE_RISCV_VECTOR
@@ -24,41 +25,43 @@ extern void matmul_serial(data_t *a, data_t *b, data_t *c, int n, int m, int p);
 
 int main (int argc, char **argv)
 {
-    if (argc != 4){
-        printf("Usage:\n\t%s <Rows> <Colums> <inputFile>\n", argv[0]);
+    if (argc != 2){
+        printf("Usage:\n\t%s <inputFile>\n", argv[0]);
         exit(1);
     }
-
-    size_t M = atoi(argv[1]);
-    size_t N = atoi(argv[2]);
-    size_t K = N;
-    char *inputFile = argv[3];
     
-    data_t *M1          = (data_t*)malloc(M*N*sizeof(data_t));
-    data_t *M2          = (data_t*)malloc(N*K*sizeof(data_t));
-    data_t *result      = (data_t*)malloc(N*K*sizeof(data_t));
-    data_t *reference   = (data_t*)malloc(M*N*sizeof(data_t));
-
     //Read input data from file
+    char *inputFile = argv[1];
     FILE *file = fopen(inputFile, "r");
     if(file == NULL) {
       printf("ERROR: Unable to open file `%s'.\n", inputFile);
       exit(1);
     }
+   
+    size_t M, K, N; 
+    char line[16];
     
-    char line[M];
+    if (read_matrix_dimensions(file, &M, &K, &N)) {
+        printf("Error reading the matrix dimensions.\n");
+    } else{
+        printf("Matrix Dimensions: M %zu, K %zu, N %zu \n", M, K, N);
+    } 
+    
+    data_t *M1          = (data_t*)malloc(M*K*sizeof(data_t));
+    data_t *M2          = (data_t*)malloc(K*N*sizeof(data_t));
+    data_t *result      = (data_t*)malloc(M*N*sizeof(data_t));
+    data_t *reference   = (data_t*)malloc(M*N*sizeof(data_t));
     
     // Read Matrix A
-    fgets(line, sizeof(line), file);  // Read the header line
-    read_vector(file, M1, M*N,M);
+    read_vector(file, M1, M*K, K);
 
     // Read Matrix B
     fgets(line, sizeof(line), file);  // Read the blank line
-    read_vector(file, M2, N*K,N);
+    read_vector(file, M2, K*N, N);
 
     // Read Matrix Reference
     fgets(line, sizeof(line), file);  // Read the blank line
-    read_vector(file, reference, M*N,M);
+    read_vector(file, reference, M*N, N);
 
     fclose(file);
 
@@ -122,3 +125,18 @@ void read_vector(FILE *file, double *vector, size_t size, size_t rowSize) {
     }
 }
 
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *K, size_t *N) {
+    char line[100];  // Buffer to store the line read from the file
+
+    // Read a line from the file
+    if (fgets(line, sizeof(line), file) != NULL) {
+        // Parse the dimensions using sscanf
+        if (sscanf(line, "%zd %zd %zd", M, K, N) != 0) {
+            return 0;  // Successfully read all dimensions
+        } else {
+            return 1;  // Error parsing the dimensions
+        }
+    } else {
+        return 1;  // Error reading the line
+    }
+}
