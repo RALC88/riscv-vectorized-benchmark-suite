@@ -18,7 +18,8 @@ using namespace std;
 *************************************************************************/
 
 #ifdef USE_RISCV_VECTOR
-#include "../../common/vector_defines.h"
+#include <riscv_vector.h>
+#include "vector_defines.h"
 #endif
 
 /************************************************************************/
@@ -173,7 +174,7 @@ void run_vector()
         }
         dst = result;
 
-        unsigned long int gvl = __builtin_epi_vsetvl(cols, __epi_e32, __epi_m1);
+        size_t gvl = __riscv_vsetvl_e32m1(cols);
 
         _MMR_i32    xSrc_slideup;
         _MMR_i32    xSrc_slidedown;
@@ -182,12 +183,12 @@ void run_vector()
 
         int aux,aux2;
 
-        for (int t = 0; t < rows-1; t++) 
+        for (size_t t = 0; t < rows-1; t++) 
         {
             aux = dst[0] ;
-            for(int n = 0; n < cols; n = n + gvl)
+            for(size_t n = 0; n < cols; n = n + gvl)
             {
-                gvl = __builtin_epi_vsetvl(cols-n, __epi_e32, __epi_m1);
+                gvl = __riscv_vsetvl_e32m1(cols-n);
                 xNextrow = _MM_LOAD_i32(&dst[n],gvl);
                 xSrc = xNextrow;
                 aux2 = (n+gvl >= cols) ?  dst[n+gvl-1] : dst[n+gvl];
