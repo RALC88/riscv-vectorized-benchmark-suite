@@ -17,6 +17,8 @@ using namespace std;
 * Barcelona Supercomputing Center (2020)
 *************************************************************************/
 
+#include "../../common/riscv_util.h"
+
 #ifdef USE_RISCV_VECTOR
 #include <riscv_vector.h>
 #include "vector_defines.h"
@@ -41,21 +43,6 @@ void init(int argc, char** argv);
 void run();
 void run_vector();
 void output_printfile(int *dst, string& filename);
-
-/*************************************************************************
-*GET_TIME
-*returns a long int representing the time
-*************************************************************************/
-long long get_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 1000000) + tv.tv_usec;
-}
-// Returns the number of seconds elapsed between the two specified times
-float elapsed_time(long long start_time, long long end_time) {
-        return (float) (end_time - start_time) / (1000 * 1000);
-}
-/*************************************************************************/
 
 void init(int argc, char** argv)
 {
