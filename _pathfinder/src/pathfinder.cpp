@@ -17,89 +17,78 @@ using namespace std;
 * Barcelona Supercomputing Center (2020)
 *************************************************************************/
 
+#include "../../common/riscv_util.h"
+
 #ifdef USE_RISCV_VECTOR
-#include "../../common/vector_defines.h"
+#include <riscv_vector.h>
+#include "vector_defines.h"
 #endif
 
 /************************************************************************/
 
 //Enable RESULT_PRINT in order to see the result vector, for instruction count it should be disable
-#define RESULT_PRINT
+//#define RESULT_PRINT
+//Enable INPUT_PRINT in order to see the input matrix, for instruction count it should be disable
 //#define INPUT_PRINT
+
 #define MAXNAMESIZE 1024 // max filename length
 #define M_SEED 9
 #define MAX_WEIGHT 10
 #define NUM_RUNS 100
 
-int rows, cols;
+size_t rows, cols;
 int* wall;
 int* result;
+int* reference;
 string inputfilename;
 string outfilename;
-//#include "timer.h"
 
 void init(int argc, char** argv);
 void run();
 void run_vector();
-void output_printfile(int *dst, string& filename);
-//void init_data(int *data, string& filename );
-/*************************************************************************
-*GET_TIME
-*returns a long int representing the time
-*************************************************************************/
-long long get_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 1000000) + tv.tv_usec;
-}
-// Returns the number of seconds elapsed between the two specified times
-float elapsed_time(long long start_time, long long end_time) {
-        return (float) (end_time - start_time) / (1000 * 1000);
-}
-/*************************************************************************/
+void output_print(int *dst, int cols);
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *N);
+void read_vector(FILE *file, int *vector, size_t size, size_t rowSize);
+
+bool compare( int cols, int* result, int* reference);
 
 void init(int argc, char** argv)
 {
-    if(argc!=4){
-        printf("Usage: pathfiner width num_of_steps input_file output_file\n");
+    if(argc!=2){
+        printf("Usage: <input_file> \n");
         exit(0);
     }
 
-    cols = atoi(argv[1]);
-    rows = atoi(argv[2]);
-    //inputfilename = argv[3];
-    outfilename = argv[3];
-    //}else{
-    //            printf("Usage: pathfiner width num_of_steps input_file output_file\n");
-    //            exit(0);
-    //    }
-    printf("cols: %d rows: %d \n", cols , rows);
+    //Read input data from file
+    char *inputFile = argv[1];
+    FILE *file = fopen(inputFile, "r");
+    if(file == NULL) {
+      printf("ERROR: Unable to open file `%s'.\n", inputFile);
+      exit(1);
+    }
 
+    if (read_matrix_dimensions(file, &rows, &cols)) {
+        printf("Error reading the matrix dimensions.\n");
+    } else{
+        printf("Matrix Dimensions: M %zu, N %zu \n", rows, cols);
+    } 
+
+    char line[16];
     wall = new int[rows * cols];
     result = new int[cols];
-    
-    //int seed = M_SEED;
-    //srand(seed);
-    /*
-    init_data(wall, inputfilename );
-    */
-    
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            wall[i*cols+j] = rand() % 10;
-        }
-    }
-    
-    //for (int j = 0; j < cols; j++)
-    //    result[j] = wall[j];
+    reference = new int[cols];
+
+    // Read Matrix
+    read_vector(file, wall, rows * cols, cols);
+
+    // Read reference
+    fgets(line, sizeof(line), file);  // Read the blank line
+    read_vector(file, reference, cols, cols);
+
 
 #ifdef INPUT_PRINT
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
             printf("%d ",wall[i*cols+j]) ;
         }
         printf("\n") ;
@@ -120,15 +109,10 @@ void fatal(char *s)
 int main(int argc, char** argv)
 {
 
-// if(argc != 1 ) {
-//         cout << "Usage: " << argv[0] << " <input_file> " << endl;
-//         exit(1);
-//     }   
 long long start_0 = get_time();
 init(argc,argv);
 long long end_0 = get_time();
 printf("TIME TO INIT DATA: %f\n", elapsed_time(start_0, end_0));
-    //unsigned long long cycles;
 
 #ifndef USE_RISCV_VECTOR
     run();
@@ -136,7 +120,6 @@ printf("TIME TO INIT DATA: %f\n", elapsed_time(start_0, end_0));
     run_vector();
 #endif
 
-return EXIT_SUCCESS;
 }
 
 #ifndef USE_RISCV_VECTOR
@@ -145,8 +128,6 @@ void run()
 {
     int min;
     int *src,*dst, *temp;
-    
-    //src = (int *)malloc(sizeof(int)*cols);
     
     printf("NUMBER OF RUNS: %d\n",NUM_RUNS);
     long long start = get_time();
@@ -162,7 +143,6 @@ void run()
             temp = src;
             src = dst;
             dst = temp;
-            //#pragma omp parallel for private(min)
             for(int n = 0; n < cols; n++){
               min = src[n];
               if (n > 0)
@@ -172,17 +152,22 @@ void run()
               dst[n] = wall[(t+1)*cols + n]+min;
             }
         }   
-        //delete src;
     }
 
     long long end = get_time();
     printf("TIME TO FIND THE SMALLEST PATH: %f\n", elapsed_time(start, end));
 
+    if(compare(cols, dst, reference)){
+        printf("Verification failed!\n");
+    } else {
+        printf("Verification passed!\n");
+    }
+
+
 #ifdef RESULT_PRINT
-
-    output_printfile(dst, outfilename );
-
+    output_print(dst, cols);
 #endif  // RESULT_PRINT
+    
     free(dst);
     free(wall);
     free(src);
@@ -203,7 +188,7 @@ void run_vector()
         }
         dst = result;
 
-        unsigned long int gvl = __builtin_epi_vsetvl(cols, __epi_e32, __epi_m1);
+        size_t gvl = __riscv_vsetvl_e32m1(cols);
 
         _MMR_i32    xSrc_slideup;
         _MMR_i32    xSrc_slidedown;
@@ -212,12 +197,12 @@ void run_vector()
 
         int aux,aux2;
 
-        for (int t = 0; t < rows-1; t++) 
+        for (size_t t = 0; t < rows-1; t++) 
         {
             aux = dst[0] ;
-            for(int n = 0; n < cols; n = n + gvl)
+            for(size_t n = 0; n < cols; n = n + gvl)
             {
-                gvl = __builtin_epi_vsetvl(cols-n, __epi_e32, __epi_m1);
+                gvl = __riscv_vsetvl_e32m1(cols-n);
                 xNextrow = _MM_LOAD_i32(&dst[n],gvl);
                 xSrc = xNextrow;
                 aux2 = (n+gvl >= cols) ?  dst[n+gvl-1] : dst[n+gvl];
@@ -229,19 +214,23 @@ void run_vector()
                 xNextrow = _MM_ADD_i32(xNextrow,xSrc,gvl);
                 aux = dst[n+gvl-1];
                 _MM_STORE_i32(&dst[n],xNextrow,gvl);
-                FENCE();
             }
         }
-
-        FENCE();
     }
     long long end = get_time();
     printf("TIME TO FIND THE SMALLEST PATH: %f\n", elapsed_time(start, end));
 
+
+    if(compare(cols, dst, reference)){
+        printf("Verification failed!\n");
+    } else {
+        printf("Verification passed!\n");
+    }
+
+
+
 #ifdef RESULT_PRINT
-
-    output_printfile(dst, outfilename );
-
+    output_print(dst, cols);
 #endif // RESULT_PRINT
 
     free(wall);
@@ -249,34 +238,60 @@ void run_vector()
 }
 #endif // USE_RISCV_VECTOR
 
-/*
-void init_data(int *data,  string&  inputfile ) {
+void output_print(int *dst, int cols) {
 
-    ifstream fp (inputfile.c_str());
-    assert(fp.is_open()); // were there any errors on opening?
-
-    int value;
-    int i=0;
-    while (!fp.eof()){
-        fp >> data[i];
-        i++;
+    for (int j = 0; j < cols; j++){
+        printf("%d ",dst[j]) ;
     }
-
-    if( !(i-1 == cols*rows) ) {
-        printf("error: the number of elements does not match the parameters i=%d , colsxrows = %d \n",i,cols*rows);
-        exit(1);
-    }
-    fp.close();
+        printf("\n") ;
 }
-*/
-void output_printfile(int *dst,  string& outfile ) {
-    ofstream myfile;
-    myfile.open(outfile);
-    assert(myfile.is_open());
 
-    for (int j = 0; j < cols; j++)
-    {
-        myfile << dst[j] <<" " ;
+bool compare( int cols, int *result, int *reference){
+
+    bool error = 0;
+    for (int j = 0; j < cols; j++){
+        if(result[j] != reference[j]){
+            error = 1;
+        }
+        return error;
     }
-    myfile.close();
+    return error;
+}
+
+void read_vector(FILE *file, int *vector, size_t size, size_t rowSize) {
+    int *ptr = vector;
+    int index = 0;
+    int value;
+
+    while (index < size) {
+        // Read ELEMENTS_PER_LINE values from each line
+        for (int i = 0; i < rowSize && index < size ; i++) {
+            if (fscanf(file, "%d", &value) != 1) {
+                fprintf(stderr, "Error reading value\n");
+                exit(EXIT_FAILURE);
+            }
+            *(ptr + index++) = value;
+        }
+        // Handle the newline character if present
+        int ch = fgetc(file);
+        if (ch != '\n' && ch != EOF) {
+            ungetc(ch, file);
+        }
+    }
+}
+
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *N) {
+    char line[100];  // Buffer to store the line read from the file
+
+    // Read a line from the file
+    if (fgets(line, sizeof(line), file) != NULL) {
+        // Parse the dimensions using sscanf
+        if (sscanf(line, "%zd %zd", M, N) != 0) {
+            return 0;  // Successfully read all dimensions
+        } else {
+            return 1;  // Error parsing the dimensions
+        }
+    } else {
+        return 1;  // Error reading the line
+    }
 }

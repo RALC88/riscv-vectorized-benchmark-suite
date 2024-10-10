@@ -5,23 +5,23 @@
 //---------------------------------------------------------------------------
 // DATA TYPES
 
-#define _MMR_f64        	__epi_1xf64
-#define _MMR_f32        	__epi_2xf32
+#define _MMR_f64        	vfloat64m1_t
+#define _MMR_f32        	vfloat32m1_t
 
 #define _MMR_2xf64			__epi_2xf64
 #define _MMR_4xf64			__epi_4xf32
 
-#define _MMR_i64        	__epi_1xi64
-#define _MMR_i32        	__epi_2xi32
+#define _MMR_i64        	vint64m1_t
+#define _MMR_i32        	vint32m1_t
 
 
 //---------------------------------------------------------------------------
 // INTEGER INTRINSICS
 
-#define _MM_LOAD_i64    	__builtin_epi_vload_1xi64
-#define _MM_LOAD_i32    	__builtin_epi_vload_2xi32
-#define _MM_LOAD_i16        __builtin_epi_vload_4xi16
-#define _MM_LOAD_i8        __builtin_epi_vload_8xi8
+#define _MM_LOAD_i64    	__riscv_vle64_v_i64m1
+#define _MM_LOAD_i32    	__riscv_vle32_v_i32m1
+#define _MM_LOAD_i16        __riscv_vle16_v_i16m1
+#define _MM_LOAD_i8         __riscv_vle8_v_i8m1
 
 #define _MM_LOAD_INDEX_i64 __builtin_epi_vload_indexed_1xi64
 #define _MM_LOAD_INDEX_i32 __builtin_epi_vload_indexed_2xi32
@@ -29,10 +29,10 @@
 #define _MM_LOAD_STRIDE_i64 __builtin_epi_vload_strided_1xi64
 #define _MM_LOAD_STRIDE_i32 __builtin_epi_vload_strided_2xi32
 
-#define _MM_STORE_i64   	__builtin_epi_vstore_1xi64
-#define _MM_STORE_i32   	__builtin_epi_vstore_2xi32
-#define _MM_STORE_i16       __builtin_epi_vstore_4xi16
-#define _MM_STORE_i8       __builtin_epi_vstore_8xi8
+#define _MM_STORE_i64   	__riscv_vse64_v_i64m1
+#define _MM_STORE_i32   	__riscv_vse32_v_i32m1
+#define _MM_STORE_i16       __riscv_vse16_v_i16m1
+#define _MM_STORE_i8        __riscv_vse8_v_i8m1
 
 #define _MM_STORE_INDEX_i64 __builtin_epi_vstore_indexed_1xi64
 #define _MM_STORE_INDEX_i32 __builtin_epi_vstore_indexed_2xi32
@@ -40,8 +40,8 @@
 #define _MM_STORE_STRIDE_i64 __builtin_epi_vstore_strided_1xi64
 #define _MM_STORE_STRIDE_i32 __builtin_epi_vstore_strided_2xi32
 
-#define _MM_ADD_i64     	__builtin_epi_vadd_1xi64
-#define _MM_ADD_i32     	__builtin_epi_vadd_2xi32
+#define _MM_ADD_i64     	__riscv_vadd_vv_i64m1
+#define _MM_ADD_i32     	__riscv_vadd_vv_i32m1
 
 #define _MM_SUB_i64			  __builtin_epi_vsub_1xi64
 #define _MM_SUB_i32			  __builtin_epi_vsub_2xi32
@@ -63,8 +63,8 @@
 #define _MM_SET_i64     	__builtin_epi_vbroadcast_1xi64
 #define _MM_SET_i32     	__builtin_epi_vbroadcast_2xi32
 
-#define _MM_MIN_i64         __builtin_epi_vmin_1xi64
-#define _MM_MIN_i32         __builtin_epi_vmin_2xi32
+#define _MM_MIN_i64         __riscv_vmin_vv_i64m1
+#define _MM_MIN_i32         __riscv_vmin_vv_i32m1
 
 #define _MM_MAX_i64         __builtin_epi_vmax_1xi64
 #define _MM_MAX_i32         __builtin_epi_vmax_2xi32
@@ -207,8 +207,8 @@
 #define _MM_VSLIDEUP_i32    __builtin_epi_vslideup_2xi32
 #define _MM_VSLIDEUP_i64    __builtin_epi_vslideup_1xi64
 
-#define _MM_VSLIDE1UP_i32    __builtin_epi_vslide1up_2xi32
-#define _MM_VSLIDE1UP_i64    __builtin_epi_vslide1up_1xi64
+#define _MM_VSLIDE1UP_i32    __riscv_vslide1up_vx_i32m1
+#define _MM_VSLIDE1UP_i64    __riscv_vslide1up_vx_i64m1
 
 #define _MM_VSLIDEUP_i32_MASK    __builtin_epi_vslideup_2xi32_mask
 #define _MM_VSLIDEUP_i64_MASK    __builtin_epi_vslideup_1xi64_mask
@@ -216,8 +216,8 @@
 #define _MM_VSLIDEDOWN_i32    __builtin_epi_vslidedown_2xi32
 #define _MM_VSLIDEDOWN_i64    __builtin_epi_vslidedown_1xi64
 
-#define _MM_VSLIDE1DOWN_i32    __builtin_epi_vslide1down_2xi32
-#define _MM_VSLIDE1DOWN_i64    __builtin_epi_vslide1down_1xi64
+#define _MM_VSLIDE1DOWN_i32    __riscv_vslide1down_vx_i32m1
+#define _MM_VSLIDE1DOWN_i64    __riscv_vslide1down_vx_i64m1
 
 #define _MM_VSLIDEDOWN_i32_MASK    __builtin_epi_vslidedown_2xi32_mask
 #define _MM_VSLIDEDOWN_i64_MASK    __builtin_epi_vslidedown_1xi64_mask
@@ -306,26 +306,26 @@
 //---------------------------------------------------------------------------
 // ADVANCE RISC-V MATH LIBRARY
 
-#ifndef _MM_LOG
-#define _MM_LOG
-#include "__log.h"
-#define _MM_LOG_f64 		__log_1xf64
-#define _MM_LOG_f32 		__log_2xf32
-#endif
-
-#ifndef _MM_EXP
-#define _MM_EXP
-#include "__exp.h"
-#define _MM_EXP_f64 		__exp_1xf64
-#define _MM_EXP_f32 		__exp_2xf32
-#endif
-
-#ifndef _MM_COS
-#define _MM_COS
-#include "__cos.h"
-#define _MM_COS_f64 		__cos_1xf64
-#define _MM_COS_f32 		__cos_1xf32
-#endif
+//#ifndef _MM_LOG
+//#define _MM_LOG
+//#include "__log.h"
+//#define _MM_LOG_f64 		__log_1xf64
+//#define _MM_LOG_f32 		__log_2xf32
+//#endif
+//
+//#ifndef _MM_EXP
+//#define _MM_EXP
+//#include "__exp.h"
+//#define _MM_EXP_f64 		__exp_1xf64
+//#define _MM_EXP_f32 		__exp_2xf32
+//#endif
+//
+//#ifndef _MM_COS
+//#define _MM_COS
+//#include "__cos.h"
+//#define _MM_COS_f64 		__cos_1xf64
+//#define _MM_COS_f32 		__cos_1xf32
+//#endif
 
 //---------------------------------------------------------------------------
 
