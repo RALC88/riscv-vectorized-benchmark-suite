@@ -27,7 +27,10 @@ using namespace std;
 /************************************************************************/
 
 //Enable RESULT_PRINT in order to see the result vector, for instruction count it should be disable
-//#define RESULT_PRINT // tmp removed
+//#define RESULT_PRINT
+//Enable INPUT_PRINT in order to see the input matrix, for instruction count it should be disable
+//#define INPUT_PRINT
+
 #define MAXNAMESIZE 1024 // max filename length
 #define M_SEED 9
 #define MAX_WEIGHT 10
@@ -211,11 +214,8 @@ void run_vector()
                 xNextrow = _MM_ADD_i32(xNextrow,xSrc,gvl);
                 aux = dst[n+gvl-1];
                 _MM_STORE_i32(&dst[n],xNextrow,gvl);
-                FENCE();
             }
         }
-
-        FENCE();
     }
     long long end = get_time();
     printf("TIME TO FIND THE SMALLEST PATH: %f\n", elapsed_time(start, end));
