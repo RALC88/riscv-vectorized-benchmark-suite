@@ -33,37 +33,55 @@ using namespace std;
 #define MAX_WEIGHT 10
 #define NUM_RUNS 100
 
-int rows, cols;
+size_t rows, cols;
 int* wall;
 int* result;
+int* reference;
 string inputfilename;
 string outfilename;
 
 void init(int argc, char** argv);
 void run();
 void run_vector();
-void output_printfile(int *dst, string& filename);
+void output_print(int *dst, int cols);
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *N);
+void read_vector(FILE *file, int *vector, size_t size, size_t rowSize);
+
+bool compare( int cols, int* result, int* reference);
 
 void init(int argc, char** argv)
 {
-    if(argc!=4){
-        printf("Usage: <cols> <rows> <output_file> \n");
+    if(argc!=2){
+        printf("Usage: <input_file> \n");
         exit(0);
     }
 
-    cols = atoi(argv[1]);
-    rows = atoi(argv[2]);
-    outfilename = argv[3];
-    printf("cols: %d rows: %d \n", cols , rows);
+    //Read input data from file
+    char *inputFile = argv[1];
+    FILE *file = fopen(inputFile, "r");
+    if(file == NULL) {
+      printf("ERROR: Unable to open file `%s'.\n", inputFile);
+      exit(1);
+    }
 
+    if (read_matrix_dimensions(file, &rows, &cols)) {
+        printf("Error reading the matrix dimensions.\n");
+    } else{
+        printf("Matrix Dimensions: M %zu, N %zu \n", rows, cols);
+    } 
+
+    char line[16];
     wall = new int[rows * cols];
     result = new int[cols];
-    
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j < cols; j++){
-            wall[i*cols+j] = rand() % 10;
-        }
-    }
+    reference = new int[cols];
+
+    // Read Matrix
+    read_vector(file, wall, rows * cols, cols);
+
+    // Read reference
+    fgets(line, sizeof(line), file);  // Read the blank line
+    read_vector(file, reference, cols, cols);
+
 
 #ifdef INPUT_PRINT
     for (int i = 0; i < rows; i++){
@@ -99,7 +117,6 @@ printf("TIME TO INIT DATA: %f\n", elapsed_time(start_0, end_0));
     run_vector();
 #endif
 
-return EXIT_SUCCESS;
 }
 
 #ifndef USE_RISCV_VECTOR
@@ -137,8 +154,15 @@ void run()
     long long end = get_time();
     printf("TIME TO FIND THE SMALLEST PATH: %f\n", elapsed_time(start, end));
 
+    if(compare(cols, dst, reference)){
+        printf("Verification failed!\n");
+    } else {
+        printf("Verification passed!\n");
+    }
+
+
 #ifdef RESULT_PRINT
-    output_printfile(dst, outfilename );
+    output_print(dst, cols);
 #endif  // RESULT_PRINT
     
     free(dst);
@@ -196,8 +220,17 @@ void run_vector()
     long long end = get_time();
     printf("TIME TO FIND THE SMALLEST PATH: %f\n", elapsed_time(start, end));
 
+
+    if(compare(cols, dst, reference)){
+        printf("Verification failed!\n");
+    } else {
+        printf("Verification passed!\n");
+    }
+
+
+
 #ifdef RESULT_PRINT
-    output_printfile(dst, outfilename );
+    output_print(dst, cols);
 #endif // RESULT_PRINT
 
     free(wall);
@@ -205,14 +238,60 @@ void run_vector()
 }
 #endif // USE_RISCV_VECTOR
 
-void output_printfile(int *dst,  string& outfile ) {
-    ofstream myfile;
-    myfile.open(outfile);
-    assert(myfile.is_open());
+void output_print(int *dst, int cols) {
 
-    for (int j = 0; j < cols; j++)
-    {
-        myfile << dst[j] <<" " ;
+    for (int j = 0; j < cols; j++){
+        printf("%d ",dst[j]) ;
     }
-    myfile.close();
+        printf("\n") ;
+}
+
+bool compare( int cols, int *result, int *reference){
+
+    bool error = 0;
+    for (int j = 0; j < cols; j++){
+        if(result[j] != reference[j]){
+            error = 1;
+        }
+        return error;
+    }
+    return error;
+}
+
+void read_vector(FILE *file, int *vector, size_t size, size_t rowSize) {
+    int *ptr = vector;
+    int index = 0;
+    int value;
+
+    while (index < size) {
+        // Read ELEMENTS_PER_LINE values from each line
+        for (int i = 0; i < rowSize && index < size ; i++) {
+            if (fscanf(file, "%d", &value) != 1) {
+                fprintf(stderr, "Error reading value\n");
+                exit(EXIT_FAILURE);
+            }
+            *(ptr + index++) = value;
+        }
+        // Handle the newline character if present
+        int ch = fgetc(file);
+        if (ch != '\n' && ch != EOF) {
+            ungetc(ch, file);
+        }
+    }
+}
+
+int read_matrix_dimensions(FILE *file, size_t *M, size_t *N) {
+    char line[100];  // Buffer to store the line read from the file
+
+    // Read a line from the file
+    if (fgets(line, sizeof(line), file) != NULL) {
+        // Parse the dimensions using sscanf
+        if (sscanf(line, "%zd %zd", M, N) != 0) {
+            return 0;  // Successfully read all dimensions
+        } else {
+            return 1;  // Error parsing the dimensions
+        }
+    } else {
+        return 1;  // Error reading the line
+    }
 }
