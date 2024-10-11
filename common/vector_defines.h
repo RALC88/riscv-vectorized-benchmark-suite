@@ -11,9 +11,10 @@
 #define _MMR_i64        	 vint64m1_t
 #define _MMR_i32        	 vint32m1_t
 
+#define _MMR_i32mf2          vint32mf2_t
+
 #define _MMR_u64        	 vuint64m1_t
 #define _MMR_u32        	 vuint32m1_t
-
 
 #define _MMR_MASK_i64   	 vbool64_t
 #define _MMR_MASK_i32   	 vbool32_t
@@ -52,6 +53,8 @@
 #define _MM_LOAD_i16         __riscv_vle16_v_i16m1
 #define _MM_LOAD_i8          __riscv_vle8_v_i8m1
 
+#define _MM_LOAD_i32mf2    	 __riscv_vle32_v_i32mf2
+
 #define _MM_LOAD_INDEX_i64   __riscv_vluxei64_v_i64m1
 #define _MM_LOAD_INDEX_i32   __riscv_vluxei32_v_i32m1
 
@@ -63,6 +66,8 @@
 #define _MM_STORE_i16        __riscv_vse16_v_i16m1
 #define _MM_STORE_i8         __riscv_vse8_v_i8m1
 
+#define _MM_STORE_i32mf2   	 __riscv_vse32_v_i32mf2
+
 #define _MM_STORE_INDEX_i64  __riscv_vsuxei64_v_i64m1
 #define _MM_STORE_INDEX_i32  __riscv_vsuxei32_v_f32m1
 
@@ -71,6 +76,8 @@
 
 #define _MM_ADD_i64     	 __riscv_vadd_vv_i64m1
 #define _MM_ADD_i32     	 __riscv_vadd_vv_i32m1
+
+#define _MM_ADD_i32mf2     	 __riscv_vadd_vv_i32mf2
 
 #define _MM_SUB_i64		     __riscv_vsub_vv_i64m1
 #define _MM_SUB_i32			 __riscv_vsub_vv_i32m1
@@ -83,14 +90,20 @@
 #define _MM_MUL_i16          __riscv_vmul_vv_i16m1
 #define _MM_MUL_i8           __riscv_vmul_vv_i8m1
 
+#define _MM_MUL_i32mf2       __riscv_vmul_vv_i32mf2
+
 #define _MM_DIV_i64          __riscv_vdiv_vv_i64m1
 #define _MM_DIV_i32          __riscv_vdiv_vv_i32m1
 
 #define _MM_REM_i64          __riscv_vrem_vv_i64m1
 #define _MM_REM_i32          __riscv_vrem_vv_i32m1
 
+#define _MM_REM_i32mf2       __riscv_vrem_vv_i32mf2
+
 #define _MM_SET_i64     	 __riscv_vmv_v_x_i64m1
 #define _MM_SET_i32     	 __riscv_vmv_v_x_i32m1
+
+#define _MM_SET_i32mf2     	 __riscv_vmv_v_x_i32mf2
 
 #define _MM_MIN_i64          __riscv_vmin_vv_i64m1
 #define _MM_MIN_i32          __riscv_vmin_vv_i32m1
@@ -203,11 +216,16 @@
 #define _MM_VFCVT_F_X_f64    __riscv_vfcvt_f_x_v_f64m1
 #define _MM_VFCVT_F_X_f32    __riscv_vfcvt_f_x_v_f32m1
 
+#define _MM_VFCVT_F_X_f32mf2 __riscv_vfcvt_f_x_v_f32mf2
+
 #define _MM_VFCVT_X_F_i64    __riscv_vfcvt_x_f_v_i64m1
 #define _MM_VFCVT_X_F_i32    __riscv_vfcvt_x_f_v_i32m1
 
-#define _MM_VFWCVT_F_F_f64   __riscv_vfwcvt_f_f_v_f64m1
-#define _MM_VFNCVT_F_F_f32   __riscv_vfncvt_f_f_w_f32m1
+#define _MM_VFWCVT_F_F_f64m1 __riscv_vfwcvt_f_f_v_f64m1
+#define _MM_VFNCVT_F_F_f32m1 __riscv_vfncvt_f_f_w_f32m1
+
+#define _MM_VFWCVT_F_X_f64m1 __riscv_vfwcvt_f_x_v_f64m1
+#define _MM_VFNCVT_F_X_f32m1 __riscv_vfncvt_f_x_w_f32m1
 
 //---------------------------------------------------------------------------
 // VECTOR ELEMENT MANIPULATION
