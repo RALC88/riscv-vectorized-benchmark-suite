@@ -136,7 +136,7 @@
 // FLOATING POINT INTRINSICS
 
 #define _MM_LOAD_f64    	 __riscv_vle64_v_f64m1
-#define _MM_LOAD_f32    	 __riscv_vle64_v_f32m1
+#define _MM_LOAD_f32    	 __riscv_vle32_v_f32m1
 
 #define _MM_LOAD_INDEX_f64   __riscv_vluxei64_v_f64m1
 #define _MM_LOAD_INDEX_f32   __riscv_vluxei32_v_f32m1
@@ -347,4 +347,3 @@
 #endif
 
 //---------------------------------------------------------------------------
-
