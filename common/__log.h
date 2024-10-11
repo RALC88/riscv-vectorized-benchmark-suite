@@ -39,12 +39,12 @@ _MMR_i64   imm0;
 _MMR_f64  e;
 _MMR_MASK_i64 invalid_mask = _MM_VFLE_f64(x,_MM_SET_f64(0.0f,gvl),gvl);
 
-  x = _MM_MAX_f64(x, (_MMR_f64)_MM_SET_i64(0x0010000000000000,gvl), gvl);  /* cut off denormalized stuff */
-  imm0 = _MM_SRL_i64((_MMR_i64)x, _MM_SET_i64(52,gvl), gvl);
+  x = _MM_MAX_f64(x, _MM_CAST_f64_i64(_MM_SET_i64(0x0010000000000000,gvl)), gvl);  /* cut off denormalized stuff */
+  imm0 = _MM_CAST_i64_u64(_MM_SRL_i64(_MM_CAST_u64_i64(_MM_CAST_i64_f64(x)), _MM_CAST_u64_i64(_MM_SET_i64(52,gvl)), gvl));
   /* keep only the fractional part */
-  _x_i = _MM_AND_i64((_MMR_i64)x, _MM_SET_i64(~0x7ff0000000000000,gvl), gvl);
-  _x_i = _MM_OR_i64(_x_i, (_MMR_i64)_MM_SET_f64(0.5f,gvl), gvl);
-  x= (_MMR_f64)_x_i;
+  _x_i = _MM_AND_i64(_MM_CAST_i64_f64(x), _MM_SET_i64(~0x7ff0000000000000,gvl), gvl);
+  _x_i = _MM_OR_i64(_x_i, _MM_CAST_i64_f64(_MM_SET_f64(0.5f,gvl)), gvl);
+  x= _MM_CAST_f64_i64(_x_i);
   imm0 = _MM_SUB_i64(imm0 ,_MM_SET_i64(1023,gvl) , gvl);
   e = _MM_VFCVT_F_X_f64(imm0,gvl);
   e = _MM_ADD_f64(e, _MM_SET_f64(1.0f,gvl) ,gvl);
@@ -74,7 +74,7 @@ _MMR_f64 y;
   tmp = _MM_MUL_f64(e, _MM_SET_f64(0.693359375,gvl),gvl);
   x = _MM_ADD_f64(x, y,gvl);
   x = _MM_ADD_f64(x, tmp,gvl);
-  x = _MM_MERGE_f64(x,(_MMR_f64)_MM_SET_i64(0xffffffffffffffff,gvl), invalid_mask,gvl);
+  x = _MM_MERGE_f64(x,_MM_CAST_f64_i64(_MM_SET_i64(0xffffffffffffffff,gvl)), invalid_mask,gvl);
 
   return x;
 }
@@ -87,12 +87,12 @@ _MMR_f32  e;
 
 _MMR_MASK_i32 invalid_mask = _MM_VFLE_f32(x,_MM_SET_f32(0.0f,gvl),gvl);
 
-  x = _MM_MAX_f32(x, (_MMR_f32)_MM_SET_i32(0x00800000,gvl), gvl);  /* cut off denormalized stuff */
-  imm0 = _MM_SRL_i32((_MMR_i32)x, _MM_SET_i32(23,gvl), gvl);
+  x = _MM_MAX_f32(x, _MM_CAST_f32_i32(_MM_SET_i32(0x00800000,gvl)), gvl);  /* cut off denormalized stuff */
+  imm0 = _MM_CAST_i32_u32(_MM_SRL_i32(_MM_CAST_u32_i32(_MM_CAST_i32_f32(x)), _MM_CAST_u32_i32(_MM_SET_i32(23,gvl)), gvl));
   /* keep only the fractional part */
-  _x_i = _MM_AND_i32((_MMR_i32)x, _MM_SET_i32(~0x7f800000,gvl), gvl);
-  _x_i = _MM_OR_i32(_x_i, (_MMR_i32)_MM_SET_f32(0.5f,gvl), gvl);
-  x= (_MMR_f32)_x_i;
+  _x_i = _MM_AND_i32(_MM_CAST_i32_f32(x), _MM_SET_i32(~0x7f800000,gvl), gvl);
+  _x_i = _MM_OR_i32(_x_i, _MM_CAST_i32_f32(_MM_SET_f32(0.5f,gvl)), gvl);
+  x= _MM_CAST_f32_i32(_x_i);
   imm0 = _MM_SUB_i32(imm0 ,_MM_SET_i32(0x7f,gvl) , gvl);
   e = _MM_VFCVT_F_X_f32(imm0,gvl);
   e = _MM_ADD_f32(e, _MM_SET_f32(1.0f,gvl) ,gvl);
@@ -122,7 +122,7 @@ _MMR_f32 y;
   tmp = _MM_MUL_f32(e, _MM_SET_f32(0.693359375,gvl),gvl);
   x = _MM_ADD_f32(x, y,gvl);
   x = _MM_ADD_f32(x, tmp,gvl);
-  x = _MM_MERGE_f32(x,(_MMR_f32)_MM_SET_i32(0xffffffff,gvl), invalid_mask,gvl);
+  x = _MM_MERGE_f32(x,_MM_CAST_f32_i32(_MM_SET_i32(0xffffffff,gvl)), invalid_mask,gvl);
 
   return x;
 }
