@@ -32,6 +32,10 @@
 
   (this is the zlib license)
 */
+#ifdef USE_RISCV_VECTOR
+
+#include <riscv_vector.h>
+
 inline _MMR_f64 __log_1xf64(_MMR_f64 x , unsigned long int gvl) {
 
 _MMR_i64   _x_i; 
@@ -126,3 +130,4 @@ _MMR_f32 y;
 
   return x;
 }
+#endif

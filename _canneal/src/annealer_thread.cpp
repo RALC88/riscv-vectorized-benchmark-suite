@@ -47,6 +47,7 @@ using std::endl;
 
 // RISC-V VECTOR Version by Cristóbal Ramírez Lazo, "Barcelona 2019"
 #ifdef USE_RISCV_VECTOR
+#include <riscv_vector.h>
 #include "../../common/vector_defines.h"
 #endif
 
@@ -68,7 +69,7 @@ void annealer_thread::Run()
     int temp_steps_completed=0;
 
     #ifdef USE_RISCV_VECTOR
-    unsigned long int gvl   = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
+    unsigned long int gvl   = __riscv_vsetvlmax_e32m1();
     mask = (int*)malloc(gvl*sizeof(int));
     for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
     #endif // !USE_RISCV_VECTOR
@@ -148,14 +149,14 @@ routing_cost_t annealer_thread::calculate_delta_routing_cost_vector(netlist_elem
     if((a_fan_size > 0) | (b_fan_size > 0))
     {
         int max_vl = (a_fan_size > b_fan_size) ? a_fan_size*2 : b_fan_size*2;
-        unsigned long int gvl   = __builtin_epi_vsetvl(max_vl,__epi_e32, __epi_m1);
+        unsigned long int gvl   = __riscv_vsetvl_e32m1(max_vl);
         // Get the MVL allowed by the hardware
         //unsigned long int gvl   = __builtin_epi_vsetvlmax(__epi_e32, __epi_m1);
         //Create a mask with size of MVL
         //int* mask;
         //mask = (int*)malloc(gvl*sizeof(int));
         //for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
-        __epi_2xi1  xMask = __builtin_epi_cast_2xi1_2xi32(_MM_LOAD_i32(mask,gvl));
+        _MMR_MASK_i32  xMask = _MM_CAST_i1_i32(_MM_LOAD_i32(mask,gvl));
 
         _MMR_i32 xAFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(a_loc->y,gvl),_MM_SET_i32(a_loc->x,gvl),xMask,gvl);
         _MMR_i32 xBFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(b_loc->y,gvl),_MM_SET_i32(b_loc->x,gvl),xMask,gvl);

@@ -1,3 +1,5 @@
+#ifdef USE_RISCV_VECTOR
+
 #define _MM_ALIGN64 __attribute__((aligned (64)))
 
 #define MUSTINLINE __attribute__((always_inline))
@@ -42,6 +44,9 @@
 #define  _MM_CAST_u64_i64   __riscv_vreinterpret_v_i64m1_u64m1
 #define  _MM_CAST_u32_i32   __riscv_vreinterpret_v_i32m1_u32m1
 
+// longint to int
+#define  _MM_CAST_i32_i64   __riscv_vreinterpret_v_i64m1_i32m1
+
 // NOTE: It is possible to reinterpret data types, from integer to float, float to integer, 
 //       mask to integer, integer to mask .. etc.
 
@@ -55,8 +60,8 @@
 
 #define _MM_LOAD_i32mf2    	 __riscv_vle32_v_i32mf2
 
-#define _MM_LOAD_INDEX_i64   __riscv_vluxei64_v_i64m1
-#define _MM_LOAD_INDEX_i32   __riscv_vluxei32_v_i32m1
+#define _MM_LOAD_INDEX_i64   __riscv_vloxei64_v_i64m1
+#define _MM_LOAD_INDEX_i32   __riscv_vloxei32_v_i32m1
 
 #define _MM_LOAD_STRIDE_i64  __riscv_vlse64_v_i64m1
 #define _MM_LOAD_STRIDE_i32  __riscv_vlse32_v_i32m1
@@ -68,8 +73,8 @@
 
 #define _MM_STORE_i32mf2   	 __riscv_vse32_v_i32mf2
 
-#define _MM_STORE_INDEX_i64  __riscv_vsuxei64_v_i64m1
-#define _MM_STORE_INDEX_i32  __riscv_vsuxei32_v_f32m1
+#define _MM_STORE_INDEX_i64  __riscv_vsoxei64_v_i64m1
+#define _MM_STORE_INDEX_i32  __riscv_vsoxei32_v_f32m1
 
 #define _MM_STORE_STRIDE_i64 __riscv_vsse64_v_i64m1
 #define _MM_STORE_STRIDE_i32 __riscv_vsse32_v_i32m1
@@ -138,8 +143,8 @@
 #define _MM_LOAD_f64    	 __riscv_vle64_v_f64m1
 #define _MM_LOAD_f32    	 __riscv_vle32_v_f32m1
 
-#define _MM_LOAD_INDEX_f64   __riscv_vluxei64_v_f64m1
-#define _MM_LOAD_INDEX_f32   __riscv_vluxei32_v_f32m1
+#define _MM_LOAD_INDEX_f64   __riscv_vloxei64_v_f64m1
+#define _MM_LOAD_INDEX_f32   __riscv_vloxei32_v_f32m1
 
 #define _MM_LOAD_STRIDE_f64  __riscv_vlse64_v_f64m1
 #define _MM_LOAD_STRIDE_f32  __riscv_vlse32_v_f32m1
@@ -147,8 +152,8 @@
 #define _MM_STORE_f64   	 __riscv_vse64_v_f64m1
 #define _MM_STORE_f32   	 __riscv_vse32_v_f32m1
 
-#define _MM_STORE_INDEX_f64  __riscv_vsuxei64_v_f64m1
-#define _MM_STORE_INDEX_f32  __riscv_vsuxei32_v_f32m1
+#define _MM_STORE_INDEX_f64  __riscv_vsoxei64_v_f64m1
+#define _MM_STORE_INDEX_f32  __riscv_vsoxei32_v_f32m1
 
 #define _MM_STORE_STRIDE_f64 __riscv_vsse64_v_f64m1
 #define _MM_STORE_STRIDE_f32 __riscv_vsse32_v_f32m1
@@ -347,3 +352,4 @@
 #endif
 
 //---------------------------------------------------------------------------
+#endif
