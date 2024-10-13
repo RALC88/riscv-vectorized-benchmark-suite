@@ -69,7 +69,7 @@ void annealer_thread::Run()
     int temp_steps_completed=0;
 
     #ifdef USE_RISCV_VECTOR
-    unsigned long int gvl   = __riscv_vsetvlmax_e32m1(); 
+    unsigned long int gvl   = __riscv_vsetvlmax_e32m1();
     mask = (int*)malloc(gvl*sizeof(int));
     for(int i=0 ; i<=gvl ; i=i+1) { mask[i]=0x55555555; }
     #endif // !USE_RISCV_VECTOR

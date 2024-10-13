@@ -51,7 +51,7 @@ if [ $simsize == "tiny" ]; then
 	if [ $sim == "spike" ]; then
 		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 100 300 input/100.nets 8"
 		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 4 300 input/10.nets 1
+		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 100 300 input/100.nets 8
 	else
 		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
 	fi
