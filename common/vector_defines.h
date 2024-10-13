@@ -20,6 +20,7 @@
 
 #define _MMR_MASK_i64   	 vbool64_t
 #define _MMR_MASK_i32   	 vbool32_t
+#define _MMR_MASK_i1     	 vbool1_t
 
 //---------------------------------------------------------------------------
 // REINTERPRET VECTOR TYPE

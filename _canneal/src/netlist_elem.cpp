@@ -133,12 +133,9 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
         xYes_Swap_aux   = _MM_VFCVT_F_X_f32(xYes_Swap_i,gvl); 
         xYes_Swap_aux   = _MM_VFSGNJX_f32(xYes_Swap_aux,xYes_Swap_aux,gvl);
 
-        gvl     = __riscv_vsetvl_e32m1(a_size);
+        // The last iteration should add few elements and the tail must be undisturbed.
         xNo_Swap        = _MM_ADD_f32(xNo_Swap,xNo_Swap_aux,gvl);
         xYes_Swap       = _MM_ADD_f32(xYes_Swap,xYes_Swap_aux,gvl);
-
-        gvl     = __riscv_vsetvl_e32m1(a_size-i);
-
     }
 
     gvl     = __riscv_vsetvl_e32m1(a_size);
@@ -152,6 +149,7 @@ routing_cost_t netlist_elem::swap_cost_vector(_MMR_i32 xOld_loc ,_MMR_i32 xNew_l
     return (double)(yes_swap - no_swap);
 }
 #else // !USE_RISCV_VECTOR
+
 routing_cost_t netlist_elem::swap_cost(location_t* old_loc, location_t* new_loc)
 {
 	int fanin_size = fanin.size();
@@ -159,9 +157,7 @@ routing_cost_t netlist_elem::swap_cost(location_t* old_loc, location_t* new_loc)
 
 	routing_cost_t no_swap = 0;
 	routing_cost_t yes_swap = 0;
-	
-	//printf("fan size: %d\n" , fanin_size + fanout_size);
-	
+
 	for (int i = 0; i< fanin_size; ++i){
 		location_t* fanin_loc = fanin[i]->present_loc.Get();
 

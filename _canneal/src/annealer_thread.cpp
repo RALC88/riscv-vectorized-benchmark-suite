@@ -69,9 +69,9 @@ void annealer_thread::Run()
     int temp_steps_completed=0;
 
     #ifdef USE_RISCV_VECTOR
-    unsigned long int gvl   = __riscv_vsetvlmax_e32m1();
+    unsigned long int gvl   = __riscv_vsetvlmax_e32m1(); 
     mask = (int*)malloc(gvl*sizeof(int));
-    for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
+    for(int i=0 ; i<=gvl ; i=i+1) { mask[i]=0x55555555; }
     #endif // !USE_RISCV_VECTOR
 
     while(keep_going(temp_steps_completed, accepted_good_moves, accepted_bad_moves)){
@@ -156,8 +156,7 @@ routing_cost_t annealer_thread::calculate_delta_routing_cost_vector(netlist_elem
         //int* mask;
         //mask = (int*)malloc(gvl*sizeof(int));
         //for(int i=0 ; i<=gvl ; i=i+2) { mask[i]=1;  mask[i+1]=0; }
-        _MMR_MASK_i32  xMask = _MM_CAST_i1_i32(_MM_LOAD_i32(mask,gvl));
-
+        _MMR_MASK_i32  xMask = _MM_CAST_i1_i32(_MM_LOAD_i32((int *)&mask[0],gvl));
         _MMR_i32 xAFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(a_loc->y,gvl),_MM_SET_i32(a_loc->x,gvl),xMask,gvl);
         _MMR_i32 xBFanin_loc     = _MM_MERGE_i32(_MM_SET_i32(b_loc->y,gvl),_MM_SET_i32(b_loc->x,gvl),xMask,gvl);
 
