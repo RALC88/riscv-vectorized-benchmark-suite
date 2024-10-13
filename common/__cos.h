@@ -32,6 +32,9 @@
 
   (this is the zlib license)
 */
+#ifdef USE_RISCV_VECTOR
+
+#include <riscv_vector.h>
 
 inline _MMR_f64 __cos_1xf64(_MMR_f64 x , unsigned long int gvl) {
 
@@ -264,3 +267,4 @@ _MMR_MASK_i32 xMask;
 
   return y;
 }
+#endif
