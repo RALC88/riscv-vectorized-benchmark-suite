@@ -22,6 +22,11 @@
 #define _MMR_MASK_i32   	 vbool32_t
 #define _MMR_MASK_i1     	 vbool1_t
 
+// CONFIG INST
+
+#define _MMR_VSETVL_E64M1   __riscv_vsetvl_e64m1
+#define _MMR_VSETVL_E32M1   __riscv_vsetvl_e32m1
+
 //---------------------------------------------------------------------------
 // REINTERPRET VECTOR TYPE
 

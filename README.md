@@ -146,7 +146,7 @@ pathfinder_args     = "_pathfinder/input/data_tiny.in"
 axpy_args           = "256"
 lavaMD_args         = "-cores 1 -boxes1d 1 -outputFile result.txt"
 somier_args         = "2 64"
-jacobi_2d_args      = "256 1 output.txt"
+jacobi_2d_args      = "32 2 output.txt"
 ```
 
 #### simsmall 

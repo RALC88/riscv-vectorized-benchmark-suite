@@ -54,6 +54,7 @@ void kernel_jacobi_2d_vector(int tsteps,int n, DATA_TYPE **A,DATA_TYPE **B)
 {
     _MMR_f64    xU;
     _MMR_f64    xUtmp;
+    _MMR_f64    xUtmp2;
     _MMR_f64    xUleft;
     _MMR_f64    xUright;
     _MMR_f64    xUtop;
@@ -61,20 +62,20 @@ void kernel_jacobi_2d_vector(int tsteps,int n, DATA_TYPE **A,DATA_TYPE **B)
     _MMR_f64    xConstant;
 
     double diff, sum=0.0;
-    unsigned long int izq,der;
+    double izq,der;
     int size_y = n-2;
     int size_x = n-2;
 
-    unsigned long int gvl = __builtin_epi_vsetvl(size_y, __epi_e64, __epi_m1);
+    unsigned long int gvl = _MMR_VSETVL_E64M1(size_y);
 
-    xConstant = _MM_SET_f64(0.20,gvl);
+    xConstant = _MM_SET_f64(0.20f,gvl);
 
     for (int j=1; j<=size_x; j=j+gvl) 
     {
-        gvl = __builtin_epi_vsetvl(size_y-j+1, __epi_e64, __epi_m1);
+        gvl = _MMR_VSETVL_E64M1(size_y-j+1);
 
-        xU = _MM_LOAD_f64(&A[1][j],gvl);
         xUtop = _MM_LOAD_f64(&A[0][j],gvl);
+        xU = _MM_LOAD_f64(&A[1][j],gvl);
         xUbottom = _MM_LOAD_f64(&A[2][j],gvl);
 
         for (int i=1; i<=size_y; i++) 
@@ -85,19 +86,18 @@ void kernel_jacobi_2d_vector(int tsteps,int n, DATA_TYPE **A,DATA_TYPE **B)
                 xU =  xUbottom;
                 xUbottom =  _MM_LOAD_f64(&A[i+1][j],gvl);
             }
-            izq = *(unsigned long int*)&A[i][j-1]; 
-            der = *(unsigned long int*)&A[i][j+gvl];
+            izq = A[i][j-1]; 
+            der = A[i][j+gvl];
             xUleft = _MM_VSLIDE1UP_f64(xU,izq,gvl);
             xUright = _MM_VSLIDE1DOWN_f64(xU,der,gvl);
-            xUtmp = _MM_ADD_f64(xUleft,xUright,gvl);
-            xUtmp = _MM_ADD_f64(xUtmp,xUtop,gvl);
-            xUtmp = _MM_ADD_f64(xUtmp,xUbottom,gvl);
-            xUtmp = _MM_ADD_f64(xUtmp,xU,gvl);
+            xUtmp = _MM_ADD_f64(xU,xUleft,gvl);
+            xUtmp = _MM_ADD_f64(xUtmp,xUright,gvl);
+            xUtmp2 = _MM_ADD_f64(xUbottom,xUtop,gvl);
+            xUtmp = _MM_ADD_f64(xUtmp,xUtmp2,gvl);
             xUtmp = _MM_MUL_f64(xUtmp,xConstant,gvl);
             _MM_STORE_f64(&B[i][j], xUtmp,gvl);
         }
     }
-    FENCE();
 }
 #endif
 
@@ -156,7 +156,7 @@ void output_printfile(int n,DATA_TYPE **A,  string& outfile ) {
 int main(int argc, char** argv)
 {
   if(argc!=4){
-        printf("Usage: pathfiner width N TSTEPS output_file\n");
+        printf("Usage: N TSTEPS output_file\n");
         exit(0);
     }
 
