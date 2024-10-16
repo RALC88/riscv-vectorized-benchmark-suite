@@ -27,6 +27,9 @@
 #define _MMR_VSETVL_E64M1   __riscv_vsetvl_e64m1
 #define _MMR_VSETVL_E32M1   __riscv_vsetvl_e32m1
 
+#define _MMR_VSETVLMAX_E64M1  __riscv_vsetvlmax_e64m1
+#define _MMR_VSETVLMAX_E32M1  __riscv_vsetvlmax_e32m1
+
 //---------------------------------------------------------------------------
 // REINTERPRET VECTOR TYPE
 
@@ -167,8 +170,14 @@
 #define _MM_MUL_f64     	 __riscv_vfmul_vv_f64m1
 #define _MM_MUL_f32     	 __riscv_vfmul_vv_f32m1
 
+#define _MM_MUL_f64_VF     	 __riscv_vfmul_vf_f64m1
+#define _MM_MUL_f32_VF     	 __riscv_vfmul_vf_f32m1
+
 #define _MM_ADD_f64     	 __riscv_vfadd_vv_f64m1
 #define _MM_ADD_f32     	 __riscv_vfadd_vv_f32m1
+
+#define _MM_ADD_f64_VF     	 __riscv_vfadd_vf_f64m1
+#define _MM_ADD_f32_VF     	 __riscv_vfadd_vf_f32m1
 
 #define _MM_SUB_f64     	 __riscv_vfsub_vv_f64m1
 #define _MM_SUB_f32     	 __riscv_vfsub_vv_f32m1
@@ -217,6 +226,9 @@
 
 #define _MM_MACC_f64  		 __riscv_vfmacc_vv_f64m1
 #define _MM_MACC_f32  		 __riscv_vfmacc_vv_f32m1
+
+#define _MM_MACC_f64_VF      __riscv_vfmacc_vf_f64m1
+#define _MM_MACC_f32_VF  	 __riscv_vfmacc_vf_f32m1
 
 #define _MM_MADD_f64  		 __riscv_vfmadd_vv_f64m1
 #define _MM_MADD_f32  		 __riscv_vfmadd_vv_f32m1

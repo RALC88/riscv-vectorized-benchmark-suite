@@ -25,8 +25,8 @@ extern "C" {
 //	UTILITIES
 //======================================================================================================================================================150
 
-#include "./../util/timer/timer.h"					// (in library path specified to compiler)	needed by timer
-
+//#include "./../util/timer/timer.h"					// (in library path specified to compiler)	needed by timer
+#include "../../common/riscv_util.h"
 //======================================================================================================================================================150
 //	KERNEL_CPU FUNCTION HEADER
 //======================================================================================================================================================150
@@ -201,10 +201,10 @@ void  kernel_cpu(	par_str par,
 
 	printf("Time spent in different stages of CPU/MCPU KERNEL:\n");
 
-	printf("%15.12f s, %15.12f % : CPU/MCPU: VARIABLES\n",				(float) (time1-time0) / 1000000, (float) (time1-time0) / (float) (time4-time0) * 100);
-	printf("%15.12f s, %15.12f % : MCPU: SET DEVICE\n",					(float) (time2-time1) / 1000000, (float) (time2-time1) / (float) (time4-time0) * 100);
-	printf("%15.12f s, %15.12f % : CPU/MCPU: INPUTS\n", 				(float) (time3-time2) / 1000000, (float) (time3-time2) / (float) (time4-time0) * 100);
-	printf("%15.12f s, %15.12f % : CPU/MCPU: KERNEL\n",					(float) (time4-time3) / 1000000, (float) (time4-time3) / (float) (time4-time0) * 100);
+	printf("%15.12f s, %15.12f  : CPU/MCPU: VARIABLES\n",				(float) (time1-time0) / 1000000, (float) (time1-time0) / (float) (time4-time0) * 100);
+	printf("%15.12f s, %15.12f  : MCPU: SET DEVICE\n",					(float) (time2-time1) / 1000000, (float) (time2-time1) / (float) (time4-time0) * 100);
+	printf("%15.12f s, %15.12f  : CPU/MCPU: INPUTS\n", 				(float) (time3-time2) / 1000000, (float) (time3-time2) / (float) (time4-time0) * 100);
+	printf("%15.12f s, %15.12f  : CPU/MCPU: KERNEL\n",					(float) (time4-time3) / 1000000, (float) (time4-time3) / (float) (time4-time0) * 100);
 
 	printf("Total time:\n");
 	printf("%.12f s\n", 												(float) (time4-time0) / 1000000);
