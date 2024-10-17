@@ -9,7 +9,9 @@ The benchmark suite with all its applications and input sets is available as ope
 RiVEC implements the lastest riscv intrinsics for rvv-1.0. It can be compiled with the latest [riscv-collab/riscv-gnu-toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). RiVEC has been successfully tested on Spike RISC-V ISA Simulator, qemu RISC-V System emulator, and gem5 simulator.
 
 Master branch holds the most updated version (rvv-v1.0) compatible with latest instrinsics andd toolchain. Additionaly, there are two more available versions:
+
 [rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) which is based on  RISC-V V vector extension v0.7. This version can be only compiled by the LLVM from Barcelona Supercomputing Center. Instrinsics also corresponds to that specific compiler.
+
 [rvv-1.0-PLCTLab](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0-PLCTLab) which is based on  RISC-V V vector extension v1.0. This version can be only compiled by the LLVM from PLCT. Instrinsics also corresponds to that specific compiler.
 
 
