@@ -115,7 +115,7 @@ void * worker(void *arg){
 
       #ifdef USE_RISCV_VECTOR
         // Vector seed to get the randon number with vector code
-        unsigned long int gvl = __builtin_epi_vsetvl(NUM_TRIALS, __epi_e64, __epi_m1);
+        unsigned long int gvl = _MMR_VSETVL_E64M1(NUM_TRIALS);
         swaption_seed_vector = (long*)malloc(gvl*sizeof(long));
         for(int j=0; j < gvl; j++) {
         swaption_seed_vector[j] = swaption_seed + j + (i * gvl);
@@ -309,15 +309,13 @@ int main(int argc, char *argv[])
 #endif
 
 //#ifdef USE_RISCV_VECTOR
-     struct timeval tv1_0, tv2_0;
-     struct timezone tz_0;
-     double elapsed0=0.0;
-     gettimeofday(&tv1_0, &tz_0);
+    long long start,end;
+    start = get_time();
 
     // Start instruction and cycles count of the region of interest
-    unsigned long cycles1, cycles2, instr2, instr1;
-    instr1 = get_inst_count();
-    cycles1 = get_cycles_count();
+    //unsigned long cycles1, cycles2, instr2, instr1;
+    //instr1 = get_inst_count();
+    //cycles1 = get_cycles_count();
 //#endif
 
 #ifdef ENABLE_THREADS
@@ -347,15 +345,14 @@ int main(int argc, char *argv[])
 
 //#ifdef USE_RISCV_VECTOR
     // End instruction and cycles count of the region of interest
-    instr2 = get_inst_count();
-    cycles2 = get_cycles_count();
+    //instr2 = get_inst_count();
+    //cycles2 = get_cycles_count();
     // Instruction and cycles count of the region of interest
-    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
-    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+    //printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    //printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
 
-     gettimeofday(&tv2_0, &tz_0);
-     elapsed0 = (double) (tv2_0.tv_sec-tv1_0.tv_sec) + (double) (tv2_0.tv_usec-tv1_0.tv_usec) * 1.e-6; 
-     printf("\n\nSwaption Pricing Routine took %8.8lf secs   \n", elapsed0 );
+    end = get_time();
+    printf("\n\nSwaption Pricing Routine took %8.8lf secs   \n", elapsed_time(start, end));   
 //#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
