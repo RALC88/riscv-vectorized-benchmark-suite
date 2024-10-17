@@ -9,27 +9,23 @@
 #include "utils.h"
 
 
-void capture_ref_result(double *y, double* y_ref, int n)
+double capture_ref_result(double a, double* dx, double* dy, int n)
 {
-   int i;
-   //printf ("\nReference result: ");
-   for (i=0; i<n; i++) {
-      y_ref[i]=y[i];
-      //printf (" %f", y[i]);
-   }
-   //printf ("\n\n");
+   double result = a*dx[0] + dy[0];
+   // result will be the same for all vector
+   return result;
 }
 
 
-void test_result(double *y, double *y_ref, long nrows)
+void test_result(double *y, double y_ref, long nrows)
 {
    long row;
    int nerrs=0;
    /* Compute with the result to keep the compiler for marking the code as dead */
    for (row=0; row<nrows; row++) {
-      double error = y[row] - y_ref[row];
+      double error = y[row] - y_ref;
       if (fabs(error) > 0.0000001)  {
-         printf("y[%ld]=%.16f != y_ref[%ld]=%.16f  INCORRECT RESULT !!!! \n ", row, y[row], row, y_ref[row]);
+         printf("y[%ld]=%.16f != y_ref[%ld]=%.16f  INCORRECT RESULT !!!! \n ", row, y[row], row, y_ref);
          nerrs++;
          if (nerrs == 100) break;
       }
@@ -37,5 +33,7 @@ void test_result(double *y, double *y_ref, long nrows)
    if (nerrs == 0) printf ("Result ok !!!\n");
 }
 
-
-
+void init_vector(double *pv, long n, double value)
+{
+   for (int i=0; i<n; i++) pv[i]= value;
+}
