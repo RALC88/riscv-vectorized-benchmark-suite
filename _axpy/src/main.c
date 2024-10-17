@@ -14,21 +14,16 @@
 
 /*************************************************************************/
 
-void axpy_intrinsics(double a, double *dx, double *dy, int n); 
-void axpy_serial(double a, double *dx, double *dy, int n); 
-
-
-void init_vector(double *pv, long n, double value)
-{
-   for (int i=0; i<n; i++) pv[i]= value;
-}
+#ifndef USE_RISCV_VECTOR
+    void axpy_serial(double a, double *dx, double *dy, int n); 
+#else
+    void axpy_vector(double a, double *dx, double *dy, int n); 
+#endif
 
 int main(int argc, char *argv[])
 {
     long long start,end;
     start = get_time();
-
-    double a=1.0;
     long n;
 
     if (argc == 2)
@@ -39,37 +34,29 @@ int main(int argc, char *argv[])
     /* Allocate the source and result vectors */
     double *dx     = (double*)malloc(n*sizeof(double));
     double *dy     = (double*)malloc(n*sizeof(double));
-    double *dy_ref = (double*)malloc(n*sizeof(double));
 
-    init_vector(dx, n, 1.0);
-    init_vector(dy, n, 2.0);
+    double a=1.53;
+    init_vector(dx, n, 1.83);
+    init_vector(dy, n, 2.22);
     
+    double reference = capture_ref_result(a, dx, dy, n);
+
     end = get_time();
     printf("init_vector time: %f\n", elapsed_time(start, end));
 
-    printf ("doing reference axpy , vector size %d\n",n);
     start = get_time();
-
+#ifndef USE_RISCV_VECTOR
     axpy_serial(a, dx, dy, n); 
+#else
+    axpy_vector(a, dx, dy, n);
+#endif
 
     end = get_time();
-    printf("axpy_serial time: %f\n", elapsed_time(start, end));
-
-    capture_ref_result(dy, dy_ref, n);
-    init_vector(dx, n, 1.0);
-    init_vector(dy, n, 2.0);
-
-    printf ("doing vector axpy, vector size %d\n",n);
-    start = get_time();
-
-    axpy_intrinsics(a, dx, dy, n);
-
-    end = get_time();
-    printf("axpy_intrinsics time: %f\n", elapsed_time(start, end));
+    printf("axpy time: %f\n", elapsed_time(start, end));
 
     printf ("done\n");
-    test_result(dy, dy_ref, n);
+    test_result(dy, reference, n);
 
-    free(dx); free(dy); free(dy_ref);
+    free(dx); free(dy);
     return 0;
 }

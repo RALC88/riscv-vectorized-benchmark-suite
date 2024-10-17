@@ -8,26 +8,13 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+
+#ifdef USE_RISCV_VECTOR
 #include <riscv_vector.h>
+#include "../../common/vector_defines.h"
+#endif
 
-void axpy_intrinsics(double a, double *dx, double *dy, int n) {
-  int i;
-
-  long gvl = __riscv_vsetvl_e64m1(n);
-  vfloat64m1_t v_a = __riscv_vfmv_s_f_f64m1(a, gvl);
-  
-  for (i = 0; i < n;) {
-    gvl = __riscv_vsetvl_e64m1(n - i);
-    vfloat64m1_t v_dx = __riscv_vle64_v_f64m1(&dx[i], gvl);
-    vfloat64m1_t v_dy = __riscv_vle64_v_f64m1(&dy[i], gvl);
-    vfloat64m1_t v_res = __riscv_vfmacc_vf_f64m1(v_dy, a, v_dx, gvl);
-    __riscv_vse64_v_f64m1(&dy[i], v_res, gvl);
-
-    i += gvl;
-  }
-}
-
-
+#ifndef USE_RISCV_VECTOR
 
 void axpy_serial(double a, double *dx, double *dy, int n) {
    int i;
@@ -35,3 +22,23 @@ void axpy_serial(double a, double *dx, double *dy, int n) {
       dy[i] += a*dx[i];
    }
 }
+
+#else
+
+void axpy_vector(double a, double *dx, double *dy, int n) {
+  int i;
+
+  long gvl = _MMR_VSETVL_E64M1(n);
+  
+  for (i = 0; i < n;) {
+    gvl = _MMR_VSETVL_E64M1(n - i);
+    vfloat64m1_t v_dx = _MM_LOAD_f64(&dx[i], gvl);
+    vfloat64m1_t v_dy = _MM_LOAD_f64(&dy[i], gvl);
+    vfloat64m1_t v_res = _MM_MACC_f64_VF(v_dy, a, v_dx, gvl);
+    _MM_STORE_f64(&dy[i], v_res, gvl);
+
+    i += gvl;
+  }
+}
+
+#endif
