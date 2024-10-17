@@ -45,6 +45,7 @@
 *************************************************************************/
 
 #ifdef USE_RISCV_VECTOR
+#include <riscv_vector.h>
 #include "../../common/vector_defines.h"
 #endif
 

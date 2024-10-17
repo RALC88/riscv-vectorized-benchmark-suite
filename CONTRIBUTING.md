@@ -17,6 +17,4 @@ New vectorized applications are welcome. We strongly encourage you to contribute
 enrich the scenarios and diversity in the RiVEC Bencmark Suite.
 
 ## Contact
-Cristóbal Ramírez Lazo: cristobal.ramirez@bsc.es
-PhD. Student at UPC Barcelona
-BSC - Barcelona Supercomputing Center
+Cristóbal Ramírez Lazo: cristobal.ramirez.lazo@gmail.com

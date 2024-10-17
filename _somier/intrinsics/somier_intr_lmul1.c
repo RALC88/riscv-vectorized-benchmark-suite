@@ -31,7 +31,7 @@ void accel_intr(int n, double (*A)[n][n][n], double (*F)[n][n][n], double M)
       for (j = 0; j<n; j++)
          for (k = 0; k<n; ) {
             rvl = n-k;
-            gvl = __builtin_epi_vsetvl(rvl, __epi_e64, __epi_m1);
+            gvl = _MMR_VSETVL_E64M1(rvl);
             _MMR_f64 v_invM = _MM_SET_f64(invM, gvl);
 
             vF0 = _MM_LOAD_f64( &F[0][i][j][k], gvl );
@@ -73,7 +73,7 @@ void vel_intr(int n, double (*V)[n][n][n], double (*A)[n][n][n], double dt)
          for (k = 0; k<n; ) {
             rvl = n-k;
 #endif
-            gvl = __builtin_epi_vsetvl(rvl, __epi_e64, __epi_m1);
+            gvl = _MMR_VSETVL_E64M1(rvl);
             _MMR_f64 vdt = _MM_SET_f64(dt, gvl);
 
             vV0 = _MM_LOAD_f64( &V[0][i][j][k], gvl );
@@ -114,7 +114,7 @@ void pos_intr(int n, double (*X)[n][n][n], double (*V)[n][n][n], double dt)
       for (j = 0; j<n; j++) {
          for (k = 0; k<n;) {
             rvl = n-k;
-            gvl = __builtin_epi_vsetvl(rvl, __epi_e64, __epi_m1);
+            gvl = _MMR_VSETVL_E64M1(rvl);
             _MMR_f64 vdt = _MM_SET_f64(dt, gvl);
 
             vX0 = _MM_LOAD_f64( &X[0][i][j][k], gvl );
@@ -136,7 +136,6 @@ void pos_intr(int n, double (*X)[n][n][n], double (*V)[n][n][n], double dt)
       }
    }
    // would need to check that possition des not go beyond the box walls
-   FENCE();
 }
 //      for (i = 0; i<N; i++)
 //         for (j = 0; j<N; j++)

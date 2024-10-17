@@ -20,12 +20,16 @@
 #include <stdio.h>					// (in path known to compiler)			needed by printf
 #include <stdlib.h>					// (in path known to compiler)			needed by malloc
 #include <stdbool.h>				// (in path known to compiler)			needed by true/false
+#include <string.h>
+
+#include <time.h>
+#include <sys/time.h>
 
 //======================================================================================================================================================150
 //	UTILITIES
 //======================================================================================================================================================150
 
-#include "./util/timer/timer.h"			// (in path specified here)
+//#include "./util/timer/timer.h"			// (in path specified here)
 #include "./util/num/num.h"				// (in path specified here)
 
 #include "../common/riscv_util.h"
@@ -39,12 +43,13 @@
 //	KERNEL
 //======================================================================================================================================================150
 
-//#ifdef USE_RISCV_VECTOR
-//#include "./kernel/kernel_vector.h"				// (in library path specified here)
-//#else
+#ifdef USE_RISCV_VECTOR
+#include "./kernel/kernel_vector.h"				// (in library path specified here)
+#else
 #include "./kernel/kernel_cpu.h"				// (in library path specified here)
-//#endif
+#endif
 
+//#define OUTPUT
 
 //========================================================================================================================================================================================================200
 //	MAIN FUNCTION
@@ -309,9 +314,9 @@ main(	int argc,
 	//====================================================================================================100
 
 	// Start instruction and cycles count of the region of interest
-    unsigned long cycles1, cycles2, instr2, instr1;
-    instr1 = get_inst_count();
-    cycles1 = get_cycles_count();
+    //unsigned long cycles1, cycles2, instr2, instr1;
+    //instr1 = get_inst_count();
+    //cycles1 = get_cycles_count();
 
 	kernel_cpu(	par_cpu,
 				dim_cpu,
@@ -321,11 +326,11 @@ main(	int argc,
 				fv_cpu);
 
 	// End instruction and cycles count of the region of interest
-    instr2 = get_inst_count();
-    cycles2 = get_cycles_count();
+    //instr2 = get_inst_count();
+    //cycles2 = get_cycles_count();
     // Instruction and cycles count of the region of interest
-    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
-    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+    //printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    //printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
 
 	time6 = get_time();
 
@@ -334,25 +339,24 @@ main(	int argc,
 	//======================================================================================================================================================150
 
 	// dump results
-//#ifdef OUTPUT
-//    FILE *fptr;
-//	fptr = fopen(outputFile, "w");
-//	if(fptr == NULL) {
-//      printf("ERROR: Unable to open file `%s'.\n", outputFile);
-//      exit(1);
-//    }
-	if (time6 > 0) {
-		printf("end\n");
-		return 0;
-	}
+    FILE *file;
 
-	printf("\n\n\n\n");
+	file = fopen(outputFile, "w");
+	if(file == NULL) {
+      printf("ERROR: Unable to open file `%s'.\n", outputFile);
+      exit(1);
+    }
+	//if (time6 > 0) {
+	//	printf("end\n");
+	//	return 0;
+	//}
+
+	//printf("\n\n\n\n");
 	for(i=0; i<dim_cpu.space_elem; i=i+1){
-        	printf("%f, %f, %f, %f\n", fv_cpu[i].v, fv_cpu[i].x, fv_cpu[i].y, fv_cpu[i].z);
-        	//fprintf(fptr, "%f, %f, %f, %f\n", fv_cpu[i].v, fv_cpu[i].x, fv_cpu[i].y, fv_cpu[i].z);
+        	//printf("%f, %f, %f, %f\n", fv_cpu[i].v, fv_cpu[i].x, fv_cpu[i].y, fv_cpu[i].z);
+        	fprintf(file, "%f, %f, %f, %f\n", fv_cpu[i].v, fv_cpu[i].x, fv_cpu[i].y, fv_cpu[i].z);
 	}
-//	fclose(fptr);
-//#endif
+	fclose(file);
 
 
 

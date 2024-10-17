@@ -25,6 +25,7 @@
 #include <sys/time.h>
 
 #ifdef USE_RISCV_VECTOR
+#include <riscv_vector.h>
 #include "../../common/vector_defines.h"
 #endif
 
@@ -154,7 +155,7 @@ _MMR_f32 CNDF_SIMD  (_MMR_f32 xInput ,unsigned long int gvl)
   xLocal   = _MM_MUL_f32(xLocal_1, xNPrimeofX,gvl);
   xLocal   = _MM_SUB_f32(xOne,xLocal,gvl);
 
-  xLocal   = _MM_SUB_f32_MASK(xLocal,xOne,xLocal,xMask,gvl); //sub(vs2,vs1)
+  xLocal   = _MM_SUB_f32_MASK(xMask, xOne, xLocal, gvl);
   return xLocal;
 }
 
@@ -187,7 +188,7 @@ void BlkSchlsEqEuroNoDiv_vector (fptype * OptionPrice, int numOptions, fptype * 
     _MMR_f32 xOptionPrice2;
     _MMR_f32 xfXd1;
     _MMR_f32 xfXd2;
-    
+
     xStrikePrice = _MM_LOAD_f32(strike,gvl);
     xStockPrice = _MM_LOAD_f32(sptprice,gvl);
     xStrikePrice = _MM_DIV_f32(xStockPrice,xStrikePrice,gvl);
@@ -429,7 +430,7 @@ int bs_thread(void *tid_ptr) {
     int start = tid * (numOptions / nThreads);
     int end = start + (numOptions / nThreads);
 
-    unsigned long int gvl = __builtin_epi_vsetvl(end, __epi_e32, __epi_m1);
+    unsigned long int gvl = __riscv_vsetvl_e32m1(end);
     //fptype* price;
     //price = (fptype*)malloc(gvl*sizeof(fptype));
     //price = aligned_alloc(64, gvl*sizeof(fptype));
@@ -447,7 +448,7 @@ int bs_thread(void *tid_ptr) {
 #endif //ENABLE_OPENMP
             // Calling main function to calculate option value based on Black & Scholes's
             // equation.
-            gvl = __builtin_epi_vsetvl(end-i, __epi_e32, __epi_m1);
+            gvl = __riscv_vsetvl_e32m1(end-i);
             BlkSchlsEqEuroNoDiv_vector( &(prices[i]), gvl, &(sptprice[i]), &(strike[i]),
                                 &(rate[i]), &(volatility[i]), &(otime[i]), &(otype[i])/*,&(otype_d[i])*/, 0,gvl);
             //for (k=0; k<gvl; k++) {
@@ -464,7 +465,6 @@ int bs_thread(void *tid_ptr) {
             }
 #endif
         }
-        FENCE();
     }
 
 #ifdef ENABLE_PARSEC_HOOKS
@@ -525,12 +525,8 @@ int main (int argc, char **argv)
     int * buffer2;
     int rv;
 
-//#ifdef USE_RISCV_VECTOR
-    struct timeval tv1_0, tv2_0;
-    struct timezone tz_0;
-    double elapsed0=0.0;
-    gettimeofday(&tv1_0, &tz_0);
-//#endif
+    long long start,end;
+    start = get_time();
 
 
 #ifdef PARSEC_VERSION
@@ -624,23 +620,16 @@ int main (int argc, char **argv)
 
     printf("Size of data: %lu\n", numOptions * (sizeof(OptionData) + sizeof(int)));
 
-//#ifdef USE_RISCV_VECTOR
-    gettimeofday(&tv2_0, &tz_0);
-    elapsed0 = (double) (tv2_0.tv_sec-tv1_0.tv_sec) + (double) (tv2_0.tv_usec-tv1_0.tv_usec) * 1.e-6; 
-    printf("\n\nBlackScholes Initialization took %8.8lf secs   \n", elapsed0 );
-    //if (elapsed0>0.00000001) { return 0;}
-//#endif
+    end = get_time();
+    printf("\n\nBlackScholes Initialization took %8.8lf secs   \n", elapsed_time(start, end));
 
-//#ifdef USE_RISCV_VECTOR
-    struct timeval tv1, tv2;
-    struct timezone tz;
-    double elapsed1=0.0;
-    gettimeofday(&tv1, &tz);
+    // ROI
+    start = get_time();
 
     // Start instruction and cycles count of the region of interest
-    unsigned long cycles1, cycles2, instr2, instr1;
-    instr1 = get_inst_count();
-    cycles1 = get_cycles_count();
+    //unsigned long cycles1, cycles2, instr2, instr1;
+    // instr1 = get_inst_count();
+    // cycles1 = get_cycles_count();
 //#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
@@ -699,16 +688,15 @@ int main (int argc, char **argv)
 
 //#ifdef USE_RISCV_VECTOR
     // End instruction and cycles count of the region of interest
-    instr2 = get_inst_count();
-    cycles2 = get_cycles_count();
+    // instr2 = get_inst_count();
+    // cycles2 = get_cycles_count();
     // Instruction and cycles count of the region of interest
-    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
-    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
-
-    gettimeofday(&tv2, &tz);
-    elapsed1 = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6; 
-    printf("\n\nBlackScholes Kernel took %8.8lf secs   \n", elapsed1 );
+    // printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    // printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
 //#endif
+    end = get_time();
+    printf("\n\nBlackScholes Kernel took %8.8lf secs   \n", elapsed_time(start, end));
+
     
     //Write prices to output file
     file = fopen(outputFile, "w");

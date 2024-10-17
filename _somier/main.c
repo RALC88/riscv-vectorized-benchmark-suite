@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
 START_TIME();
 
 // Start instruction and cycles count of the region of interest
-unsigned long cycles1, cycles2, instr2, instr1;
-instr1 = get_inst_count();
-cycles1 = get_cycles_count();
+//unsigned long cycles1, cycles2, instr2, instr1;
+//instr1 = get_inst_count();
+//cycles1 = get_cycles_count();
     
    for (nt=0; nt <ntsteps-1; nt++) {
 
@@ -107,11 +107,11 @@ cycles1 = get_cycles_count();
    }
 
 // End instruction and cycles count of the region of interest
-instr2 = get_inst_count();
-cycles2 = get_cycles_count();
+//instr2 = get_inst_count();
+//cycles2 = get_cycles_count();
 // Instruction and cycles count of the region of interest
-printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
-printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+//printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+//printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
 
 STOP_TIME();
 #ifdef SEQ
