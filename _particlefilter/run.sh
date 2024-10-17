@@ -6,19 +6,25 @@ echo "PARTICLEFILTER"
 echo "----------------------------------------------------------------------------------"
 echo " "
 
-app="particlefilter"
+app_name="particlefilter"
 
 while true; do
-    echo -n "do you want to run on spike or qemu [spike qemu]: "
+    echo -n "do you want to run on spike, qemu, or gem5 [spike qemu gem5]: "
     read sim
-    if [[ $sim == "spike" ]]  || [[ $sim == "qemu" ]]; then
-        break
+    if [ $sim == "spike" ]; then
+		simulator="$RISCV/bin/spike --isa=rv64gcv pk"
+		break
+	elif [ $sim == "qemu" ]; then
+		simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
+		break
+	elif [ $sim == "gem5" ]; then
+		simulator="$GEM5/build/RISCV/gem5.opt $GEM5/configs/deprecated/example/se.py"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
-
 
 while true; do
     echo -n "do you want to run the serial or vectorized version [serial vector]: "
@@ -34,63 +40,36 @@ done
 while true; do
     echo -n "select the simulation size [tiny small medium large]: "
     read simsize
-    if [[ $simsize == "tiny" ]]  || [[ $simsize == "small" ]] || [[ $simsize == "medium" ]] || [[ $simsize == "large" ]]; then
-        break
+    if [ $simsize == "tiny" ]; then
+		app_args="-x 128 -y 128 -z 2 -np 256"
+		break
+	elif [ $simsize == "small" ]; then
+		app_args="-x 128 -y 128 -z 8 -np 1024"
+		break
+	elif [ $simsize == "medium" ]; then
+		app_args="-x 128 -y 128 -z 16 -np 4096"
+		break
+	elif [ $simsize == "large" ]; then
+		app_args="-x 128 -y 128 -z 24 -np 8192"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
 
-echo " "
-echo "----------------------------------------------------------------------------------"
-echo "RUNNING PARTICLEFILTER"
-echo "----------------------------------------------------------------------------------"
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          RUNNING PARTICLEFILTER   						"
+echo "[RIVEC]---------------------------------------------------------------------------"
 
-if [ $simsize == "tiny" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 2 -np 256"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 2 -np 256
-	else #qemu
-		echo "command: $RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 2 -np 256"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 2 -np 256
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "small" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 8 -np 1024"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 8 -np 1024
-	else #qemu
-		echo "command: $RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 8 -np 1024"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 8 -np 1024
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "medium" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 16 -np 4096"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 16 -np 4096
-	else #qemu
-		echo "command: $RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 16 -np 4096"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 16 -np 4096
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "large" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 24 -np 8192"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe -x 128 -y 128 -z 24 -np 8192
-	else #qemu
-		echo "command: $RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 24 -np 8192"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot bin/${app}_${version}.exe -x 128 -y 128 -z 24 -np 8192
-	fi
-	echo "----------------------------------------------------------------------------------"
+echo "command: $simulator bin/${app_name}_${version}.exe $app_args"
+echo "----------------------------------------------------------------------------------"
+if [ $sim == "gem5" ]; then
+	$simulator  --cmd="bin/${app_name}_${version}.exe" --options="$app_args"
 else
-	echo "RiVec Benchmark Suite"
+	$simulator bin/${app_name}_${version}.exe $app_args
 fi
+
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          DONE 											"
+echo "[RIVEC]---------------------------------------------------------------------------"

@@ -15,8 +15,9 @@ while true; do
 		simulator="$RISCV/bin/spike --isa=rv64gcv pk"
 		break
 	elif [ $sim == "qemu" ]; then
-		simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
-		break
+		#simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
+		echo "qemu is not working for jacobi-2d. Try with a diferent option: "
+        continue
 	elif [ $sim == "gem5" ]; then
 		simulator="$GEM5/build/RISCV/gem5.opt $GEM5/configs/deprecated/example/se.py"
 		break
