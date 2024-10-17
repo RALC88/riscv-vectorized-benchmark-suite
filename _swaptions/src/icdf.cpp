@@ -4,7 +4,9 @@
 #include "HJM_type.h"
 
 
-
+#if __cplusplus > 199711L
+#define register      // Deprecated in C++11.
+#endif  // #if __cplusplus > 199711L
 
 void icdf_baseline(const int N, FTYPE *in, FTYPE *out){
       
