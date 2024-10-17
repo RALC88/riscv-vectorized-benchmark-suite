@@ -121,7 +121,7 @@ When building the rv64gcv baremetal toolchain with LLVM with the above provided 
 
 ### Running the apps
 
-The suite provides an interactive scrip (run.sh) which provides a simple way to execute every app.
+The suite provides an interactive script (run.sh) which provides a simple way to execute every app.
 
 First run the following command:
 ```
@@ -138,7 +138,8 @@ source run.sh
 RiVec Benchmark Suite
 ----------------------------------------------------------------------------------
 
-select one application to run [axpy blackscholes canneal jacobi-2d lavaMD matmul swaptions streamcluster somier particlefilter pathfinder]: axpy
+select one application to run [axpy blackscholes canneal jacobi-2d lavaMD matmul 
+swaptions streamcluster somier particlefilter pathfinder]: axpy
  
 ----------------------------------------------------------------------------------
 AXPY
@@ -166,7 +167,7 @@ Result ok !!!
 
 There are provided 4 different simulation sizes (arguments to run the application).
 
-Whe you are executing an application, you must write the following arguments to run a predefined simsize. The interactive script already includes all those simulation sizes.
+Whe you are executing an application, it will include the corresopnding argument to run a predefined simsize. The interactive script already includes all those simulation sizes.
 #### simtiny 
 ```
 blackscholes_args   = "1 input/in_512.input output_prices.txt"
