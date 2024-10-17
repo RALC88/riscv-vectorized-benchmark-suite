@@ -47,14 +47,14 @@ void force_contr_prevec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i
 inline void force_contr_vec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i, int j, int neig_i, int neig_j);
 void force_contr_vec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i, int j, int neig_i, int neig_j)
 {
-   unsigned long gvl = __builtin_epi_vsetvl(n, __epi_e64, __epi_m1);
+   unsigned long gvl = _MMR_VSETVL_E64M1(n);
 
    _MMR_f64 v_1        = _MM_SET_f64(1.0, gvl);
    _MMR_f64 v_spr_K    = _MM_SET_f64(0.25*spring_K, gvl);
 
    for (int k=1; k<n-1; ) {
 
-      gvl = __builtin_epi_vsetvl(n-1 - k, __epi_e64, __epi_m1);
+      gvl = _MMR_VSETVL_E64M1(n-1 - k);
 
       _MMR_f64 v_x1    = _MM_LOAD_f64(&X[0][neig_i][neig_j][k], gvl);
       _MMR_f64 v_x2    = _MM_LOAD_f64(&X[0][i][j][k], gvl);
@@ -92,14 +92,14 @@ void force_contr_vec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i, i
 
 void k_force_contr_vec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i, int j)
 {
-   long gvl = __builtin_epi_vsetvl(n, __epi_e64, __epi_m1);
+   long gvl = _MMR_VSETVL_E64M1(n);
 
    _MMR_f64 v_1        = _MM_SET_f64(1.0, gvl);
    _MMR_f64 v_spr_K    = _MM_SET_f64(0.25*spring_K, gvl);
 
    for (int k=1; k<n-1; ) {
 
-      gvl = __builtin_epi_vsetvl(n-1 - k, __epi_e64, __epi_m1);
+      gvl = _MMR_VSETVL_E64M1(n-1 - k);
 
       // Still missing: elements to shift at the boundaries !!!!!
 
@@ -131,9 +131,9 @@ void k_force_contr_vec(int n, double (*X)[n][n][n], double (*F)[n][n][n], int i,
       v_FY               = _MM_MACC_f64(v_FY, v_spr_F, v_dFY,  gvl);
       v_FZ               = _MM_MACC_f64(v_FZ, v_spr_F, v_dFZ,  gvl);
 
-      v_xs    = _MM_VSLIDEUP_f64(v_x, 1, gvl) ;
-      v_ys    = _MM_VSLIDEUP_f64(v_y, 1, gvl) ;
-      v_zs    = _MM_VSLIDEUP_f64(v_z, 1, gvl) ;
+      v_xs    = _MM_VSLIDEUP_f64(v_xs, v_x, 1, gvl) ;
+      v_ys    = _MM_VSLIDEUP_f64(v_ys, v_y, 1, gvl) ;
+      v_zs    = _MM_VSLIDEUP_f64(v_zs, v_z, 1, gvl) ;
       v_dx    = _MM_SUB_f64(v_xs, v_x, gvl);
       v_dx2   = _MM_MUL_f64(v_dx, v_dx, gvl);
       v_dy    = _MM_SUB_f64(v_ys, v_y, gvl);
