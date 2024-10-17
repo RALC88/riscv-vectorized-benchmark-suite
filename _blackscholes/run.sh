@@ -2,23 +2,30 @@
 
 echo " "
 echo "----------------------------------------------------------------------------------"
-echo "BLACKSCHOLES"
+echo "BLACKSCHOLES 																		"
 echo "----------------------------------------------------------------------------------"
 echo " "
 
-app="blackscholes"
+app_name="blackscholes"
 
 while true; do
-    echo -n "do you want to run on spike or qemu [spike qemu]: "
+    echo -n "do you want to run on spike or qemu [spike qemu gem5]: "
     read sim
-    if [[ $sim == "spike" ]]  || [[ $sim == "qemu" ]]; then
-        break
+    if [ $sim == "spike" ]; then
+		simulator="$RISCV/bin/spike --isa=rv64gcv pk"
+		break
+	elif [ $sim == "qemu" ]; then
+		#simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
+		echo "qemu is not working for blackscholes. Try with a diferent option: "
+        continue
+	elif [ $sim == "gem5" ]; then
+		simulator="$GEM5/build/RISCV/gem5.opt $GEM5/configs/deprecated/example/se.py"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
-
 
 while true; do
     echo -n "do you want to run the serial or vectorized version [serial vector]: "
@@ -34,63 +41,38 @@ done
 while true; do
     echo -n "select the simulation size [tiny small medium large]: "
     read simsize
-    if [[ $simsize == "tiny" ]]  || [[ $simsize == "small" ]] || [[ $simsize == "medium" ]] || [[ $simsize == "large" ]]; then
-        break
+    if [ $simsize == "tiny" ]; then
+		app_args="1 input/in_512.input output/output_prices_${version}_${simsize}.txt"
+		break
+	elif [ $simsize == "small" ]; then
+		app_args="1 input/in_4K.input output/output_prices_${version}_${simsize}.txt"
+		break
+	elif [ $simsize == "medium" ]; then
+		app_args="1 input/in_16K.input output/output_prices_${version}_${simsize}.txt"
+		break
+	elif [ $simsize == "large" ]; then
+		app_args="1 input/in_64K.input output/output_prices_${version}_${simsize}.txt"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
 
-echo " "
-echo "----------------------------------------------------------------------------------"
-echo "RUNNING BLACKSCHOLES"
-echo "----------------------------------------------------------------------------------"
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          RUNNING BLACKSCHOLES								"
+echo "[RIVEC]---------------------------------------------------------------------------"
 
-if [ $simsize == "tiny" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_512.input output/output_prices_${version}_$simsize.txt"
-		echo "----------------------------------------------------------------------------------"
-		mkdir output
-		echo " " > output/output_prices_${version}_$simsize.txt
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_512.input output/output_prices_${version}_$simsize.txt
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "small" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_4K.input output/output_prices_${version}_$simsize.txt"
-		echo "----------------------------------------------------------------------------------"
-		mkdir output
-		echo " " > output/output_prices_${version}_$simsize.txt
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_4K.input output/output_prices_${version}_$simsize.txt
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "medium" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_16K.input output/output_prices_${version}_$simsize.txt"
-		echo "----------------------------------------------------------------------------------"
-		mkdir output
-		echo " " > output/output_prices_${version}_$simsize.txt
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_16K.input output/output_prices_${version}_$simsize.txt
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "large" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_64K.input output/output_prices_${version}_$simsize.txt"
-		echo "----------------------------------------------------------------------------------"
-		mkdir output
-		echo " " > output/output_prices_${version}_$simsize.txt
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 input/in_64K.input output/output_prices_${version}_$simsize.txt
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
+echo "command: $simulator bin/${app_name}_${version}.exe $app_args"
+echo "----------------------------------------------------------------------------------"
+mkdir output
+echo " " > output/output_prices_${version}_${simsize}.txt
+if [ $sim == "gem5" ]; then
+	$simulator  --cmd="bin/${app_name}_${version}.exe" --options="$app_args"
 else
-	echo "RiVec Benchmark Suite"
+	$simulator bin/${app_name}_${version}.exe $app_args
 fi
+
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          DONE 											"
+echo "[RIVEC]---------------------------------------------------------------------------"

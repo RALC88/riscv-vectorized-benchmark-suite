@@ -92,8 +92,9 @@ int main (int argc, char **argv)
     if(compare(M, N, result, reference)){
         printf("Verification failed!\n");
         return 1;
+    } else {
+        printf("Verification passed!\n");
     }
-
 
     free(M1);
     free(M2);

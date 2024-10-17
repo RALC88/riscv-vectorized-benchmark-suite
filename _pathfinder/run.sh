@@ -16,7 +16,7 @@ while true; do
 		break
 	elif [ $sim == "qemu" ]; then
 		//simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
-		echo "qemu is not working for pathfinder. Fix in progress. Try with a diferent option: "
+		echo "qemu is not working for pathfinder. Try with a diferent option: "
         continue
 	elif [ $sim == "gem5" ]; then
 		simulator="$GEM5/build/RISCV/gem5.opt $GEM5/configs/deprecated/example/se.py"

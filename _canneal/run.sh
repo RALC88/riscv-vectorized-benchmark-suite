@@ -6,20 +6,26 @@ echo "CANNEAL"
 echo "----------------------------------------------------------------------------------"
 echo " "
 
-app="canneal"
+app_name="canneal"
 
 while true; do
-    echo -n "do you want to run on spike or qemu [spike qemu]: "
+    echo -n "do you want to run on spike or qemu [spike qemu gem5]: "
     read sim
-    if [[ $sim == "spike" ]]  || [[ $sim == "qemu" ]]; then
-        break
+    if [ $sim == "spike" ]; then
+		simulator="$RISCV/bin/spike --isa=rv64gcv pk"
+		break
+	elif [ $sim == "qemu" ]; then
+		#simulator="$RISCV/bin/qemu-riscv64 -L $RISCV/sysroot"
+		echo "qemu is not working for canneal. Try with a diferent option: "
+        continue
+	elif [ $sim == "gem5" ]; then
+		simulator="$GEM5/build/RISCV/gem5.opt $GEM5/configs/deprecated/example/se.py"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
-
-
 while true; do
     echo -n "do you want to run the serial or vectorized version [serial vector]: "
     read version
@@ -34,55 +40,36 @@ done
 while true; do
     echo -n "select the simulation size [tiny small medium large]: "
     read simsize
-    if [[ $simsize == "tiny" ]]  || [[ $simsize == "small" ]] || [[ $simsize == "medium" ]] || [[ $simsize == "large" ]]; then
-        break
+    if [ $simsize == "tiny" ]; then
+		app_args="1 100 300 input/100.nets 8"
+		break
+	elif [ $simsize == "small" ]; then
+		app_args="1 10000 2000 input/100000.nets 32"
+		break
+	elif [ $simsize == "medium" ]; then
+		app_args="1 15000 2000 input/200000.nets 64"
+		break
+	elif [ $simsize == "large" ]; then
+		app_args="1 15000 2000 input/400000.nets 128"
+		break
     else
     	echo "Input not valid, try again."
         continue
     fi
 done
 
-echo " "
-echo "----------------------------------------------------------------------------------"
-echo "RUNNING CANNEAL"
-echo "----------------------------------------------------------------------------------"
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          RUNNING CANNEAL								"
+echo "[RIVEC]---------------------------------------------------------------------------"
 
-if [ $simsize == "tiny" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 100 300 input/100.nets 8"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 100 300 input/100.nets 8
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "small" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 10000 2000 input/100000.nets 32"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 10000 2000 input/100000.nets 32
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "medium" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 15000 2000 input/200000.nets 64"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 15000 2000 input/200000.nets 64
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
-elif [ $simsize == "large" ]; then
-	if [ $sim == "spike" ]; then
-		echo "command: $RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 15000 2000 input/400000.nets 128"
-		echo "----------------------------------------------------------------------------------"
-		$RISCV/bin/spike --isa=rv64gcv pk bin/${app}_${version}.exe 1 15000 2000 input/400000.nets 128
-	else
-		echo "qemu: we need to mount the input file into qemu file system, looking on how to do it.. WIP"
-	fi
-	echo "----------------------------------------------------------------------------------"
+echo "command: $simulator bin/${app_name}_${version}.exe $app_args"
+echo "----------------------------------------------------------------------------------"
+if [ $sim == "gem5" ]; then
+	$simulator  --cmd="bin/${app_name}_${version}.exe" --options="$app_args"
 else
-	echo "RiVec Benchmark Suite"
+	$simulator bin/${app_name}_${version}.exe $app_args
 fi
+
+echo "[RIVEC]---------------------------------------------------------------------- ----"
+echo "[RIVEC]                          DONE 											"
+echo "[RIVEC]---------------------------------------------------------------------------"
