@@ -667,7 +667,7 @@ float dist(Point p1, Point p2, int dim )
 #ifdef USE_RISCV_VECTOR
   float result=0.0;
   int i;
-  unsigned long int gvl = __builtin_epi_vsetvl(dim, __epi_e32, __epi_m1);
+  unsigned long int gvl = _MMR_VSETVL_E32M1(dim);
 
  _MMR_f32 result1,result2, _aux, _diff, _coord1, _coord2;
 
@@ -675,7 +675,7 @@ float dist(Point p1, Point p2, int dim )
   result2 = _MM_SET_f32(0.0,gvl);
   for (i=0;i<dim;i=i+gvl) {  
 
-    gvl = __builtin_epi_vsetvl(dim-i, __epi_e32, __epi_m1);
+    gvl = _MMR_VSETVL_E32M1(dim-i);
 
     _coord1 = _MM_LOAD_f32(&(p1.coord[i]),gvl);
     _coord2 = _MM_LOAD_f32(&(p2.coord[i]),gvl);
@@ -685,7 +685,6 @@ float dist(Point p1, Point p2, int dim )
   }
   result2 = _MM_REDSUM_f32(result1,result2,gvl);
   result = _MM_VGETFIRST_f32(result2);
-  //FENCE();
   //printf("result = %f \n",result);
   return result;
 #else // USE_RISCV_VECTOR
@@ -2077,30 +2076,28 @@ int main(int argc, char **argv)
 
 
 //#ifdef USE_RISCV_VECTOR
-    struct timeval tv1, tv2;
-    struct timezone tz;
-    double elapsed=0.0;
-    gettimeofday(&tv1, &tz);
+  long long start,end;
+  start = get_time();
+
 
     // Start instruction and cycles count of the region of interest
-    unsigned long cycles1, cycles2, instr2, instr1;
-    instr1 = get_inst_count();
-    cycles1 = get_cycles_count();
+    //unsigned long cycles1, cycles2, instr2, instr1;
+    //instr1 = get_inst_count();
+    //cycles1 = get_cycles_count();
 //#endif
 
   streamCluster(stream, kmin, kmax, dim, chunksize, clustersize, outfilename );
 
 //#ifdef USE_RISCV_VECTOR
     // End instruction and cycles count of the region of interest
-    instr2 = get_inst_count();
-    cycles2 = get_cycles_count();
+    //instr2 = get_inst_count();
+    //cycles2 = get_cycles_count();
     // Instruction and cycles count of the region of interest
-    printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
-    printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
+    //printf("-CSR   NUMBER OF EXEC CYCLES :%lu\n", cycles2 - cycles1);
+    //printf("-CSR   NUMBER OF INSTRUCTIONS EXECUTED :%lu\n", instr2 - instr1);
 
-    gettimeofday(&tv2, &tz);
-    elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6; 
-    printf("\n\nstreamCluster Kernel took %8.8lf secs   \n", elapsed );
+  end = get_time();
+  printf("\n\nstreamCluster Kernel took %8.8lf secs   \n", elapsed_time(start, end));
 //#endif
 
 #ifdef ENABLE_PARSEC_HOOKS
