@@ -8,7 +8,9 @@ The benchmark suite with all its applications and input sets is available as ope
 
 RiVEC implements the lastest riscv intrinsics for rvv-1.0. It can be compiled with the latest [riscv-collab/riscv-gnu-toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). RiVEC has been successfully tested on Spike RISC-V ISA Simulator, qemu RISC-V System emulator, and gem5 simulator.
 
-There is also an implementation based on the Working draft of the proposed RISC-V V vector extension v0.7. Click [here](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7).
+Master branch holds the most updated version (rvv-v1.0) compatible with latest instrinsics andd toolchain. Additionaly, there are two more available versions:
+[rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) which is based on  RISC-V V vector extension v0.7. This version can be only compiled by the LLVM from Barcelona Supercomputing Center. Instrinsics also corresponds to that specific compiler.
+[rvv-1.0-PLCTLab](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-1.0-PLCTLab) which is based on  RISC-V V vector extension v1.0. This version can be only compiled by the LLVM from PLCT. Instrinsics also corresponds to that specific compiler.
 
 
 If you use this software or a modified version of it for your research, please cite the paper:
@@ -22,6 +24,7 @@ Cristóbal Ramírez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramíre
 | Blackscholes      | Financial Analysis            | Dense Linear Algebra  | PARSEC      |
 | Canneal           | Engineering                   | Unstructured Grids    | PARSEC      |
 | LavaMD2           | Molecular Dynamics            | N-Body                | Rodinia     |
+| matmul            | High Performance Computing    | BLAS                  | -           |
 | Particle Filter   | Medical Imaging               | Structured Grids      | Rodinia     |
 | Somier            | Physics Simulation            | Dense Linear Algebra  | -           |
 | Jacobi-2D         | Engineering                   | Dense Linear Algebra  | PolyBench   |
@@ -85,14 +88,18 @@ For example to compile blackscholes:
 ```
 make blackscholes 
 ```
-The same for the other applications ...
+This will compile two versions of the application, namely serial and vector versions.
 
 Also you can compile all the applications by typing:
 ```
 make all 
 ```
 
-### Running applications on Spike
+## Running the Vectorized apps
+
+To be able to run all the apps, you must install Spike, qemu, and/or gem5. All the applications run succesfully in spike and gem5. Applications that does not require an input file, or generate an output file are able to run on qemu as well.
+
+### Installing Spike, qemu, and gem5
 
 All the RiVEC applications can run on [Spike] (https://github.com/riscv-software-src/riscv-isa-sim).  We strongly recommend to look at the official Spike RISC-V ISA Simulator repository for more details.
 
@@ -108,33 +115,58 @@ make -j17
 make install
 ```
 
-Once you have installed Spike you can run the following commands to run an applicaiton.
-```
-$RISCV/bin/spike --isa=rv64gcv pk _axpy/bin/axpy_vector.exe "256"
-```
-
-### Running applications on Qemu
+### Installing Qemu
 
 When building the rv64gcv baremetal toolchain with LLVM with the above provided commands, it was indicated to also install QEMU
+
+### Running the apps
+
+The suite provides an interactive scrip (run.sh) which provides a simple way to execute every app.
+
+First run the following command:
+```
+source run.sh
+```
+That will display all the applications available, next it ask if do you want to run the serial or vectorized version, followed by the simulation size. Some applications creates an output file located in the folder "output" inside each application folder.
 
 
 Running Axpy:
 ```
-RISCV/bin/qemu-riscv64 -L $RISCV/sysroot ./_axpy/bin/axpy_vector.exe "256"
+source run.sh
+
+----------------------------------------------------------------------------------
+RiVec Benchmark Suite
+----------------------------------------------------------------------------------
+
+select one application to run [axpy blackscholes canneal jacobi-2d lavaMD matmul swaptions streamcluster somier particlefilter pathfinder]: axpy
+ 
+----------------------------------------------------------------------------------
+AXPY
+----------------------------------------------------------------------------------
+ 
+do you want to run the serial or vectorized version [serial vector]: vector
+select the simulation size [tiny small medium large]: tiny
+ 
+----------------------------------------------------------------------------------
+RUNNING AXPY
+----------------------------------------------------------------------------------
+command: /home/ralc/Desktop/RISC-V/build/riscv/bin/spike --isa=rv64gcv pk bin/axpy_vector.exe 256
+----------------------------------------------------------------------------------
+init_vector time: 0.002524
+doing reference axpy , vector size 262144
+axpy_serial time: 0.000525
+doing vector axpy, vector size 262144
+axpy_intrinsics time: 0.001442
+done
+Result ok !!!
+
 ```
 
-### Running applications
+### Simulation sizes 
 
-There are provided 5 different simulation sizes (arguments to run the application).
-```
-simtiny : takes seconds to be executed on gem5
-simsmall : takes around 15-30 minutes to be executed on gem5
-simmedium : takes around 1-2  hour to be executed on gem5
-simlarge : takes around 8-24 hours to be executed on gem5
-native : only for native hardware
-```
+There are provided 4 different simulation sizes (arguments to run the application).
 
-Whe you are executing an application, you must write the following arguments to run a predefined simsize.
+Whe you are executing an application, you must write the following arguments to run a predefined simsize. The interactive script already includes all those simulation sizes.
 #### simtiny 
 ```
 blackscholes_args   = "1 input/in_512.input output_prices.txt"
@@ -191,19 +223,6 @@ somier_args         = "4 128"
 jacobi_2d_args      = "256 2000 output.txt"
 ```  
 
-#### Example of execution blackscholes serial version.
-```
-./blackscholes_serial 1 input/in_64K.input prices.txt
-
-```
-#### Example of execution blackscholes vector version.
-```
-./blackscholes_vector 1 input/in_64K.input prices.txt
-
-```
-
-More info about how to execute the serial and vectorized versions on the gem5 Vector Architecture model can be found in he README file located in https://github.com/RALC88/gem5/blob/develop/src/cpu/vector_engine/README.md
-
 ## Contributing
 
 New vectorized applications are welcome. We strongly encourage you to contribute with new apps to enrich the scenarios and diversity in the RiVEC Bencmark Suite.
@@ -212,5 +231,5 @@ New vectorized applications are welcome. We strongly encourage you to contribute
 We thank the [European Processor Initiative](https://www.european-processor-initiative.eu/) (EPI) project, and the Barcelona Supercomputing Center compiler team, specially to Roger Ferrer who have always support us and solved our doubts about compiler-related issues.
 
 ## Contact
-Cristóbal Ramírez Lazo
+Cristobal Ramirez
 cristobal.ramirez.lazo@gmail.com
