@@ -36,9 +36,7 @@ void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, 
 void spmv_serial(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y) {
     for (int row=0; row<nrows; row++) {
         double sum = 0;
-        for (size_t idx=ia[row]; idx<ia[row+1]; idx++)
-        {
-            printf("idx: %d ja: %d \n",idx,ja[idx]);
+        for (size_t idx=ia[row]; idx<ia[row+1]; idx++){
             sum += a[idx] * x[ja[idx]] ;
         }
         y[row] = sum;
