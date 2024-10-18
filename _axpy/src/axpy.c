@@ -34,7 +34,7 @@ void axpy_vector(double a, double *dx, double *dy, int n) {
     gvl = _MMR_VSETVL_E64M1(n - i);
     vfloat64m1_t v_dx = _MM_LOAD_f64(&dx[i], gvl);
     vfloat64m1_t v_dy = _MM_LOAD_f64(&dy[i], gvl);
-    vfloat64m1_t v_res = _MM_MACC_f64_VF(v_dy, a, v_dx, gvl);
+    vfloat64m1_t v_res = _MM_MACC_VF_f64(v_dy, a, v_dx, gvl);
     _MM_STORE_f64(&dy[i], v_res, gvl);
 
     i += gvl;

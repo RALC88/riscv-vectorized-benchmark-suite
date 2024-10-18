@@ -91,10 +91,16 @@
 #define _MM_ADD_i64     	 __riscv_vadd_vv_i64m1
 #define _MM_ADD_i32     	 __riscv_vadd_vv_i32m1
 
+#define _MM_ADD_VX_i64     	 __riscv_vadd_vx_i64m1
+#define _MM_ADD_VX_i32     	 __riscv_vadd_vx_i32m1
+
 #define _MM_ADD_i32mf2     	 __riscv_vadd_vv_i32mf2
 
 #define _MM_SUB_i64		     __riscv_vsub_vv_i64m1
 #define _MM_SUB_i32			 __riscv_vsub_vv_i32m1
+
+#define _MM_SUB_VX_i64		 __riscv_vsub_vx_i64m1
+#define _MM_SUB_VX_i32		 __riscv_vsub_vx_i32m1
 
 #define _MM_ADD_i64_MASK     __riscv_vadd_vv_i64m1_m
 #define _MM_ADD_i32_MASK     __riscv_vadd_vv_i32m1_m
@@ -128,23 +134,38 @@
 #define _MM_SLL_i64     	 __riscv_vsll_vv_i64m1
 #define _MM_SLL_i32     	 __riscv_vsll_vv_i32m1
 
+#define _MM_SLL_VX_i64     	 __riscv_vsll_vx_i64m1
+#define _MM_SLL_VX_i32     	 __riscv_vsll_vx_i32m1
+
 #define _MM_SRL_i64     	 __riscv_vsrl_vv_u64m1
 #define _MM_SRL_i32     	 __riscv_vsrl_vv_u32m1
 
 #define _MM_AND_i64     	 __riscv_vand_vv_i64m1
 #define _MM_AND_i32     	 __riscv_vand_vv_i32m1
 
+#define _MM_AND_VX_i64     	 __riscv_vand_vx_i64m1
+#define _MM_AND_VX_i32     	 __riscv_vand_vx_i32m1
+
 #define _MM_OR_i64     		 __riscv_vor_vv_i64m1
 #define _MM_OR_i32     		 __riscv_vor_vv_i32m1
 
+#define _MM_OR_VX_i64     	 __riscv_vor_vx_i64m1
+#define _MM_OR_VX_i32     	 __riscv_vor_vx_i32m1
+
 #define _MM_XOR_i64     	 __riscv_vxor_vv_i64m1
 #define _MM_XOR_i32     	 __riscv_vxor_vv_i32m1
+
+#define _MM_XOR_VX_i64     	 __riscv_vxor_vx_i64m1
+#define _MM_XOR_VX_i32     	 __riscv_vxor_vx_i32m1
 
 #define _MM_NOT_i64(x)     	 _MM_XOR_i64((x),(x), gvl)
 #define _MM_NOT_i32(x)     	 _MM_XOR_i32((x),(x), gvl)
 
 #define _MM_MERGE_i64  		 __riscv_vmerge_vvm_i64m1
 #define _MM_MERGE_i32  		 __riscv_vmerge_vvm_i32m1
+
+#define _MM_MERGE_VX_i64  	 __riscv_vmerge_vxm_i64m1
+#define _MM_MERGE_VX_i32  	 __riscv_vmerge_vxm_i32m1
 
 //---------------------------------------------------------------------------
 // FLOATING POINT INTRINSICS
@@ -170,17 +191,20 @@
 #define _MM_MUL_f64     	 __riscv_vfmul_vv_f64m1
 #define _MM_MUL_f32     	 __riscv_vfmul_vv_f32m1
 
-#define _MM_MUL_f64_VF     	 __riscv_vfmul_vf_f64m1
-#define _MM_MUL_f32_VF     	 __riscv_vfmul_vf_f32m1
+#define _MM_MUL_VF_f64     	 __riscv_vfmul_vf_f64m1
+#define _MM_MUL_VF_f32     	 __riscv_vfmul_vf_f32m1
 
 #define _MM_ADD_f64     	 __riscv_vfadd_vv_f64m1
 #define _MM_ADD_f32     	 __riscv_vfadd_vv_f32m1
 
-#define _MM_ADD_f64_VF     	 __riscv_vfadd_vf_f64m1
-#define _MM_ADD_f32_VF     	 __riscv_vfadd_vf_f32m1
+#define _MM_ADD_VF_f64     	 __riscv_vfadd_vf_f64m1
+#define _MM_ADD_VF_f32     	 __riscv_vfadd_vf_f32m1
 
 #define _MM_SUB_f64     	 __riscv_vfsub_vv_f64m1
 #define _MM_SUB_f32     	 __riscv_vfsub_vv_f32m1
+
+#define _MM_SUB_VF_f64     	 __riscv_vfsub_vf_f64m1
+#define _MM_SUB_VF_f32     	 __riscv_vfsub_vf_f32m1
 
 #define _MM_SUB_f64_MASK	 __riscv_vfsub_vv_f64m1_m
 #define _MM_SUB_f32_MASK	 __riscv_vfsub_vv_f32m1_m
@@ -200,8 +224,14 @@
 #define _MM_MIN_f64          __riscv_vfmin_vv_f64m1
 #define _MM_MIN_f32          __riscv_vfmin_vv_f32m1
 
+#define _MM_MIN_VF_f64       __riscv_vfmin_vf_f64m1
+#define _MM_MIN_VF_f32       __riscv_vfmin_vf_f32m1
+
 #define _MM_MAX_f64          __riscv_vfmax_vv_f64m1
 #define _MM_MAX_f32          __riscv_vfmax_vv_f32m1
+
+#define _MM_MAX_VF_f64       __riscv_vfmax_vf_f64m1
+#define _MM_MAX_VF_f32       __riscv_vfmax_vf_f32m1
 
 #define _MM_VFSGNJ_f64       __riscv_vfsgnj_vv_f64m1
 #define _MM_VFSGNJ_f32       __riscv_vfsgnj_vv_f32m1
@@ -215,6 +245,9 @@
 #define _MM_MERGE_f64  		 __riscv_vmerge_vvm_f64m1
 #define _MM_MERGE_f32 		 __riscv_vmerge_vvm_f32m1
 
+#define _MM_MERGE_VF_f64  	__riscv_vfmerge_vfm_f64m1
+#define _MM_MERGE_VF_f32 	__riscv_vfmerge_vfm_f32m1
+
 #define _MM_REDSUM_f64  	 __riscv_vfredosum_vs_f64m1_f64m1
 #define _MM_REDSUM_f32  	 __riscv_vfredosum_vs_f32m1_f32m1
 
@@ -227,11 +260,14 @@
 #define _MM_MACC_f64  		 __riscv_vfmacc_vv_f64m1
 #define _MM_MACC_f32  		 __riscv_vfmacc_vv_f32m1
 
-#define _MM_MACC_f64_VF      __riscv_vfmacc_vf_f64m1
-#define _MM_MACC_f32_VF  	 __riscv_vfmacc_vf_f32m1
+#define _MM_MACC_VF_f64      __riscv_vfmacc_vf_f64m1
+#define _MM_MACC_VF_f32  	 __riscv_vfmacc_vf_f32m1
 
 #define _MM_MADD_f64  		 __riscv_vfmadd_vv_f64m1
 #define _MM_MADD_f32  		 __riscv_vfmadd_vv_f32m1
+
+#define _MM_MADD_VF_f64  	__riscv_vfmadd_vf_f64m1
+#define _MM_MADD_VF_f32  	__riscv_vfmadd_vf_f32m1
 
 //---------------------------------------------------------------------------
 // CONVERSION INTRINSICS
@@ -336,14 +372,26 @@
 #define _MM_VFGT_f64        __riscv_vmfgt_vv_f64m1_b64
 #define _MM_VFGT_f32        __riscv_vmfgt_vv_f32m1_b32
 
+#define _MM_VFGT_VF_f64     __riscv_vmfgt_vf_f64m1_b64
+#define _MM_VFGT_VF_f32     __riscv_vmfgt_vf_f32m1_b32
+
 #define _MM_VFGE_f64        __riscv_vmfge_vv_f64m1_b64
 #define _MM_VFGE_f32        __riscv_vmfge_vv_f32m1_b32
+
+#define _MM_VFGE_VF_f64     __riscv_vmfge_vf_f64m1_b64
+#define _MM_VFGE_VF_f32     __riscv_vmfge_vf_f32m1_b32
 
 #define _MM_VFLT_f64        __riscv_vmflt_vv_f64m1_b64
 #define _MM_VFLT_f32        __riscv_vmflt_vv_f32m1_b32
 
+#define _MM_VFLT_VF_f64     __riscv_vmflt_vf_f64m1_b64
+#define _MM_VFLT_VF_f32     __riscv_vmflt_vf_f32m1_b32
+
 #define _MM_VFLE_f64        __riscv_vmfle_vv_f64m1_b64
 #define _MM_VFLE_f32        __riscv_vmfle_vv_f32m1_b32
+
+#define _MM_VFLE_VF_f64     __riscv_vmfle_vf_f64m1_b64
+#define _MM_VFLE_VF_f32     __riscv_vmfle_vf_f32m1_b32
 
 //---------------------------------------------------------------------------
 // ADVANCE RISC-V MATH LIBRARY
