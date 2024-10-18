@@ -48,35 +48,55 @@ _MMR_MASK_i64  mask;
 _MMR_i64  imm0;
 _MMR_i64  tmp3;
 
-        x     = _MM_MIN_f64(x, _MM_SET_f64(88.3762626647949,gvl),gvl);
-        x     = _MM_MAX_f64(x, _MM_SET_f64(-88.3762626647949,gvl),gvl);
+double exp_hi = 88.3762626647949;
+double exp_low = -88.3762626647949;
+
+double   cephes_LOG2EF = 1.44269504088896341;
+double   cephes_exp_C1 = 0.693359375;
+double   cephes_exp_C2 = -2.12194440e-4;
+
+double   cephes_exp_p0 = 1.9875691500E-4;
+double   cephes_exp_p1 = 1.3981999507E-3;
+double   cephes_exp_p2 = 8.3334519073E-3;
+double   cephes_exp_p3 = 4.1665795894E-2;
+double   cephes_exp_p4 = 1.6666665459E-1;
+double   cephes_exp_p5 = 5.0000001201E-1;
+
+double One = 1.0;
+
+
+        x     = _MM_MIN_VF_f64(x, exp_hi, gvl);
+        x     = _MM_MAX_VF_f64(x, exp_low, gvl);
 
         fx    = _MM_SET_f64(0.5,gvl);
-        fx    = _MM_MACC_f64(fx,x,_MM_SET_f64(1.44269504088896341,gvl),gvl);
+        fx    = _MM_MACC_VF_f64(fx, cephes_LOG2EF, x, gvl);
 
         tmp3  = _MM_VFCVT_X_F_i64(fx,gvl);
         tmp   = _MM_VFCVT_F_X_f64(tmp3,gvl);
 
         mask  = _MM_VFLT_f64(fx,tmp,gvl); 
-        tmp2  = _MM_MERGE_f64(_MM_SET_f64(0.0,gvl),_MM_SET_f64(1.0,gvl), mask,gvl);
+        tmp2  = _MM_MERGE_VF_f64(_MM_SET_f64(0.0,gvl), One, mask,gvl);
         fx    = _MM_SUB_f64(tmp,tmp2,gvl);
-        tmp   = _MM_MUL_f64(fx, _MM_SET_f64(0.693359375,gvl),gvl);
-        z     = _MM_MUL_f64(fx, _MM_SET_f64(-2.12194440e-4,gvl),gvl);
+        tmp   = _MM_MUL_VF_f64(fx, cephes_exp_C1, gvl);
+        z     = _MM_MUL_VF_f64(fx, cephes_exp_C2,gvl);
         x     = _MM_SUB_f64(x,tmp,gvl);
         x     = _MM_SUB_f64(x,z,gvl);
-        z     = _MM_MUL_f64(x,x,gvl);
-        y     = _MM_SET_f64(1.9875691500E-4,gvl);
-        y     = _MM_MADD_f64(y,x,_MM_SET_f64(1.3981999507E-3,gvl),gvl);
-        y     = _MM_MADD_f64(y,x,_MM_SET_f64(8.3334519073E-3,gvl),gvl);
-        y     = _MM_MADD_f64(y,x,_MM_SET_f64(4.1665795894E-2,gvl),gvl);
-        y     = _MM_MADD_f64(y,x,_MM_SET_f64(1.6666665459E-1,gvl),gvl);
-        y     = _MM_MADD_f64(y,x,_MM_SET_f64(5.0000001201E-1,gvl),gvl);
-        y     = _MM_MADD_f64(y,z,x,gvl);
-        y     = _MM_ADD_f64(y, _MM_SET_f64(1.0,gvl),gvl);
 
+        z     = _MM_MUL_f64(x,x,gvl);
+        y     = _MM_SET_f64(cephes_exp_p0,gvl);
+        y     = _MM_MADD_f64(y,x,_MM_SET_f64(cephes_exp_p1,gvl),gvl);
+        y     = _MM_MADD_f64(y,x,_MM_SET_f64(cephes_exp_p2,gvl),gvl);
+        y     = _MM_MADD_f64(y,x,_MM_SET_f64(cephes_exp_p3,gvl),gvl);
+        y     = _MM_MADD_f64(y,x,_MM_SET_f64(cephes_exp_p4,gvl),gvl);
+        y     = _MM_MADD_f64(y,x,_MM_SET_f64(cephes_exp_p5,gvl),gvl);
+        y     = _MM_MADD_f64(y,z,x,gvl);
+        y     = _MM_ADD_VF_f64(y, One, gvl);
+
+        long int _1023 = 1023;
+        unsigned long int _52 = 52;
         imm0  = _MM_VFCVT_X_F_i64(fx,gvl);
-        imm0  = _MM_ADD_i64(imm0, _MM_SET_i64(1023,gvl),gvl); 
-        imm0  = _MM_SLL_i64(imm0, _MM_CAST_u64_i64(_MM_SET_i64(52,gvl)),gvl);
+        imm0  = _MM_ADD_VX_i64(imm0, _1023, gvl); 
+        imm0  = _MM_SLL_VX_i64(imm0, _52, gvl);
 
         tmp4 = _MM_CAST_f64_i64(imm0);
         y     = _MM_MUL_f64(y, tmp4,gvl);
@@ -95,36 +115,54 @@ _MMR_MASK_i32  mask;
 _MMR_i32  imm0;
 _MMR_i32  tmp3;
 
-        x     = _MM_MIN_f32(x, _MM_SET_f32(88.3762626647949,gvl),gvl);
-        x     = _MM_MAX_f32(x, _MM_SET_f32(-88.3762626647949,gvl),gvl);
+float exp_hi = 88.3762626647949;
+float exp_low = -88.3762626647949;
+
+float   cephes_LOG2EF = 1.44269504088896341;
+float   cephes_exp_C1 = 0.693359375;
+float   cephes_exp_C2 = -2.12194440e-4;
+
+float   cephes_exp_p0 = 1.9875691500E-4;
+float   cephes_exp_p1 = 1.3981999507E-3;
+float   cephes_exp_p2 = 8.3334519073E-3;
+float   cephes_exp_p3 = 4.1665795894E-2;
+float   cephes_exp_p4 = 1.6666665459E-1;
+float   cephes_exp_p5 = 5.0000001201E-1;
+
+float One = 1.0;
+
+        x     = _MM_MIN_VF_f32(x, exp_hi, gvl);
+        x     = _MM_MAX_VF_f32(x, exp_low, gvl);
 
         fx    = _MM_SET_f32(0.5,gvl);
-        fx    = _MM_MACC_f32(fx,x,_MM_SET_f32(1.44269504088896341,gvl),gvl);
+        fx    = _MM_MACC_VF_f32(fx, cephes_LOG2EF, x, gvl);
 
         tmp3  = _MM_VFCVT_X_F_i32(fx,gvl);
         tmp   = _MM_VFCVT_F_X_f32(tmp3,gvl);
 
         mask  = _MM_VFLT_f32(fx,tmp,gvl); 
-        tmp2  = _MM_MERGE_f32( _MM_SET_f32(0.0,gvl),_MM_SET_f32(1.0,gvl), mask,gvl);
+        tmp2  = _MM_MERGE_VF_f32( _MM_SET_f32(0.0,gvl), One, mask,gvl);
         fx    = _MM_SUB_f32(tmp,tmp2,gvl);
-        tmp   = _MM_MUL_f32(fx, _MM_SET_f32(0.693359375,gvl),gvl);
-        z     = _MM_MUL_f32(fx, _MM_SET_f32(-2.12194440e-4,gvl),gvl);
+        tmp   = _MM_MUL_VF_f32(fx, cephes_exp_C1, gvl);
+        z     = _MM_MUL_VF_f32(fx, cephes_exp_C2, gvl);
         x     = _MM_SUB_f32(x,tmp,gvl);
         x     = _MM_SUB_f32(x,z,gvl);
 
         z     = _MM_MUL_f32(x,x,gvl);
-        y     = _MM_SET_f32(1.9875691500E-4,gvl);
-        y     = _MM_MADD_f32(y,x,_MM_SET_f32(1.3981999507E-3,gvl),gvl);
-        y     = _MM_MADD_f32(y,x,_MM_SET_f32(8.3334519073E-3,gvl),gvl);
-        y     = _MM_MADD_f32(y,x,_MM_SET_f32(4.1665795894E-2,gvl),gvl);
-        y     = _MM_MADD_f32(y,x,_MM_SET_f32(1.6666665459E-1,gvl),gvl);
-        y     = _MM_MADD_f32(y,x,_MM_SET_f32(5.0000001201E-1,gvl),gvl);
+        y     = _MM_SET_f32(cephes_exp_p0,gvl);
+        y     = _MM_MADD_f32(y,x,_MM_SET_f32(cephes_exp_p1, gvl),gvl);
+        y     = _MM_MADD_f32(y,x,_MM_SET_f32(cephes_exp_p2, gvl),gvl);
+        y     = _MM_MADD_f32(y,x,_MM_SET_f32(cephes_exp_p3, gvl),gvl);
+        y     = _MM_MADD_f32(y,x,_MM_SET_f32(cephes_exp_p4, gvl),gvl);
+        y     = _MM_MADD_f32(y,x,_MM_SET_f32(cephes_exp_p5, gvl),gvl);
         y     = _MM_MADD_f32(y,z,x,gvl);
-        y     = _MM_ADD_f32(y, _MM_SET_f32(1.0,gvl),gvl);
+        y     = _MM_ADD_VF_f32(y, One, gvl);
 
+        int _0x7f = 0x7f;
+        unsigned int _23 = 23;
         imm0  = _MM_VFCVT_X_F_i32(fx,gvl);
-        imm0  = _MM_ADD_i32(imm0, _MM_SET_i32(0x7f,gvl),gvl); 
-        imm0  = _MM_SLL_i32(imm0, _MM_CAST_u32_i32(_MM_SET_i32(23,gvl)),gvl);
+        imm0  = _MM_ADD_VX_i32(imm0, _0x7f, gvl); 
+        imm0  = _MM_SLL_VX_i32(imm0, _23, gvl);
 
         tmp4 = _MM_CAST_f32_i32(imm0);
         y     = _MM_MUL_f32(y, tmp4,gvl);
