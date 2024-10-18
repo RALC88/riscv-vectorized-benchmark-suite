@@ -36,42 +36,31 @@ int main(int argc, char *argv[]){
         }
     }
     
-    uint64_t *ia = (uint64_t *) malloc(M+1 * sizeof(uint64_t));
+    uint64_t *ia = (uint64_t *) calloc((M+1) , sizeof(uint64_t));
     uint64_t *ja = (uint64_t *) malloc(NZ * sizeof(uint64_t));
     double *a = (double *) malloc(NZ * sizeof(double));
     double *x = (double *) malloc(N * sizeof(double));
-    double *y = (double *) calloc(M, sizeof(double));
+    double *y = (double *) malloc(M * sizeof(double));
 
-    uint64_t readRow;
-    size_t currentRow = 0;
     ia[0]=0;
+    size_t currentRow = 0;
     for (size_t i = 0; i < NZ; i++) {
-        if (fscanf(f, "%llu %llu %lf", &col, &row, &value) != 3) {
+        if (fscanf(f, "%lu %lu %lf", &col, &row, &value) != 3) {
             printf("Error reading file at line %zu\n", i);
             break; 
         }
-
         ja[i] = col;
         a[i] = value;
-        readRow = row; 
-        if (readRow == currentRow+1) {
-	        currentRow++;
-	        ia[currentRow]=i;
-	    }
-        if(ja[0] != 1) 
-        {
-            printf("i: %ld ja[0]: %ld col: %ld value: %lf xcol: %ld ycol: %ld  \n",i,ja[0],col,value,ja[i-1],ja[i]);
-            return 0;
+        if (row == currentRow+1) {
+            currentRow++;
+            ia[currentRow]=i;
         }
-    
     }
+    ia[M]=NZ;
     
-    ia[currentRow++]=NZ;
-
     fclose(f);
 
     for (size_t i = 0; i < N; i++) x[i] = 1.0 ;
-
 
 #ifdef USE_RISCV_VECTOR
     start = get_time();
@@ -88,6 +77,8 @@ int main(int argc, char *argv[]){
     free(ia);
     free(ja);
     free(a);
+    free(x);
+    free(y);
 
     printf ("done\n");
 
