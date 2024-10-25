@@ -1,3 +1,13 @@
+/*                                  
+ * Neiel Israel Leyva Santes
+ * neiel.leyva@bsc.es
+ * Barcelona Supercomputing Center
+ *
+ * SpMV Vector Implementation.
+ * Sparse Matrix-Vector Multiplication (SpMV) is a mathematical operation 
+ * in which a sparse matrix is multiplied by a dense vector.
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "../../common/riscv_util.h"
@@ -8,16 +18,16 @@
 
 #ifdef USE_RISCV_VECTOR
 void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y) {
+    size_t   gvl    = __riscv_vsetvlmax_e64m1();
+    _MMR_u64 vthree = __riscv_vmv_v_x_u64m1(3, gvl);
     
     for (size_t row = 0; row < nrows; row++) {
-        
         uint64_t nnz_row = ia[row + 1] - ia[row];
         uint64_t idx     = ia[row];
         
-        size_t gvl = __riscv_vsetvl_e64m1(nnz_row);
+                 gvl      = __riscv_vsetvlmax_e64m1();
         _MMR_f64 vprod    = _MM_SET_f64(0, gvl); 
         _MMR_f64 part_res = _MM_SET_f64(0, gvl);
-        _MMR_u64 vthree   = __riscv_vmv_v_x_u64m1(3, gvl);
 
         for(size_t colid = 0; colid < nnz_row; colid += gvl ) {
                      gvl       = __riscv_vsetvl_e64m1(nnz_row - colid);
