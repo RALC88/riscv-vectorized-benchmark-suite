@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "../../common/riscv_util.h"
 
-void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y); 
+void spmv_intrinsics(const size_t nrows, const size_t ncols, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y); 
 void spmv_serial(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y); 
 
 int main(int argc, char *argv[]){
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
 
 #ifdef USE_RISCV_VECTOR
     start = get_time();
-    spmv_intrinsics(M, a, ia, ja, x, y);
+    spmv_intrinsics(M, N, a, ia, ja, x, y);
     end = get_time();
     printf("spmv_intrinsics time: %f\n", elapsed_time(start, end));
 #else // !USE_RISCV_VECTOR

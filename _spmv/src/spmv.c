@@ -17,9 +17,9 @@
 #endif
 
 #ifdef USE_RISCV_VECTOR
-void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y) {
-    size_t   gvl      = __riscv_vsetvlmax_e64m1();
-    _MMR_u64 vthree   = __riscv_vmv_v_x_u64m1(3, gvl);
+void spmv_intrinsics(const size_t nrows, const size_t ncols, double *a, uint64_t *ia, uint64_t *ja, double *x, double *y) {
+    size_t   gvl      = _MMR_VSETVL_E64M1(ncols);
+    _MMR_u64 vthree   = _MM_SET_u64(3, gvl);
     _MMR_f64 vprod    = _MM_SET_f64(0, gvl); 
     _MMR_f64 part_res = _MM_SET_f64(0, gvl); 
     
@@ -28,15 +28,15 @@ void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, 
         uint64_t idx     = ia[row];
 
         for(size_t colid = 0; colid < nnz_row; colid += gvl ) {
-                     gvl       = __riscv_vsetvl_e64m1(nnz_row - colid);
+                     gvl       = _MMR_VSETVL_E64M1(nnz_row - colid);
             _MMR_f64 va        = _MM_LOAD_f64(&a[idx+colid],  gvl);
-            _MMR_u64 v_idx_row = __riscv_vle64_v_u64m1(&ja[idx+colid], gvl);
-                     v_idx_row = __riscv_vsll_vv_u64m1(v_idx_row, vthree, gvl);
-            _MMR_f64 vx        = __riscv_vluxei64_v_f64m1(x, v_idx_row, gvl);
+            _MMR_u64 v_idx_row = _MM_LOAD_u64(&ja[idx+colid], gvl);
+                     v_idx_row = _MM_SLL_u64(v_idx_row, vthree, gvl);
+            _MMR_f64 vx        = _MM_LOAD_INDEX_f64(x, v_idx_row, gvl);
                      vprod     = _MM_MACC_f64(vprod,va, vx, gvl);
         }
         
-        gvl       = __riscv_vsetvlmax_e64m1();
+        gvl       = _MMR_VSETVL_E64M1(ncols);
         part_res  = _MM_REDSUM_f64(vprod, part_res, gvl);
         y[row]    = _MM_VGETFIRST_f64(part_res);
         vprod     = _MM_SET_f64(0, gvl); 

@@ -64,8 +64,10 @@
 
 #define _MM_LOAD_i64    	 __riscv_vle64_v_i64m1
 #define _MM_LOAD_i32    	 __riscv_vle32_v_i32m1
-#define _MM_LOAD_i16         __riscv_vle16_v_i16m1
-#define _MM_LOAD_i8          __riscv_vle8_v_i8m1
+
+#define _MM_LOAD_u64    	 __riscv_vle64_v_u64m1
+#define _MM_LOAD_u32    	 __riscv_vle32_v_u32m1
+
 
 #define _MM_LOAD_i32mf2    	 __riscv_vle32_v_i32mf2
 
@@ -123,6 +125,9 @@
 #define _MM_SET_i64     	 __riscv_vmv_v_x_i64m1
 #define _MM_SET_i32     	 __riscv_vmv_v_x_i32m1
 
+#define _MM_SET_u64     	 __riscv_vmv_v_x_u64m1
+#define _MM_SET_u32     	 __riscv_vmv_v_x_u32m1
+
 #define _MM_SET_i32mf2     	 __riscv_vmv_v_x_i32mf2
 
 #define _MM_MIN_i64          __riscv_vmin_vv_i64m1
@@ -133,6 +138,9 @@
 
 #define _MM_SLL_i64     	 __riscv_vsll_vv_i64m1
 #define _MM_SLL_i32     	 __riscv_vsll_vv_i32m1
+
+#define _MM_SLL_u64     	 __riscv_vsll_vv_u64m1
+#define _MM_SLL_u32     	 __riscv_vsll_vv_u32m1
 
 #define _MM_SLL_VX_i64     	 __riscv_vsll_vx_i64m1
 #define _MM_SLL_VX_i32     	 __riscv_vsll_vx_i32m1
