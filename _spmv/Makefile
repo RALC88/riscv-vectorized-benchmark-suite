@@ -65,20 +65,20 @@ endif
 ifeq ($(SIMULATOR),qemu)
 ifeq ($(TYPE),vector)
 	@echo "Running with QEMU the vector version..."
-	qemu-riscv64 $(BIN_VECTOR) $(INPUT)
+	qemu-riscv64 $(BIN_VECTOR) $(INPUT) $(VERIF)
 else ifeq ($(TYPE),serial)
 	@echo "Running with QEMU the serial version..."
-	qemu-riscv64 $(BIN_SERIAL) $(INPUT)
+	qemu-riscv64 $(BIN_SERIAL) $(INPUT) $(VERIF)
 else
 	@echo $(ERROR_UNSUPPORTED)$(TYPE)
 endif
 else ifeq ($(SIMULATOR),spike)
 ifeq ($(TYPE),vector)
 	@echo "Running with Spike the vector version..."
-	spike --isa=rv64gcv $(PK) $(BIN_VECTOR) $(INPUT)
+	spike --isa=rv64gcv $(PK) $(BIN_VECTOR) $(INPUT) $(VERIF)
 else ifeq ($(TYPE),serial)
 	@echo "Running with Spike the serial version..."
-	spike --isa=rv64gc $(PK) $(BIN_SERIAL) $(INPUT)
+	spike --isa=rv64gc $(PK) $(BIN_SERIAL) $(INPUT) $(VERIF)
 else
 	@echo $(ERROR_UNSUPPORTED)$(TYPE)
 endif
