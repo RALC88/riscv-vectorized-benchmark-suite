@@ -184,6 +184,9 @@
 #define _MM_LOAD_INDEX_f64   __riscv_vloxei64_v_f64m1
 #define _MM_LOAD_INDEX_f32   __riscv_vloxei32_v_f32m1
 
+#define _MM_LOAD_U_INDEX_f64 __riscv_vluxei64_v_f64m1
+#define _MM_LOAD_U_INDEX_f32 __riscv_vluxei32_v_f32m1
+
 #define _MM_LOAD_STRIDE_f64  __riscv_vlse64_v_f64m1
 #define _MM_LOAD_STRIDE_f32  __riscv_vlse32_v_f32m1
 
