@@ -8,7 +8,7 @@ The benchmark suite with all its applications and input sets is available as ope
 
 RiVEC implements the lastest riscv intrinsics for rvv-1.0. It can be compiled with the latest [riscv-collab/riscv-gnu-toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain). RiVEC has been successfully tested on Spike RISC-V ISA Simulator, qemu RISC-V System emulator, and gem5 simulator.
 
-Master branch holds the most updated version (rvv-v1.0) compatible with latest instrinsics andd toolchain. Additionaly, there are two more available versions:
+Master branch holds the most updated version (rvv-v1.0) compatible with latest instrinsics and toolchain. Additionaly, there are two more available versions:
 
 [rvv-0.7](https://github.com/RALC88/riscv-vectorized-benchmark-suite/tree/rvv-0.7) which is based on  RISC-V V vector extension v0.7. This version can be only compiled by the LLVM from Barcelona Supercomputing Center. Instrinsics also corresponds to that specific compiler.
 
@@ -27,6 +27,7 @@ Cristóbal Ramírez, César Hernandez, Oscar Palomar, Osman Unsal, Marco Ramíre
 | Canneal           | Engineering                   | Unstructured Grids    | PARSEC      |
 | LavaMD2           | Molecular Dynamics            | N-Body                | Rodinia     |
 | matmul            | High Performance Computing    | BLAS                  | -           |
+| spmv              | High Performance Computing    | BLAS                  | -           |
 | Particle Filter   | Medical Imaging               | Structured Grids      | Rodinia     |
 | Somier            | Physics Simulation            | Dense Linear Algebra  | -           |
 | Jacobi-2D         | Engineering                   | Dense Linear Algebra  | PolyBench   |
@@ -182,6 +183,8 @@ axpy_args           = "256"
 lavaMD_args         = "-cores 1 -boxes1d 1 -outputFile result.txt"
 somier_args         = "2 64"
 jacobi_2d_args      = "32 2 output.txt"
+matmul_args         = "input/data_64.in"
+spmv_args 			= "input/football.mtx input/football.verif"
 ```
 
 #### simsmall 
@@ -196,6 +199,8 @@ axpy_args           = "512"
 lavaMD_args         = "-cores 1 -boxes1d 4 -outputFile result.txt"
 somier_args         = "4 64"
 jacobi_2d_args      = "128 10 output.txt"
+matmul_args         = "input/data_128.in"
+spmv_args 			= "input/lhr07.mtx input/lhr07.verif"
 ```  
 
 #### simmedium
@@ -210,6 +215,8 @@ axpy_args           = "1024"
 lavaMD_args         = "-cores 1 -boxes1d 6 -outputFile result.txt"
 somier_args         = "2 128"
 jacobi_2d_args      = "256 100 output.txt"
+matmul_args         = "input/data_256.in"
+spmv_args 			= "input/venkat25.mtx input/venkat25.verif"
 ```  
 
 #### simlarge
@@ -224,6 +231,8 @@ axpy_args           = "2048"
 lavaMD_args         = "-cores 1 -boxes1d 10 -outputFile result.txt"
 somier_args         = "4 128"
 jacobi_2d_args      = "256 2000 output.txt"
+matmul_args         = "input/data_512.in"
+spmv_args 			= "input/poisson3Db.mtx input/poisson3Db.verif"
 ```  
 
 ## Contributing
