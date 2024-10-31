@@ -184,7 +184,7 @@ lavaMD_args         = "-cores 1 -boxes1d 1 -outputFile result.txt"
 somier_args         = "2 64"
 jacobi_2d_args      = "32 2 output.txt"
 matmul_args         = "input/data_64.in"
-spmv_args 			= "input/football.mtx input/football.verif"
+spmv_args           = "input/football.mtx input/football.verif"
 ```
 
 #### simsmall 
@@ -200,7 +200,7 @@ lavaMD_args         = "-cores 1 -boxes1d 4 -outputFile result.txt"
 somier_args         = "4 64"
 jacobi_2d_args      = "128 10 output.txt"
 matmul_args         = "input/data_128.in"
-spmv_args 			= "input/lhr07.mtx input/lhr07.verif"
+spmv_args           = "input/lhr07.mtx input/lhr07.verif"
 ```  
 
 #### simmedium
@@ -216,7 +216,7 @@ lavaMD_args         = "-cores 1 -boxes1d 6 -outputFile result.txt"
 somier_args         = "2 128"
 jacobi_2d_args      = "256 100 output.txt"
 matmul_args         = "input/data_256.in"
-spmv_args 			= "input/venkat25.mtx input/venkat25.verif"
+spmv_args           = "input/venkat25.mtx input/venkat25.verif"
 ```  
 
 #### simlarge
@@ -232,7 +232,7 @@ lavaMD_args         = "-cores 1 -boxes1d 10 -outputFile result.txt"
 somier_args         = "4 128"
 jacobi_2d_args      = "256 2000 output.txt"
 matmul_args         = "input/data_512.in"
-spmv_args 			= "input/poisson3Db.mtx input/poisson3Db.verif"
+spmv_args           = "input/poisson3Db.mtx input/poisson3Db.verif"
 ```  
 
 ## Contributing
