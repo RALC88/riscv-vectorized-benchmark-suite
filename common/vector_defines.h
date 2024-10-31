@@ -145,6 +145,9 @@
 #define _MM_SLL_VX_i64     	 __riscv_vsll_vx_i64m1
 #define _MM_SLL_VX_i32     	 __riscv_vsll_vx_i32m1
 
+#define _MM_SLL_VX_u64     	 __riscv_vsll_vx_u64m1
+#define _MM_SLL_VX_u32     	 __riscv_vsll_vx_u32m1
+
 #define _MM_SRL_i64     	 __riscv_vsrl_vv_u64m1
 #define _MM_SRL_i32     	 __riscv_vsrl_vv_u32m1
 
