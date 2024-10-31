@@ -30,12 +30,12 @@ void spmv_intrinsics(const size_t nrows, double *a, uint64_t *ia, uint64_t *ja, 
         int64_t nnz_row = ia[row + 1] - ia[row];
         int64_t idx     = ia[row];
 
-        if(nnz_row <= 0) {
+        if(nnz_row == 0) {
             y[row] = 0; 
         } else {
             size_t gvl = _MMR_VSETVL_E64M1(nnz_row);
-            vprod    = _MM_SET_f64(0, gvl);
-            part_res = _MM_SET_f64(0, 1); 
+            vprod    = _MM_SET_f64(0.0, gvl);
+            part_res = _MM_SET_f64(0.0, 1);
 
             for(size_t colid = 0; colid < nnz_row; colid += gvl ) {
                 gvl       = _MMR_VSETVL_E64M1(nnz_row - colid);

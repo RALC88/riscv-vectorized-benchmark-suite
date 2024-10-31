@@ -63,12 +63,24 @@ int main(int argc, char *argv[]){
         }
         ja[i] = col;
         a[i] = value;
-        if (row == currentRow+1) {
+        if (row != currentRow){
+            int diff = row - currentRow;
+            for(int j=0;j < diff; j++) {
+                currentRow++;
+                ia[currentRow]=i;
+            }
+        } 
+    }
+    
+    if(currentRow < M-1){
+        int diff = M - currentRow;
+        for(int j=0;j < diff; j++) {
             currentRow++;
-            ia[currentRow]=i;
+            ia[currentRow]=NZ;
         }
     }
     ia[M]=NZ;
+
     
     fclose(f);
         
