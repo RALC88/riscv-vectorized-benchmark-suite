@@ -13,29 +13,31 @@ typedef double data_t;
 
 #ifdef USE_RISCV_VECTOR
 #include <riscv_vector.h>
+#include "../../common/vector_defines.h"
 
 void matrixmul_intrinsics(data_t *a, data_t *b, data_t *c, int n, int m, int p) {
 
     for (size_t i = 0; i < m; i++) {
         for (size_t j = 0; j < n; j++) {
-            size_t gvl = __riscv_vsetvl_e64m1(p);
-            vfloat64m1_t vprod = __riscv_vfmv_v_f_f64m1(0, gvl); 
-            vfloat64m1_t vsum  = __riscv_vfmv_v_f_f64m1(0, gvl);
+            size_t gvl = _MMR_VSETVL_E64M1(p);
+            vfloat64m1_t vprod = _MM_SET_f64(0, gvl); 
+            vfloat64m1_t vsum  = _MM_SET_f64(0, gvl);
 
             for (size_t k = 0; k < p; k += gvl){
-                gvl = __riscv_vsetvl_e64m1(p - k);
+                gvl = _MMR_VSETVL_E64M1(p - k);
                  
                 // Matrix A row
-                vfloat64m1_t va  = __riscv_vle64_v_f64m1(&a[i*p+k], gvl); 
+                vfloat64m1_t va  = _MM_LOAD_f64(&a[i*p+k], gvl); 
                 // Matrix B column
-                vfloat64m1_t vb = __riscv_vlse64_v_f64m1(&b[k*n+j], n * sizeof(data_t), gvl);
+                vfloat64m1_t vb = _MM_LOAD_STRIDE_f64(&b[k*n+j], n * sizeof(data_t), gvl);
                 
                 // A[0]*B[0], A[1]*B[1],... A[n]*B[n]
-                vprod  = __riscv_vfmacc_vv_f64m1(vprod,va, vb, gvl); 
+                vprod  = _MM_MACC_f64(vprod,va, vb, gvl); 
   
             }//k
-            vsum   = __riscv_vfredosum_vs_f64m1_f64m1(vprod,vsum, gvl);
-            c[i*n+j] = __riscv_vfmv_f_s_f64m1_f64(vsum);
+            gvl = _MMR_VSETVL_E64M1(p);
+            vsum   = _MM_REDSUM_f64(vprod,vsum, gvl);
+            c[i*n+j] = _MM_VGETFIRST_f64(vsum);
         }//j
     }//i
 }

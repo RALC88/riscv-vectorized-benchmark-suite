@@ -65,8 +65,6 @@ echo "[RIVEC]-------------------------------------------------------------------
 
 echo "command: $simulator bin/${app_name}_${version}.exe $app_args"
 echo "----------------------------------------------------------------------------------"
-mkdir output
-echo " " > output/output_${version}_$simsize.txt
 if [ $sim == "gem5" ]; then
 	$simulator  --cmd="bin/${app_name}_${version}.exe" --options="$app_args"
 else
