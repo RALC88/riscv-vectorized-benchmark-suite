@@ -6,6 +6,18 @@
  * SpMV Vector Implementation.
  * Sparse Matrix-Vector Multiplication (SpMV) is a mathematical operation 
  * in which a sparse matrix is multiplied by a dense vector.
+ *
+ * Inputs: 
+ *      *tiny:   football.mtx
+ *               M. Girvan and M. E. J. Newman, The network of American football games 
+ *               between Division IA colleges during regular season Fall 2000.
+ *      *small:  lhr07.mtx
+ *               J. Mallya, Light hydrocarbon recovery. OK if ill conditioned, from a nonlinear solver.
+ *      *medium: venkat25.mtx
+ *               V. Venkatakrishnan, Unstructured 2d euler solver, time step = 25.
+ *      *large:  poisson3Db.mtx
+ *               Comsol, Inc., 3D Poisson problem.
+ *
  */
 
 #include <stdlib.h>
